@@ -44,7 +44,7 @@ With `minLength` you can validate the length of a string or array. If the input 
 
 The following examples show how `minLength` can be used.
 
-### Minumum string length
+### Minimum string length
 
 Schema to validate a string with a minimum length of 3 characters.
 
@@ -62,7 +62,7 @@ Schema to validate an array with a minimum length of 5 items.
 ```ts
 const MinArraySchema = v.pipe(
   v.array(v.number()),
-  v.minLength(5, 'The array must contain 3 numbers or more.')
+  v.minLength(5, 'The array must contain 5 numbers or more.')
 );
 ```
 

@@ -1,7 +1,7 @@
 /**
  * The Standard Schema properties interface.
  */
-export interface StandardSchemaProps<Input, Output> {
+export interface StandardProps<TInput, TOutput> {
   /**
    * The version number of the standard.
    */
@@ -15,28 +15,28 @@ export interface StandardSchemaProps<Input, Output> {
    */
   readonly validate: (
     value: unknown
-  ) => StandardResult<Output> | Promise<StandardResult<Output>>;
+  ) => StandardResult<TOutput> | Promise<StandardResult<TOutput>>;
   /**
    * Inferred types associated with the schema.
    */
-  readonly types?: StandardTypes<Input, Output> | undefined;
+  readonly types?: StandardTypes<TInput, TOutput> | undefined;
 }
 
 /**
  * The result interface of the validate function.
  */
-export type StandardResult<Output> =
-  | StandardSuccessResult<Output>
+export type StandardResult<TOutput> =
+  | StandardSuccessResult<TOutput>
   | StandardFailureResult;
 
 /**
  * The result interface if validation succeeds.
  */
-export interface StandardSuccessResult<Output> {
+export interface StandardSuccessResult<TOutput> {
   /**
    * The typed output value.
    */
-  readonly value: Output;
+  readonly value: TOutput;
   /**
    * The non-existent issues.
    */
@@ -50,13 +50,13 @@ export interface StandardFailureResult {
   /**
    * The issues of failed validation.
    */
-  readonly issues: ReadonlyArray<StandardIssue>;
+  readonly issues: readonly StandardIssue[];
 }
 
 /**
  * The issue interface of the failure output.
  */
-interface StandardIssue {
+export interface StandardIssue {
   /**
    * The error message of the issue.
    */
@@ -64,29 +64,29 @@ interface StandardIssue {
   /**
    * The path of the issue, if any.
    */
-  readonly path?: ReadonlyArray<PropertyKey | StandardPathSegment> | undefined;
+  readonly path?: readonly (PropertyKey | StandardPathItem)[] | undefined;
 }
 
 /**
- * The path segment interface of the issue.
+ * The path item interface of the issue.
  */
-interface StandardPathSegment {
+export interface StandardPathItem {
   /**
-   * The key representing a path segment.
+   * The key of the path item.
    */
   readonly key: PropertyKey;
 }
 
 /**
- * The base types interface of Standard Schema.
+ * The Standard Schema types interface.
  */
-interface StandardTypes<Input, Output> {
+export interface StandardTypes<TInput, TOutput> {
   /**
    * The input type of the schema.
    */
-  readonly input: Input;
+  readonly input: TInput;
   /**
    * The output type of the schema.
    */
-  readonly output: Output;
+  readonly output: TOutput;
 }

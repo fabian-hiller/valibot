@@ -92,10 +92,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'intersectAsync',
-      href: '../intersectAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'intersect',
+          href: '../intersect/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'intersectAsync',
+          href: '../intersectAsync/',
+        },
+      ],
     },
   },
   options: {

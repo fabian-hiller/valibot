@@ -2,22 +2,56 @@
 
 All notable changes to the library will be documented in this file.
 
-## v1.0.0 (Month DD, YYYY)
+## vX.X.X (Month DD, YYYY)
+
+- Add `message` method to overwrite local error message configuration of a schema (pull request #1103)
+- Add `summarize` method to summarize issues into a pretty-printable multi-line string (pull request #1158)
+- Add `minEntries` and `maxEntries` validation action to validate number of object entries (pull request #1100)
+- Add `entries` and `notEntries` validation action to validate number of object entries (pull request #1156)
+- Add support for bigints to `multipleOf` validation action (pull request #1164)
+- Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
+- Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
+- Add `parseJson` and `stringifyJson` transformation action to parse and stringify JSON (pull request #1137)
+- Fix `MarkOptional` type to fix input and output type of object in edge cases (issue #1176)
+
+## v1.0.0 (March 18, 2025)
 
 - Add `assert` method to assert values (issue #862)
 - Add `checkItemsAsync` action (pull request #856)
 - Add `graphemes`, `maxGraphemes`, `minGraphemes` and `notGraphemes` action (pull request #853)
 - Add `words`, `maxWords`, `minWords` and `notWords` action
 - Add `args` and `returns` action to transform functions (issue #243)
+- Add `rfcEmail` action to validate RFC 5322 email addresses (pull request #912)
+- Add `gtValue` and `ltValue` action for greater than and less than validation (pull request #978, #985)
+- Add `values` and `notValues` action for easier multi-value validation (pull request #919)
+- Add `slug` action to validate URL slugs (pull request #910)
+- Add support for `ReadonlyMap` and `ReadonlySet` to `readonly` action (issue #1059)
+- Add `entriesFromObjects` util to improve tree shaking (pull request #1023)
 - Add new overload signature to `pipe` and `pipeAync` method to support unlimited pipe items of same input and output type (issue #852)
+- Add `@__NO_SIDE_EFFECTS__` notation to improve tree shaking (pull request #995)
+- Add `exactOptional` and `exactOptionalAsync` schema (PR #1013)
 - Change types and implementation to support Standard Schema
 - Change behaviour of `minValue` and `maxValue` for `NaN` (pull request #843)
 - Change type and behaviour of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional`, `optionalAsync`, `undefinedable` and `undefinedableAsync` for undefined default value (issue #878)
 - Change type signature of `partialCheck` and `partialCheckAsync` action to add `.pathList` property in a type-safe way
 - Change type signature of `findItem` action to support type predicates (issue #867)
+- Change validation of missing object entries in `looseObject`, `looseObjectAsync`, `object`, `objectAsync`, `objectWithRest`, `objectWithRestAsync`, `strictObject` and `strictObject` (PR #1013)
+- Change type signature of `optional` and `optionalAsync` when used within an object schema (PR #1013)
+- Change `MarkOptional` type to fix order of entries and TS error when using generic schemas (issue #1021)
+- Change `VariantOption` and `VariantOptionAsync` type to fix TS error when using generic schemas (issue #842)
+- Change implementation of `variant` and `variantAsync` to support optional discriminators using `exactOptional`, `exactOptionalAsync`, `optional`, `optionalAsync`, `nullish` or `nullishAsync`
+- Change `_addIssue` to not ignore empty strings as error message (pull request #1065)
+- Change `ISO_DATE_TIME_REGEX` and `ISO_TIMESTAMP_REGEX` to support space as separator (pull request #1064)
+- Change pipe tuple of `pipe` and `pipeAsync` to be readonly by default
+- Change `forward`, `forwardCheck`, `partialCheck` and `partialCheckAsync` to improve TypeScript performance (issue #987)
+- Change `DECIMAL_REGEX` to support floats that start with a dot (pull request #1086)
+- Change exports to export only public types to reduce noise
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
+- Fix TypeScript error of `keyof` method for objects with many keys (pull request #988)
+- Fix options filtering in `enum_` schema (pull request #941)
+- Fix `partialCheck` and `partialCheckAsync` action for typed data with issues
 
 ## v0.42.1 (September 20, 2024)
 

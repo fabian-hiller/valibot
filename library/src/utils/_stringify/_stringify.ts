@@ -7,11 +7,13 @@
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _stringify(input: unknown): string {
   const type = typeof input;
   if (type === 'string') {
     return `"${input}"`;
   }
+  // TODO: Should we add "n" suffix to bigints?
   if (type === 'number' || type === 'bigint' || type === 'boolean') {
     return `${input}`;
   }

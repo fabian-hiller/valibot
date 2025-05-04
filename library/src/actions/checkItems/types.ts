@@ -2,7 +2,7 @@ import type { BaseIssue } from '../../types/index.ts';
 import type { ArrayInput, ArrayRequirementAsync } from '../types.ts';
 
 /**
- * Check items issue type.
+ * Check items issue interface.
  */
 export interface CheckItemsIssue<TInput extends ArrayInput>
   extends BaseIssue<TInput[number]> {

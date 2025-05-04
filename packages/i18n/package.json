@@ -1,7 +1,7 @@
 {
   "name": "@valibot/i18n",
   "description": "The official i18n translations for Valibot",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -28,13 +28,13 @@
     "build.jsr": "tsm ./scripts/build-jsr.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.12.2",
+    "@types/node": "^22.13.5",
     "tsm": "^2.3.0",
-    "typescript": "^5.5.3",
+    "typescript": "^5.7.3",
     "valibot": "workspace:*"
   },
   "peerDependencies": {
-    "valibot": "^1.0.0 || ^1.0.0-beta || ^1.0.0-rc"
+    "valibot": "^1.0.0"
   },
   "files": [
     "index.ts",
@@ -64,6 +64,7 @@
     "sv",
     "tr",
     "uk",
+    "vi",
     "zh-CN",
     "zh-TW"
   ],
@@ -16358,6 +16359,746 @@
         "default": "./uk/words.cjs"
       }
     },
+    "./vi": {
+      "import": {
+        "types": "./vi/index.d.ts",
+        "default": "./vi/index.js"
+      },
+      "require": {
+        "types": "./vi/index.d.cts",
+        "default": "./vi/index.cjs"
+      }
+    },
+    "./vi/schema": {
+      "import": {
+        "types": "./vi/schema.d.ts",
+        "default": "./vi/schema.js"
+      },
+      "require": {
+        "types": "./vi/schema.d.cts",
+        "default": "./vi/schema.cjs"
+      }
+    },
+    "./vi/base64": {
+      "import": {
+        "types": "./vi/base64.d.ts",
+        "default": "./vi/base64.js"
+      },
+      "require": {
+        "types": "./vi/base64.d.cts",
+        "default": "./vi/base64.cjs"
+      }
+    },
+    "./vi/bic": {
+      "import": {
+        "types": "./vi/bic.d.ts",
+        "default": "./vi/bic.js"
+      },
+      "require": {
+        "types": "./vi/bic.d.cts",
+        "default": "./vi/bic.cjs"
+      }
+    },
+    "./vi/bytes": {
+      "import": {
+        "types": "./vi/bytes.d.ts",
+        "default": "./vi/bytes.js"
+      },
+      "require": {
+        "types": "./vi/bytes.d.cts",
+        "default": "./vi/bytes.cjs"
+      }
+    },
+    "./vi/check": {
+      "import": {
+        "types": "./vi/check.d.ts",
+        "default": "./vi/check.js"
+      },
+      "require": {
+        "types": "./vi/check.d.cts",
+        "default": "./vi/check.cjs"
+      }
+    },
+    "./vi/checkAsync": {
+      "import": {
+        "types": "./vi/checkAsync.d.ts",
+        "default": "./vi/checkAsync.js"
+      },
+      "require": {
+        "types": "./vi/checkAsync.d.cts",
+        "default": "./vi/checkAsync.cjs"
+      }
+    },
+    "./vi/checkItems": {
+      "import": {
+        "types": "./vi/checkItems.d.ts",
+        "default": "./vi/checkItems.js"
+      },
+      "require": {
+        "types": "./vi/checkItems.d.cts",
+        "default": "./vi/checkItems.cjs"
+      }
+    },
+    "./vi/checkItemsAsync": {
+      "import": {
+        "types": "./vi/checkItemsAsync.d.ts",
+        "default": "./vi/checkItemsAsync.js"
+      },
+      "require": {
+        "types": "./vi/checkItemsAsync.d.cts",
+        "default": "./vi/checkItemsAsync.cjs"
+      }
+    },
+    "./vi/creditCard": {
+      "import": {
+        "types": "./vi/creditCard.d.ts",
+        "default": "./vi/creditCard.js"
+      },
+      "require": {
+        "types": "./vi/creditCard.d.cts",
+        "default": "./vi/creditCard.cjs"
+      }
+    },
+    "./vi/cuid2": {
+      "import": {
+        "types": "./vi/cuid2.d.ts",
+        "default": "./vi/cuid2.js"
+      },
+      "require": {
+        "types": "./vi/cuid2.d.cts",
+        "default": "./vi/cuid2.cjs"
+      }
+    },
+    "./vi/decimal": {
+      "import": {
+        "types": "./vi/decimal.d.ts",
+        "default": "./vi/decimal.js"
+      },
+      "require": {
+        "types": "./vi/decimal.d.cts",
+        "default": "./vi/decimal.cjs"
+      }
+    },
+    "./vi/digits": {
+      "import": {
+        "types": "./vi/digits.d.ts",
+        "default": "./vi/digits.js"
+      },
+      "require": {
+        "types": "./vi/digits.d.cts",
+        "default": "./vi/digits.cjs"
+      }
+    },
+    "./vi/email": {
+      "import": {
+        "types": "./vi/email.d.ts",
+        "default": "./vi/email.js"
+      },
+      "require": {
+        "types": "./vi/email.d.cts",
+        "default": "./vi/email.cjs"
+      }
+    },
+    "./vi/emoji": {
+      "import": {
+        "types": "./vi/emoji.d.ts",
+        "default": "./vi/emoji.js"
+      },
+      "require": {
+        "types": "./vi/emoji.d.cts",
+        "default": "./vi/emoji.cjs"
+      }
+    },
+    "./vi/empty": {
+      "import": {
+        "types": "./vi/empty.d.ts",
+        "default": "./vi/empty.js"
+      },
+      "require": {
+        "types": "./vi/empty.d.cts",
+        "default": "./vi/empty.cjs"
+      }
+    },
+    "./vi/endsWith": {
+      "import": {
+        "types": "./vi/endsWith.d.ts",
+        "default": "./vi/endsWith.js"
+      },
+      "require": {
+        "types": "./vi/endsWith.d.cts",
+        "default": "./vi/endsWith.cjs"
+      }
+    },
+    "./vi/everyItem": {
+      "import": {
+        "types": "./vi/everyItem.d.ts",
+        "default": "./vi/everyItem.js"
+      },
+      "require": {
+        "types": "./vi/everyItem.d.cts",
+        "default": "./vi/everyItem.cjs"
+      }
+    },
+    "./vi/excludes": {
+      "import": {
+        "types": "./vi/excludes.d.ts",
+        "default": "./vi/excludes.js"
+      },
+      "require": {
+        "types": "./vi/excludes.d.cts",
+        "default": "./vi/excludes.cjs"
+      }
+    },
+    "./vi/finite": {
+      "import": {
+        "types": "./vi/finite.d.ts",
+        "default": "./vi/finite.js"
+      },
+      "require": {
+        "types": "./vi/finite.d.cts",
+        "default": "./vi/finite.cjs"
+      }
+    },
+    "./vi/graphemes": {
+      "import": {
+        "types": "./vi/graphemes.d.ts",
+        "default": "./vi/graphemes.js"
+      },
+      "require": {
+        "types": "./vi/graphemes.d.cts",
+        "default": "./vi/graphemes.cjs"
+      }
+    },
+    "./vi/hash": {
+      "import": {
+        "types": "./vi/hash.d.ts",
+        "default": "./vi/hash.js"
+      },
+      "require": {
+        "types": "./vi/hash.d.cts",
+        "default": "./vi/hash.cjs"
+      }
+    },
+    "./vi/hexColor": {
+      "import": {
+        "types": "./vi/hexColor.d.ts",
+        "default": "./vi/hexColor.js"
+      },
+      "require": {
+        "types": "./vi/hexColor.d.cts",
+        "default": "./vi/hexColor.cjs"
+      }
+    },
+    "./vi/hexadecimal": {
+      "import": {
+        "types": "./vi/hexadecimal.d.ts",
+        "default": "./vi/hexadecimal.js"
+      },
+      "require": {
+        "types": "./vi/hexadecimal.d.cts",
+        "default": "./vi/hexadecimal.cjs"
+      }
+    },
+    "./vi/imei": {
+      "import": {
+        "types": "./vi/imei.d.ts",
+        "default": "./vi/imei.js"
+      },
+      "require": {
+        "types": "./vi/imei.d.cts",
+        "default": "./vi/imei.cjs"
+      }
+    },
+    "./vi/includes": {
+      "import": {
+        "types": "./vi/includes.d.ts",
+        "default": "./vi/includes.js"
+      },
+      "require": {
+        "types": "./vi/includes.d.cts",
+        "default": "./vi/includes.cjs"
+      }
+    },
+    "./vi/integer": {
+      "import": {
+        "types": "./vi/integer.d.ts",
+        "default": "./vi/integer.js"
+      },
+      "require": {
+        "types": "./vi/integer.d.cts",
+        "default": "./vi/integer.cjs"
+      }
+    },
+    "./vi/ip": {
+      "import": {
+        "types": "./vi/ip.d.ts",
+        "default": "./vi/ip.js"
+      },
+      "require": {
+        "types": "./vi/ip.d.cts",
+        "default": "./vi/ip.cjs"
+      }
+    },
+    "./vi/ipv4": {
+      "import": {
+        "types": "./vi/ipv4.d.ts",
+        "default": "./vi/ipv4.js"
+      },
+      "require": {
+        "types": "./vi/ipv4.d.cts",
+        "default": "./vi/ipv4.cjs"
+      }
+    },
+    "./vi/ipv6": {
+      "import": {
+        "types": "./vi/ipv6.d.ts",
+        "default": "./vi/ipv6.js"
+      },
+      "require": {
+        "types": "./vi/ipv6.d.cts",
+        "default": "./vi/ipv6.cjs"
+      }
+    },
+    "./vi/isoDate": {
+      "import": {
+        "types": "./vi/isoDate.d.ts",
+        "default": "./vi/isoDate.js"
+      },
+      "require": {
+        "types": "./vi/isoDate.d.cts",
+        "default": "./vi/isoDate.cjs"
+      }
+    },
+    "./vi/isoDateTime": {
+      "import": {
+        "types": "./vi/isoDateTime.d.ts",
+        "default": "./vi/isoDateTime.js"
+      },
+      "require": {
+        "types": "./vi/isoDateTime.d.cts",
+        "default": "./vi/isoDateTime.cjs"
+      }
+    },
+    "./vi/isoTime": {
+      "import": {
+        "types": "./vi/isoTime.d.ts",
+        "default": "./vi/isoTime.js"
+      },
+      "require": {
+        "types": "./vi/isoTime.d.cts",
+        "default": "./vi/isoTime.cjs"
+      }
+    },
+    "./vi/isoTimeSecond": {
+      "import": {
+        "types": "./vi/isoTimeSecond.d.ts",
+        "default": "./vi/isoTimeSecond.js"
+      },
+      "require": {
+        "types": "./vi/isoTimeSecond.d.cts",
+        "default": "./vi/isoTimeSecond.cjs"
+      }
+    },
+    "./vi/isoTimestamp": {
+      "import": {
+        "types": "./vi/isoTimestamp.d.ts",
+        "default": "./vi/isoTimestamp.js"
+      },
+      "require": {
+        "types": "./vi/isoTimestamp.d.cts",
+        "default": "./vi/isoTimestamp.cjs"
+      }
+    },
+    "./vi/isoWeek": {
+      "import": {
+        "types": "./vi/isoWeek.d.ts",
+        "default": "./vi/isoWeek.js"
+      },
+      "require": {
+        "types": "./vi/isoWeek.d.cts",
+        "default": "./vi/isoWeek.cjs"
+      }
+    },
+    "./vi/length": {
+      "import": {
+        "types": "./vi/length.d.ts",
+        "default": "./vi/length.js"
+      },
+      "require": {
+        "types": "./vi/length.d.cts",
+        "default": "./vi/length.cjs"
+      }
+    },
+    "./vi/mac": {
+      "import": {
+        "types": "./vi/mac.d.ts",
+        "default": "./vi/mac.js"
+      },
+      "require": {
+        "types": "./vi/mac.d.cts",
+        "default": "./vi/mac.cjs"
+      }
+    },
+    "./vi/mac48": {
+      "import": {
+        "types": "./vi/mac48.d.ts",
+        "default": "./vi/mac48.js"
+      },
+      "require": {
+        "types": "./vi/mac48.d.cts",
+        "default": "./vi/mac48.cjs"
+      }
+    },
+    "./vi/mac64": {
+      "import": {
+        "types": "./vi/mac64.d.ts",
+        "default": "./vi/mac64.js"
+      },
+      "require": {
+        "types": "./vi/mac64.d.cts",
+        "default": "./vi/mac64.cjs"
+      }
+    },
+    "./vi/maxBytes": {
+      "import": {
+        "types": "./vi/maxBytes.d.ts",
+        "default": "./vi/maxBytes.js"
+      },
+      "require": {
+        "types": "./vi/maxBytes.d.cts",
+        "default": "./vi/maxBytes.cjs"
+      }
+    },
+    "./vi/maxGraphemes": {
+      "import": {
+        "types": "./vi/maxGraphemes.d.ts",
+        "default": "./vi/maxGraphemes.js"
+      },
+      "require": {
+        "types": "./vi/maxGraphemes.d.cts",
+        "default": "./vi/maxGraphemes.cjs"
+      }
+    },
+    "./vi/maxLength": {
+      "import": {
+        "types": "./vi/maxLength.d.ts",
+        "default": "./vi/maxLength.js"
+      },
+      "require": {
+        "types": "./vi/maxLength.d.cts",
+        "default": "./vi/maxLength.cjs"
+      }
+    },
+    "./vi/maxSize": {
+      "import": {
+        "types": "./vi/maxSize.d.ts",
+        "default": "./vi/maxSize.js"
+      },
+      "require": {
+        "types": "./vi/maxSize.d.cts",
+        "default": "./vi/maxSize.cjs"
+      }
+    },
+    "./vi/maxValue": {
+      "import": {
+        "types": "./vi/maxValue.d.ts",
+        "default": "./vi/maxValue.js"
+      },
+      "require": {
+        "types": "./vi/maxValue.d.cts",
+        "default": "./vi/maxValue.cjs"
+      }
+    },
+    "./vi/maxWords": {
+      "import": {
+        "types": "./vi/maxWords.d.ts",
+        "default": "./vi/maxWords.js"
+      },
+      "require": {
+        "types": "./vi/maxWords.d.cts",
+        "default": "./vi/maxWords.cjs"
+      }
+    },
+    "./vi/mimeType": {
+      "import": {
+        "types": "./vi/mimeType.d.ts",
+        "default": "./vi/mimeType.js"
+      },
+      "require": {
+        "types": "./vi/mimeType.d.cts",
+        "default": "./vi/mimeType.cjs"
+      }
+    },
+    "./vi/minBytes": {
+      "import": {
+        "types": "./vi/minBytes.d.ts",
+        "default": "./vi/minBytes.js"
+      },
+      "require": {
+        "types": "./vi/minBytes.d.cts",
+        "default": "./vi/minBytes.cjs"
+      }
+    },
+    "./vi/minGraphemes": {
+      "import": {
+        "types": "./vi/minGraphemes.d.ts",
+        "default": "./vi/minGraphemes.js"
+      },
+      "require": {
+        "types": "./vi/minGraphemes.d.cts",
+        "default": "./vi/minGraphemes.cjs"
+      }
+    },
+    "./vi/minLength": {
+      "import": {
+        "types": "./vi/minLength.d.ts",
+        "default": "./vi/minLength.js"
+      },
+      "require": {
+        "types": "./vi/minLength.d.cts",
+        "default": "./vi/minLength.cjs"
+      }
+    },
+    "./vi/minSize": {
+      "import": {
+        "types": "./vi/minSize.d.ts",
+        "default": "./vi/minSize.js"
+      },
+      "require": {
+        "types": "./vi/minSize.d.cts",
+        "default": "./vi/minSize.cjs"
+      }
+    },
+    "./vi/minValue": {
+      "import": {
+        "types": "./vi/minValue.d.ts",
+        "default": "./vi/minValue.js"
+      },
+      "require": {
+        "types": "./vi/minValue.d.cts",
+        "default": "./vi/minValue.cjs"
+      }
+    },
+    "./vi/minWords": {
+      "import": {
+        "types": "./vi/minWords.d.ts",
+        "default": "./vi/minWords.js"
+      },
+      "require": {
+        "types": "./vi/minWords.d.cts",
+        "default": "./vi/minWords.cjs"
+      }
+    },
+    "./vi/multipleOf": {
+      "import": {
+        "types": "./vi/multipleOf.d.ts",
+        "default": "./vi/multipleOf.js"
+      },
+      "require": {
+        "types": "./vi/multipleOf.d.cts",
+        "default": "./vi/multipleOf.cjs"
+      }
+    },
+    "./vi/nanoid": {
+      "import": {
+        "types": "./vi/nanoid.d.ts",
+        "default": "./vi/nanoid.js"
+      },
+      "require": {
+        "types": "./vi/nanoid.d.cts",
+        "default": "./vi/nanoid.cjs"
+      }
+    },
+    "./vi/nonEmpty": {
+      "import": {
+        "types": "./vi/nonEmpty.d.ts",
+        "default": "./vi/nonEmpty.js"
+      },
+      "require": {
+        "types": "./vi/nonEmpty.d.cts",
+        "default": "./vi/nonEmpty.cjs"
+      }
+    },
+    "./vi/notBytes": {
+      "import": {
+        "types": "./vi/notBytes.d.ts",
+        "default": "./vi/notBytes.js"
+      },
+      "require": {
+        "types": "./vi/notBytes.d.cts",
+        "default": "./vi/notBytes.cjs"
+      }
+    },
+    "./vi/notGraphemes": {
+      "import": {
+        "types": "./vi/notGraphemes.d.ts",
+        "default": "./vi/notGraphemes.js"
+      },
+      "require": {
+        "types": "./vi/notGraphemes.d.cts",
+        "default": "./vi/notGraphemes.cjs"
+      }
+    },
+    "./vi/notLength": {
+      "import": {
+        "types": "./vi/notLength.d.ts",
+        "default": "./vi/notLength.js"
+      },
+      "require": {
+        "types": "./vi/notLength.d.cts",
+        "default": "./vi/notLength.cjs"
+      }
+    },
+    "./vi/notSize": {
+      "import": {
+        "types": "./vi/notSize.d.ts",
+        "default": "./vi/notSize.js"
+      },
+      "require": {
+        "types": "./vi/notSize.d.cts",
+        "default": "./vi/notSize.cjs"
+      }
+    },
+    "./vi/notValue": {
+      "import": {
+        "types": "./vi/notValue.d.ts",
+        "default": "./vi/notValue.js"
+      },
+      "require": {
+        "types": "./vi/notValue.d.cts",
+        "default": "./vi/notValue.cjs"
+      }
+    },
+    "./vi/notWords": {
+      "import": {
+        "types": "./vi/notWords.d.ts",
+        "default": "./vi/notWords.js"
+      },
+      "require": {
+        "types": "./vi/notWords.d.cts",
+        "default": "./vi/notWords.cjs"
+      }
+    },
+    "./vi/octal": {
+      "import": {
+        "types": "./vi/octal.d.ts",
+        "default": "./vi/octal.js"
+      },
+      "require": {
+        "types": "./vi/octal.d.cts",
+        "default": "./vi/octal.cjs"
+      }
+    },
+    "./vi/partialCheck": {
+      "import": {
+        "types": "./vi/partialCheck.d.ts",
+        "default": "./vi/partialCheck.js"
+      },
+      "require": {
+        "types": "./vi/partialCheck.d.cts",
+        "default": "./vi/partialCheck.cjs"
+      }
+    },
+    "./vi/regex": {
+      "import": {
+        "types": "./vi/regex.d.ts",
+        "default": "./vi/regex.js"
+      },
+      "require": {
+        "types": "./vi/regex.d.cts",
+        "default": "./vi/regex.cjs"
+      }
+    },
+    "./vi/safeInteger": {
+      "import": {
+        "types": "./vi/safeInteger.d.ts",
+        "default": "./vi/safeInteger.js"
+      },
+      "require": {
+        "types": "./vi/safeInteger.d.cts",
+        "default": "./vi/safeInteger.cjs"
+      }
+    },
+    "./vi/size": {
+      "import": {
+        "types": "./vi/size.d.ts",
+        "default": "./vi/size.js"
+      },
+      "require": {
+        "types": "./vi/size.d.cts",
+        "default": "./vi/size.cjs"
+      }
+    },
+    "./vi/someItem": {
+      "import": {
+        "types": "./vi/someItem.d.ts",
+        "default": "./vi/someItem.js"
+      },
+      "require": {
+        "types": "./vi/someItem.d.cts",
+        "default": "./vi/someItem.cjs"
+      }
+    },
+    "./vi/startsWith": {
+      "import": {
+        "types": "./vi/startsWith.d.ts",
+        "default": "./vi/startsWith.js"
+      },
+      "require": {
+        "types": "./vi/startsWith.d.cts",
+        "default": "./vi/startsWith.cjs"
+      }
+    },
+    "./vi/ulid": {
+      "import": {
+        "types": "./vi/ulid.d.ts",
+        "default": "./vi/ulid.js"
+      },
+      "require": {
+        "types": "./vi/ulid.d.cts",
+        "default": "./vi/ulid.cjs"
+      }
+    },
+    "./vi/url": {
+      "import": {
+        "types": "./vi/url.d.ts",
+        "default": "./vi/url.js"
+      },
+      "require": {
+        "types": "./vi/url.d.cts",
+        "default": "./vi/url.cjs"
+      }
+    },
+    "./vi/uuid": {
+      "import": {
+        "types": "./vi/uuid.d.ts",
+        "default": "./vi/uuid.js"
+      },
+      "require": {
+        "types": "./vi/uuid.d.cts",
+        "default": "./vi/uuid.cjs"
+      }
+    },
+    "./vi/value": {
+      "import": {
+        "types": "./vi/value.d.ts",
+        "default": "./vi/value.js"
+      },
+      "require": {
+        "types": "./vi/value.d.cts",
+        "default": "./vi/value.cjs"
+      }
+    },
+    "./vi/words": {
+      "import": {
+        "types": "./vi/words.d.ts",
+        "default": "./vi/words.js"
+      },
+      "require": {
+        "types": "./vi/words.d.cts",
+        "default": "./vi/words.cjs"
+      }
+    },
     "./zh-CN": {
       "import": {
         "types": "./zh-CN/index.d.ts",
@@ -17158,14 +17899,14 @@
         "default": "./zh-TW/check.cjs"
       }
     },
-    "./zh-TW/creditCard": {
+    "./zh-TW/checkAsync": {
       "import": {
-        "types": "./zh-TW/creditCard.d.ts",
-        "default": "./zh-TW/creditCard.js"
+        "types": "./zh-TW/checkAsync.d.ts",
+        "default": "./zh-TW/checkAsync.js"
       },
       "require": {
-        "types": "./zh-TW/creditCard.d.cts",
-        "default": "./zh-TW/creditCard.cjs"
+        "types": "./zh-TW/checkAsync.d.cts",
+        "default": "./zh-TW/checkAsync.cjs"
       }
     },
     "./zh-TW/checkItems": {
@@ -17178,16 +17919,6 @@
         "default": "./zh-TW/checkItems.cjs"
       }
     },
-    "./zh-TW/checkAsync": {
-      "import": {
-        "types": "./zh-TW/checkAsync.d.ts",
-        "default": "./zh-TW/checkAsync.js"
-      },
-      "require": {
-        "types": "./zh-TW/checkAsync.d.cts",
-        "default": "./zh-TW/checkAsync.cjs"
-      }
-    },
     "./zh-TW/checkItemsAsync": {
       "import": {
         "types": "./zh-TW/checkItemsAsync.d.ts",
@@ -17196,6 +17927,16 @@
       "require": {
         "types": "./zh-TW/checkItemsAsync.d.cts",
         "default": "./zh-TW/checkItemsAsync.cjs"
+      }
+    },
+    "./zh-TW/creditCard": {
+      "import": {
+        "types": "./zh-TW/creditCard.d.ts",
+        "default": "./zh-TW/creditCard.js"
+      },
+      "require": {
+        "types": "./zh-TW/creditCard.d.cts",
+        "default": "./zh-TW/creditCard.cjs"
       }
     },
     "./zh-TW/cuid2": {

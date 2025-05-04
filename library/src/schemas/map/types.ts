@@ -7,7 +7,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Map issue type.
+ * Map issue interface.
  */
 export interface MapIssue extends BaseIssue<unknown> {
   /**

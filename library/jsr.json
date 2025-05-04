@@ -1,5 +1,9 @@
 {
   "name": "@valibot/valibot",
-  "version": "1.0.0-beta.9",
-  "exports": "./src/index.ts"
+  "version": "1.0.0",
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": ["src/**/*.ts", "README.md"],
+    "exclude": ["src/**/*.test.ts", "src/**/*.test-d.ts", "src/vitest/**/*.ts"]
+  }
 }

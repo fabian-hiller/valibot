@@ -1,0 +1,27 @@
+---
+title: ExactOptionalSchema
+description: Exact optional schema interface.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ExactOptionalSchema
+
+Exact optional schema interface.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+
+## Definition
+
+- `ExactOptionalSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `default` <Property {...properties.default} />

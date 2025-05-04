@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * File issue type.
+ * File issue interface.
  */
 export interface FileIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface FileIssue extends BaseIssue<unknown> {
 }
 
 /**
- * File schema type.
+ * File schema interface.
  */
 export interface FileSchema<
   TMessage extends ErrorMessage<FileIssue> | undefined,
@@ -66,6 +66,7 @@ export function file<
   const TMessage extends ErrorMessage<FileIssue> | undefined,
 >(message: TMessage): FileSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function file(
   message?: ErrorMessage<FileIssue>
 ): FileSchema<ErrorMessage<FileIssue> | undefined> {

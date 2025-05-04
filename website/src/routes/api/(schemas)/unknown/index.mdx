@@ -4,9 +4,11 @@ description: Creates an unknown schema.
 source: /schemas/unknown/unknown.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
+  - vladshcherbin
+  - jasperteo
   - morinokami
   - mwskwong
-  - jasperteo
 ---
 
 import { ApiList, Property } from '~/components';
@@ -35,6 +37,7 @@ The following APIs can be combined with `unknown`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -71,6 +74,7 @@ The following APIs can be combined with `unknown`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -83,6 +87,7 @@ The following APIs can be combined with `unknown`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -99,12 +104,14 @@ The following APIs can be combined with `unknown`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -121,11 +128,13 @@ The following APIs can be combined with `unknown`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -134,6 +143,7 @@ The following APIs can be combined with `unknown`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -143,23 +153,30 @@ The following APIs can be combined with `unknown`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
+    'slug',
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
@@ -173,6 +190,7 @@ The following APIs can be combined with `unknown`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Bytes issue type.
+ * Bytes issue interface.
  */
 export interface BytesIssue<TInput extends string, TRequirement extends number>
   extends BaseIssue<TInput> {
@@ -33,7 +33,7 @@ export interface BytesIssue<TInput extends string, TRequirement extends number>
 }
 
 /**
- * Bytes action type.
+ * Bytes action interface.
  */
 export interface BytesAction<
   TInput extends string,
@@ -92,6 +92,7 @@ export function bytes<
   message: TMessage
 ): BytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bytes(
   requirement: number,
   message?: ErrorMessage<BytesIssue<string, number>>

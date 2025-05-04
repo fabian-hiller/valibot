@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
- * Nullish schema type.
+ * Nullish schema interface.
  */
 export interface NullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -67,6 +67,7 @@ export function nullish<
   const TDefault extends Default<TWrapped, null | undefined>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown

@@ -11,10 +11,13 @@ import type {
 import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { bigint } from '../bigint/bigint.ts';
 import { boolean } from '../boolean/index.ts';
+import { exactOptional, exactOptionalAsync } from '../exactOptional/index.ts';
 import { literal } from '../literal/literal.ts';
 import { null_ } from '../null/null.ts';
+import { nullish, nullishAsync } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { object, objectAsync } from '../object/index.ts';
+import { optional, optionalAsync } from '../optional/index.ts';
 import { strictObjectAsync } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
 import { variantAsync, type VariantSchemaAsync } from './variantAsync.ts';
@@ -122,6 +125,57 @@ describe('variantAsync', () => {
           ]),
         ]),
         [{ type: 'foo' }, { type: 'bar' }, { type: null }]
+      );
+    });
+
+    test('for optional discriminators', async () => {
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          object({ type: exactOptional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: 'bar' }]
+      );
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          objectAsync({ type: exactOptionalAsync(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: 'bar' }]
+      );
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          object({ type: optional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: undefined }, { type: 'bar' }]
+      );
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          objectAsync({ type: optionalAsync(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: undefined }, { type: 'bar' }]
+      );
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          object({ type: nullish(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: null }, { type: undefined }, { type: 'bar' }]
+      );
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          objectAsync({ type: nullishAsync(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: null }, { type: undefined }, { type: 'bar' }]
       );
     });
   });

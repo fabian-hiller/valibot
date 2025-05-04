@@ -9,10 +9,11 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { optional } from './optional.ts';
 import type { InferOptionalOutput } from './types.ts';
 
 /**
- * Optional schema async type.
+ * Optional schema async interface.
  */
 export interface OptionalSchemaAsync<
   TWrapped extends
@@ -31,7 +32,7 @@ export interface OptionalSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof optionalAsync;
+  readonly reference: typeof optional | typeof optionalAsync;
   /**
    * The expected property.
    */
@@ -77,6 +78,7 @@ export function optionalAsync<
   default_: TDefault
 ): OptionalSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function optionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

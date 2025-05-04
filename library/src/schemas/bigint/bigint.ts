@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Bigint issue type.
+ * Bigint issue interface.
  */
 export interface BigintIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface BigintIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Bigint schema type.
+ * Bigint schema interface.
  */
 export interface BigintSchema<
   TMessage extends ErrorMessage<BigintIssue> | undefined,
@@ -66,6 +66,7 @@ export function bigint<
   const TMessage extends ErrorMessage<BigintIssue> | undefined,
 >(message: TMessage): BigintSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bigint(
   message?: ErrorMessage<BigintIssue>
 ): BigintSchema<ErrorMessage<BigintIssue> | undefined> {

@@ -10,7 +10,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
- * Map schema type.
+ * Map schema interface.
  */
 export interface MapSchema<
   TKey extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -79,6 +79,7 @@ export function map<
   message: TMessage
 ): MapSchema<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function map(
   key: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

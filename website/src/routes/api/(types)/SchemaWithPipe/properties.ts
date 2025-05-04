@@ -5,6 +5,7 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'tuple',
+      modifier: 'readonly',
       items: [
         {
           type: 'custom',
@@ -69,7 +70,7 @@ export const properties: Record<string, PropertyProps> = {
             },
             {
               type: 'string',
-              value: '~validate',
+              value: '~run',
             },
           ],
         },
@@ -152,7 +153,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  '~validate': {
+  '~run': {
     type: {
       type: 'function',
       params: [
@@ -166,7 +167,6 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           name: 'config',
-          optional: true,
           type: {
             type: 'custom',
             name: 'Config',

@@ -19,7 +19,7 @@ import type {
 } from './types.ts';
 
 /**
- * Variant schema type.
+ * Variant schema interface.
  */
 export interface VariantSchema<
   TKey extends string,
@@ -88,6 +88,7 @@ export function variant<
   message: TMessage
 ): VariantSchema<TKey, TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function variant(
   key: string,
   options: VariantOptions<string>,
@@ -145,12 +146,17 @@ export function variant(
               // information about invalid discriminator keys if not
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
+                const discriminatorSchema = schema.entries[currentKey];
                 if (
-                  schema.entries[currentKey]['~run'](
-                    // @ts-expect-error
-                    { typed: false, value: input[currentKey] },
-                    config
-                  ).issues
+                  currentKey in input
+                    ? discriminatorSchema['~run'](
+                        // @ts-expect-error
+                        { typed: false, value: input[currentKey] },
+                        { abortEarly: true }
+                      ).issues
+                    : discriminatorSchema.type !== 'exact_optional' &&
+                      discriminatorSchema.type !== 'optional' &&
+                      discriminatorSchema.type !== 'nullish'
                 ) {
                   keysAreValid = false;
 

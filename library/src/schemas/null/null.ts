@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Null issue type.
+ * Null issue interface.
  */
 export interface NullIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface NullIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Null schema type.
+ * Null schema interface.
  */
 export interface NullSchema<
   TMessage extends ErrorMessage<NullIssue> | undefined,
@@ -66,6 +66,7 @@ export function null_<
   const TMessage extends ErrorMessage<NullIssue> | undefined,
 >(message: TMessage): NullSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function null_(
   message?: ErrorMessage<NullIssue>
 ): NullSchema<ErrorMessage<NullIssue> | undefined> {

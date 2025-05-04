@@ -68,6 +68,7 @@ The following APIs can be combined with `omit`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -106,6 +107,7 @@ The following APIs can be combined with `omit`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'parse',
     'parser',
     'partial',
@@ -125,7 +127,11 @@ The following APIs can be combined with `omit`.
     'brand',
     'flavor',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -138,3 +144,47 @@ The following APIs can be combined with `omit`.
 ### Utils
 
 <ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'exactOptionalAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+  ]}
+/>

@@ -4,6 +4,7 @@ description: Returns a fallback value as output if the input does not match the 
 source: /methods/fallback/fallback.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - morinokami
   - sqmasep
   - FlorianDevPhynix
@@ -81,6 +82,7 @@ The following APIs can be combined with `fallback`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -133,6 +135,7 @@ The following APIs can be combined with `fallback`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -150,6 +153,7 @@ The following APIs can be combined with `fallback`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -166,12 +170,14 @@ The following APIs can be combined with `fallback`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -188,11 +194,13 @@ The following APIs can be combined with `fallback`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -201,6 +209,7 @@ The following APIs can be combined with `fallback`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -210,23 +219,30 @@ The following APIs can be combined with `fallback`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
+    'slug',
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
@@ -240,6 +256,7 @@ The following APIs can be combined with `fallback`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

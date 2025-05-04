@@ -8,8 +8,6 @@ import { ValiError } from '../../utils/index.ts';
 
 /**
  * Returns action type.
- *
- * @beta
  */
 export interface ReturnsAction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,8 +38,6 @@ export interface ReturnsAction<
  * @param schema The arguments schema.
  *
  * @returns An returns action.
- *
- * @beta
  */
 export function returns<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,6 +45,7 @@ export function returns<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema): ReturnsAction<TInput, TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function returns(
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>
 ): ReturnsAction<

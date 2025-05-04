@@ -19,9 +19,9 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { Registry } from 'monaco-textmate';
 import { loadWASM } from 'onigasm';
 import onigasm from 'onigasm/lib/onigasm.wasm?url';
-import { formatWithCursor } from 'prettier';
 import prettierPluginEstree from 'prettier/plugins/estree';
 import prettierPluginTypeScript from 'prettier/plugins/typescript';
+import { formatWithCursor } from 'prettier/standalone';
 import { useTheme } from '~/routes/plugin@theme';
 import valibotTypes from '../../../library/dist/index.d.ts?raw';
 import packageJson from '../../../library/package.json?raw';
@@ -139,7 +139,16 @@ export const CodeEditor = component$<CodeEditorProps>(
             plugins: [prettierPluginEstree, prettierPluginTypeScript],
             singleQuote: true,
           });
-          model.value!.setValue(prettier.formatted);
+          model.value!.pushEditOperations(
+            null,
+            [
+              {
+                range: model.value!.getFullModelRange(),
+                text: prettier.formatted,
+              },
+            ],
+            () => null
+          );
           editor.value!.setPosition(
             model.value!.getPositionAt(prettier.cursorOffset)
           );

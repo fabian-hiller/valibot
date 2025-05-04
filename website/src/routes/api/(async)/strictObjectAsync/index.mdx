@@ -35,8 +35,6 @@ With `strictObjectAsync` you can validate the data type of the input and whether
 
 > The difference to <Link href="../objectAsync/">`objectAsync`</Link> is that this schema returns an issue for unknown entries. It intentionally returns only one issue. Otherwise, attackers could send large objects to exhaust device resources. If you want an issue for every unknown key, use the <Link href="../objectWithRestAsync/">`objectWithRestAsync`</Link> schema with <Link href="../never/">`never`</Link> for the `rest` argument.
 
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
-
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -81,6 +79,7 @@ The following APIs can be combined with `strictObjectAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -135,7 +134,11 @@ The following APIs can be combined with `strictObjectAsync`.
     'flavor',
     'check',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -156,6 +159,7 @@ The following APIs can be combined with `strictObjectAsync`.
     'arrayAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'forwardAsync',
     'getDefaultsAsync',

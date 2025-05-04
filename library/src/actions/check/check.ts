@@ -3,7 +3,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { CheckIssue } from './types.ts';
 
 /**
- * Check action type.
+ * Check action interface.
  */
 export interface CheckAction<
   TInput,
@@ -58,6 +58,7 @@ export function check<
   message: TMessage
 ): CheckAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function check(
   requirement: (input: unknown) => boolean,
   message?: ErrorMessage<CheckIssue<unknown>>

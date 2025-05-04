@@ -14,10 +14,11 @@ import type {
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { tupleWithRest } from './tupleWithRest.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
- * Tuple with rest schema async type.
+ * Tuple with rest schema async interface.
  */
 export interface TupleWithRestSchemaAsync<
   TItems extends TupleItemsAsync,
@@ -37,7 +38,7 @@ export interface TupleWithRestSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof tupleWithRestAsync;
+  readonly reference: typeof tupleWithRest | typeof tupleWithRestAsync;
   /**
    * The expected property.
    */
@@ -95,6 +96,7 @@ export function tupleWithRestAsync<
   message: TMessage
 ): TupleWithRestSchemaAsync<TItems, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleWithRestAsync(
   items: TupleItemsAsync,
   rest:

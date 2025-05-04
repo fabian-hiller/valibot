@@ -23,6 +23,7 @@ export class ValiError<
    *
    * @param issues The error issues.
    */
+  // @__NO_SIDE_EFFECTS__
   constructor(issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]]) {
     super(issues[0].message);
     this.name = 'ValiError';

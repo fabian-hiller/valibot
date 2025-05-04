@@ -41,8 +41,6 @@ With `objectWithRestAsync` you can validate the data type of the input and wheth
 
 > The difference to <Link href="../objectAsync/">`objectAsync`</Link> is that this schema includes unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
 
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
-
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -95,6 +93,7 @@ The following APIs can be combined with `objectWithRestAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -149,7 +148,11 @@ The following APIs can be combined with `objectWithRestAsync`.
     'flavor',
     'check',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -170,6 +173,7 @@ The following APIs can be combined with `objectWithRestAsync`.
     'arrayAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'forwardAsync',
     'getDefaultsAsync',

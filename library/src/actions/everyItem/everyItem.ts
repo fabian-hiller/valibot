@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
- * Every item issue type.
+ * Every item issue interface.
  */
 export interface EveryItemIssue<TInput extends ArrayInput>
   extends BaseIssue<TInput> {
@@ -30,7 +30,7 @@ export interface EveryItemIssue<TInput extends ArrayInput>
 }
 
 /**
- * Every item action type.
+ * Every item action interface.
  */
 export interface EveryItemAction<
   TInput extends ArrayInput,
@@ -85,6 +85,7 @@ export function everyItem<
   message: TMessage
 ): EveryItemAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function everyItem(
   requirement: ArrayRequirement<unknown[]>,
   message?: ErrorMessage<EveryItemIssue<unknown[]>>

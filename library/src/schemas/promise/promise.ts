@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Promise issue type.
+ * Promise issue interface.
  */
 export interface PromiseIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface PromiseIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Promise schema type.
+ * Promise schema interface.
  */
 export interface PromiseSchema<
   TMessage extends ErrorMessage<PromiseIssue> | undefined,
@@ -66,6 +66,7 @@ export function promise<
   const TMessage extends ErrorMessage<PromiseIssue> | undefined,
 >(message: TMessage): PromiseSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function promise(
   message?: ErrorMessage<PromiseIssue>
 ): PromiseSchema<ErrorMessage<PromiseIssue> | undefined> {

@@ -57,7 +57,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
 
   // Close main menu when location pathname changes
   useTask$(({ track }) => {
-    track(() => location.url);
+    track(() => location.prevUrl);
     if (
       isOpen.value &&
       location.prevUrl &&
@@ -139,7 +139,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
           id="main-menu"
         >
           {[
-            { label: 'Guides', href: '/guides/' },
+            { label: 'Guides', href: '/guides/introduction/' },
             { label: 'API', href: '/api/' },
             { label: 'Blog', href: '/blog/' },
             { label: 'Playground', href: '/playground/' },

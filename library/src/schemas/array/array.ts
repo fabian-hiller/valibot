@@ -12,7 +12,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
- * Array schema type.
+ * Array schema interface.
  */
 export interface ArraySchema<
   TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -68,6 +68,7 @@ export function array<
   const TMessage extends ErrorMessage<ArrayIssue> | undefined,
 >(item: TItem, message: TMessage): ArraySchema<TItem, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function array(
   item: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<ArrayIssue>

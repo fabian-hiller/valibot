@@ -4,6 +4,7 @@ description: Creates a boolean schema.
 source: /schemas/boolean/boolean.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - wout-junius
 ---
 
@@ -58,6 +59,7 @@ The following APIs can be combined with `boolean`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -94,6 +96,7 @@ The following APIs can be combined with `boolean`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -110,11 +113,14 @@ The following APIs can be combined with `boolean`.
     'brand',
     'flavor',
     'description',
+    'gtValue',
+    'ltValue',
     'maxValue',
     'maxWords',
     'metadata',
     'minValue',
     'notValue',
+    'notValues',
     'rawCheck',
     'rawTransform',
     'readonly',
@@ -123,6 +129,7 @@ The following APIs can be combined with `boolean`.
     'toMinValue',
     'transform',
     'value',
+    'values',
   ]}
 />
 

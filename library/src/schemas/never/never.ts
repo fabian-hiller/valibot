@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Never issue type.
+ * Never issue interface.
  */
 export interface NeverIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface NeverIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Never schema type.
+ * Never schema interface.
  */
 export interface NeverSchema<
   TMessage extends ErrorMessage<NeverIssue> | undefined,
@@ -66,6 +66,7 @@ export function never<
   const TMessage extends ErrorMessage<NeverIssue> | undefined,
 >(message: TMessage): NeverSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function never(
   message?: ErrorMessage<NeverIssue>
 ): NeverSchema<ErrorMessage<NeverIssue> | undefined> {

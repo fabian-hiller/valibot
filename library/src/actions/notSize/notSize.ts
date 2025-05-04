@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { SizeInput } from '../types.ts';
 
 /**
- * Not size issue type.
+ * Not size issue interface.
  */
 export interface NotSizeIssue<
   TInput extends SizeInput,
@@ -36,7 +36,7 @@ export interface NotSizeIssue<
 }
 
 /**
- * Not size action type.
+ * Not size action interface.
  */
 export interface NotSizeAction<
   TInput extends SizeInput,
@@ -96,6 +96,7 @@ export function notSize<
   message: TMessage
 ): NotSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notSize(
   requirement: number,
   message?: ErrorMessage<NotSizeIssue<SizeInput, number>>

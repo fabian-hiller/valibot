@@ -4,6 +4,7 @@ description: Creates a custom schema.
 source: /schemas/custom/custom.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - morinokami
 ---
 
@@ -63,6 +64,7 @@ The following APIs can be combined with `custom`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -99,6 +101,7 @@ The following APIs can be combined with `custom`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -111,6 +114,7 @@ The following APIs can be combined with `custom`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -127,12 +131,14 @@ The following APIs can be combined with `custom`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -149,11 +155,13 @@ The following APIs can be combined with `custom`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -162,6 +170,7 @@ The following APIs can be combined with `custom`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -171,23 +180,30 @@ The following APIs can be combined with `custom`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
+    'slug',
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
@@ -201,6 +217,7 @@ The following APIs can be combined with `custom`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

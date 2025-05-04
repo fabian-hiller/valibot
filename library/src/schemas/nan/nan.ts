@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * NaN issue type.
+ * NaN issue interface.
  */
 export interface NanIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface NanIssue extends BaseIssue<unknown> {
 }
 
 /**
- * NaN schema type.
+ * NaN schema interface.
  */
 export interface NanSchema<TMessage extends ErrorMessage<NanIssue> | undefined>
   extends BaseSchema<number, number, NanIssue> {
@@ -65,6 +65,7 @@ export function nan<const TMessage extends ErrorMessage<NanIssue> | undefined>(
   message: TMessage
 ): NanSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nan(
   message?: ErrorMessage<NanIssue>
 ): NanSchema<ErrorMessage<NanIssue> | undefined> {

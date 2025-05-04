@@ -16,7 +16,7 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 ## Highlights
 
 - Fully type safe with static type inference
-- Small bundle size starting at less than 600 bytes
+- Small bundle size starting at less than 700 bytes
 - Validate everything from strings to complex objects
 - Open source and fully tested with 100 % coverage
 - Many transformation and validation actions included
@@ -29,7 +29,7 @@ First you create a schema that describes a structured data set. A schema can be 
 
 <!-- prettier-ignore -->
 ```ts
-import * as v from 'valibot'; // 1.24 kB
+import * as v from 'valibot'; // 1.31 kB
 
 // Create login schema with email and password
 const LoginSchema = v.object({
@@ -37,14 +37,18 @@ const LoginSchema = v.object({
   password: v.pipe(v.string(), v.minLength(8)),
 });
 
-// Infer output TypeScript type of login schema
-type LoginData = v.InferOutput<typeof LoginSchema>; // { email: string; password: string }
+// Infer output TypeScript type of login schema as
+// { email: string; password: string }
+type LoginData = v.InferOutput<typeof LoginSchema>;
 
-// Throws error for `email` and `password`
-v.parse(LoginSchema, { email: '', password: '' });
+// Throws error for email and password
+const output1 = v.parse(LoginSchema, { email: '', password: '' });
 
 // Returns data as { email: string; password: string }
-v.parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
+const output2 = v.parse(LoginSchema, {
+  email: 'jane@example.com',
+  password: '12345678',
+});
 ```
 
 Apart from `parse` I also offer a non-exception-based API with `safeParse` and a type guard function with `is`. You can read more about it [here](https://valibot.dev/guides/parse-data/).
@@ -59,7 +63,7 @@ In addition, it allows you to easily extend my functionality with external code 
 
 ## Credits
 
-My friend [Fabian](https://twitter.com/FabianHiller) created me as part of his bachelor thesis at [Stuttgart Media University](https://www.hdm-stuttgart.de/en/), supervised by Walter Kriha, [Miško Hevery](https://twitter.com/mhevery) and [Ryan Carniato](https://twitter.com/RyanCarniato). My role models also include [Colin McDonnell](https://twitter.com/colinhacks), who had a big influence on my API design with [Zod](https://zod.dev/).
+My friend [Fabian](https://github.com/fabian-hiller) created me as part of his bachelor thesis at [Stuttgart Media University](https://www.hdm-stuttgart.de/en/), supervised by Walter Kriha, [Miško Hevery](https://github.com/mhevery) and [Ryan Carniato](https://github.com/ryansolid). My role models also include [Colin McDonnell](https://github.com/colinhacks), who had a big influence on my API design with [Zod](https://zod.dev/).
 
 ## Feedback
 

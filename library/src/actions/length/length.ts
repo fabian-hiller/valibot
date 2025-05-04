@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Length issue type.
+ * Length issue interface.
  */
 export interface LengthIssue<
   TInput extends LengthInput,
@@ -36,7 +36,7 @@ export interface LengthIssue<
 }
 
 /**
- * Length action type.
+ * Length action interface.
  */
 export interface LengthAction<
   TInput extends LengthInput,
@@ -96,6 +96,7 @@ export function length<
   message: TMessage
 ): LengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function length(
   requirement: number,
   message?: ErrorMessage<LengthIssue<LengthInput, number>>

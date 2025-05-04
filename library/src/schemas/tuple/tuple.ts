@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { TupleIssue } from './types.ts';
 
 /**
- * Tuple schema type.
+ * Tuple schema interface.
  */
 export interface TupleSchema<
   TItems extends TupleItems,
@@ -79,6 +79,7 @@ export function tuple<
   const TMessage extends ErrorMessage<TupleIssue> | undefined,
 >(items: TItems, message: TMessage): TupleSchema<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tuple(
   items: TupleItems,
   message?: ErrorMessage<TupleIssue>

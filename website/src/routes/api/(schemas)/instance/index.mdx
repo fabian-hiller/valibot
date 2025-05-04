@@ -4,6 +4,7 @@ description: Creates an instance schema.
 source: /schemas/instance/instance.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -68,6 +69,7 @@ The following APIs can be combined with `instance`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -104,6 +106,7 @@ The following APIs can be combined with `instance`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -120,6 +123,8 @@ The following APIs can be combined with `instance`.
     'brand',
     'flavor',
     'description',
+    'gtValue',
+    'ltValue',
     'maxSize',
     'maxValue',
     'metadata',
@@ -128,6 +133,7 @@ The following APIs can be combined with `instance`.
     'minValue',
     'notSize',
     'notValue',
+    'notValues',
     'rawCheck',
     'rawTransform',
     'readonly',
@@ -137,6 +143,7 @@ The following APIs can be combined with `instance`.
     'toMinValue',
     'transform',
     'value',
+    'values',
   ]}
 />
 

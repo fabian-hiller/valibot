@@ -1,0 +1,71 @@
+---
+title: rfcEmail
+description: Creates a RFC email validation action.
+source: /actions/rfcEmail/rfcEmail.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# rfcEmail
+
+Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) validation action.
+
+```ts
+const Action = v.rfcEmail<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `rfcEmail` you can validate the formatting of a string. If the input is not an email, you can use `message` to customize the error message.
+
+> This validation action intentionally validates the entire RFC 5322 specification. If you are interested in an action that only covers common email addresses, please use the <Link href="../email/">`email`</Link> action instead.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `rfcEmail` can be used.
+
+### Email schema
+
+Schema to validate an email.
+
+```ts
+const EmailSchema = v.pipe(
+  v.string(),
+  v.nonEmpty('Please enter your email.'),
+  v.rfcEmail('The email is badly formatted.'),
+  v.maxLength(30, 'Your email is too long.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `rfcEmail`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

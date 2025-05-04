@@ -4,6 +4,7 @@ description: Creates an object with rest schema.
 source: /schemas/object/object.ts
 contributors:
   - fabian-hiller
+  - muningis
   - kazizi55
 ---
 
@@ -40,8 +41,6 @@ const Schema = v.objectWithRest<TEntries, TRest, TMessage>(
 With `objectWithRest` you can validate the data type of the input and whether the content matches `entries` and `rest`. If the input is not an object, you can use `message` to customize the error message.
 
 > The difference to <Link href="../object/">`object`</Link> is that this schema includes unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
-
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
 
 ## Returns
 
@@ -129,6 +128,7 @@ The following APIs can be combined with `objectWithRest`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -182,6 +182,7 @@ The following APIs can be combined with `objectWithRest`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -202,7 +203,11 @@ The following APIs can be combined with `objectWithRest`.
     'brand',
     'flavor',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',

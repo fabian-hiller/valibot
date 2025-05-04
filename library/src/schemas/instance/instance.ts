@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 export type Class = new (...args: any[]) => any;
 
 /**
- * Instance issue type.
+ * Instance issue interface.
  */
 export interface InstanceIssue extends BaseIssue<unknown> {
   /**
@@ -31,7 +31,7 @@ export interface InstanceIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Instance schema type.
+ * Instance schema interface.
  */
 export interface InstanceSchema<
   TClass extends Class,
@@ -83,6 +83,7 @@ export function instance<
   const TMessage extends ErrorMessage<InstanceIssue> | undefined,
 >(class_: TClass, message: TMessage): InstanceSchema<TClass, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function instance(
   class_: Class,
   message?: ErrorMessage<InstanceIssue>

@@ -48,6 +48,7 @@ import type { InferFallbacks } from './types.ts';
  *
  * @returns The fallback values.
  */
+// @__NO_SIDE_EFFECTS__
 export async function getFallbacksAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

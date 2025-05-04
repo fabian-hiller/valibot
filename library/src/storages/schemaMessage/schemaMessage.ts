@@ -24,6 +24,7 @@ export function setSchemaMessage(
  *
  * @returns The error message.
  */
+// @__NO_SIDE_EFFECTS__
 export function getSchemaMessage(
   lang?: string
 ): ErrorMessage<BaseIssue<unknown>> | undefined {

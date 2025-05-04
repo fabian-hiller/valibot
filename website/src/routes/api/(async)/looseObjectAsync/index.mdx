@@ -35,8 +35,6 @@ With `looseObjectAsync` you can validate the data type of the input and whether 
 
 > The difference to <Link href="../objectAsync/">`objectAsync`</Link> is that this schema includes any unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
 
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
-
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -81,6 +79,7 @@ The following APIs can be combined with `looseObjectAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -154,6 +153,7 @@ The following APIs can be combined with `looseObjectAsync`.
     'arrayAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'forwardAsync',
     'getDefaultsAsync',

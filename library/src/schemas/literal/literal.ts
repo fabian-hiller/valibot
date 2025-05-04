@@ -12,7 +12,7 @@ import { _addIssue, _getStandardProps, _stringify } from '../../utils/index.ts';
 export type Literal = bigint | boolean | number | string | symbol;
 
 /**
- * Literal issue type.
+ * Literal issue interface.
  */
 export interface LiteralIssue extends BaseIssue<unknown> {
   /**
@@ -30,7 +30,7 @@ export interface LiteralIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Literal schema type.
+ * Literal schema interface.
  */
 export interface LiteralSchema<
   TLiteral extends Literal,
@@ -78,6 +78,7 @@ export function literal<
   const TMessage extends ErrorMessage<LiteralIssue> | undefined,
 >(literal_: TLiteral, message: TMessage): LiteralSchema<TLiteral, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function literal(
   literal_: Literal,
   message?: ErrorMessage<LiteralIssue>

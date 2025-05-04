@@ -7,8 +7,9 @@ import type {
   InferIssue,
   InferOutput,
   MaybePromise,
+  MaybeReadonly,
   OutputDataset,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -22,11 +23,11 @@ export type FallbackAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > =
-  | InferOutput<TSchema>
+  | MaybeReadonly<InferOutput<TSchema>>
   | ((
       dataset?: OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>,
       config?: Config<InferIssue<TSchema>>
-    ) => MaybePromise<InferOutput<TSchema>>);
+    ) => MaybePromise<MaybeReadonly<InferOutput<TSchema>>>);
 
 /**
  * Schema with fallback async type.
@@ -50,7 +51,7 @@ export type SchemaWithFallbackAsync<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<
+  readonly '~standard': StandardProps<
     InferInput<TSchema>,
     InferOutput<TSchema>
   >;
@@ -78,6 +79,7 @@ export type SchemaWithFallbackAsync<
  *
  * @returns The passed schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function fallbackAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

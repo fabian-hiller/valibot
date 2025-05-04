@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Finite issue type.
+ * Finite issue interface.
  */
 export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Finite action type.
+ * Finite action interface.
  */
 export interface FiniteAction<
   TInput extends number,
@@ -82,6 +82,7 @@ export function finite<
   const TMessage extends ErrorMessage<FiniteIssue<TInput>> | undefined,
 >(message: TMessage): FiniteAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function finite(
   message?: ErrorMessage<FiniteIssue<number>>
 ): FiniteAction<number, ErrorMessage<FiniteIssue<number>> | undefined> {

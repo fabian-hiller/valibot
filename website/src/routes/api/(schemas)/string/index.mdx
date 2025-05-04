@@ -4,6 +4,7 @@ description: Creates a string schema.
 source: /schemas/string/string.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - morinokami
   - jasperteo
   - kazizi55
@@ -88,6 +89,7 @@ The following APIs can be combined with `string`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -124,6 +126,7 @@ The following APIs can be combined with `string`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -153,6 +156,7 @@ The following APIs can be combined with `string`.
     'endsWith',
     'excludes',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -167,7 +171,9 @@ The following APIs can be combined with `string`.
     'isoTimeSecond',
     'isoTimestamp',
     'isoWeek',
+    'json',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
@@ -185,16 +191,22 @@ The following APIs can be combined with `string`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'rawCheck',
     'rawTransform',
     'readonly',
     'regex',
+    'rfcEmail',
+    'slug',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
@@ -208,6 +220,7 @@ The following APIs can be combined with `string`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

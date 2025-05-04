@@ -124,7 +124,9 @@ describe('mapAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });

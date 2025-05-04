@@ -1,5 +1,6 @@
 import { component$, Fragment } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
+import clsx from 'clsx';
 
 type DefinitionData =
   | 'string'
@@ -51,6 +52,7 @@ type DefinitionData =
     }
   | {
       type: 'tuple';
+      modifier?: string;
       items: DefinitionData[];
     }
   | {
@@ -240,16 +242,21 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
         <span class="text-slate-600 dark:text-slate-400">[]</span>
       </span>
     ) : data.type === 'tuple' ? (
-      <span class="text-slate-600 dark:text-slate-400">
-        [
-        {data.items.map((item, index) => (
-          <Fragment key={index}>
-            {index > 0 && ', '}
-            <Definition parent={data.type} data={item} />
-          </Fragment>
-        ))}
-        ]
-      </span>
+      <>
+        {data.modifier && (
+          <span class="text-red-600 dark:text-red-400">{data.modifier} </span>
+        )}
+        <span class="text-slate-600 dark:text-slate-400">
+          [
+          {data.items.map((item, index) => (
+            <Fragment key={index}>
+              {index > 0 && ', '}
+              <Definition parent={data.type} data={item} />
+            </Fragment>
+          ))}
+          ]
+        </span>
+      </>
     ) : data.type === 'function' ? (
       <span class="text-slate-600 dark:text-slate-400">
         {(parent === 'union' ||
@@ -266,7 +273,14 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
               {param.spread && (
                 <span class="text-red-600 dark:text-red-400">...</span>
               )}
-              <span class="italic text-orange-500 dark:text-orange-300">
+              <span
+                class={clsx(
+                  'italic',
+                  param.name === 'this' && index === 0
+                    ? 'text-red-600 dark:text-red-400'
+                    : 'text-orange-500 dark:text-orange-300'
+                )}
+              >
                 {param.name}
               </span>
               <span class="text-red-600 dark:text-red-400">
@@ -364,10 +378,12 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
           <>
             {'<'}
             {data.generics.map((generic, index) => (
-              <Fragment key={index}>
-                {index > 0 && ', '}
+              <span key={index} class="inline-block">
                 <Definition parent={data.type} data={generic} />
-              </Fragment>
+                {index < data.generics!.length - 1 && (
+                  <span class="whitespace-pre">, </span>
+                )}
+              </span>
             ))}
             {'>'}
           </>

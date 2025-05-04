@@ -1,0 +1,40 @@
+name: Setup environment
+description: Setup environment with Node.js, Deno and pnpm
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+        run_install: false
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        registry-url: 'https://registry.npmjs.org'
+        cache: pnpm
+
+    - name: Setup Deno
+      uses: denoland/setup-deno@v2
+      with:
+        deno-version: v2.2.12
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
+
+    - name: Create library build cache
+      id: library-build-cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/library/dist
+        key: library-build-cache-${{ hashFiles('library/src/**/*.ts', '!library/src/**/*.test.ts', '!library/src/**/*.test-d.ts') }}
+
+    - name: Build library
+      if: steps.library-build-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: pnpm build
+      working-directory: library

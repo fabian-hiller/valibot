@@ -4,6 +4,7 @@ description: Creates a loose object schema.
 source: /schemas/looseObject/looseObject.ts
 contributors:
   - fabian-hiller
+  - muningis
   - kazizi55
 ---
 
@@ -34,8 +35,6 @@ const Schema = v.looseObject<TEntries, TMessage>(entries, message);
 With `looseObject` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object, you can use `message` to customize the error message.
 
 > The difference to <Link href="../object/">`object`</Link> is that this schema includes any unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
-
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
 
 ## Returns
 
@@ -111,6 +110,7 @@ The following APIs can be combined with `looseObject`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -164,6 +164,7 @@ The following APIs can be combined with `looseObject`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -184,7 +185,11 @@ The following APIs can be combined with `looseObject`.
     'brand',
     'flavor',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',

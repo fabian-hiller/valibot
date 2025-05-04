@@ -7,7 +7,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Set issue type.
+ * Set issue interface.
  */
 export interface SetIssue extends BaseIssue<unknown> {
   /**

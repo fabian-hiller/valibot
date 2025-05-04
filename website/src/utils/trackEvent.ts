@@ -1,12 +1,17 @@
 type EventName =
   | 'change_theme'
+  | 'change_chapters'
   | 'open_search'
   | 'select_search_item'
+  | 'copy_code_snippet'
+  | 'open_code_snippet_in_playground'
   | 'copy_playground_code'
   | 'share_playground_code'
   | 'save_playground_code'
   | 'execute_playground_code'
-  | 'clear_playground_logs';
+  | 'clear_playground_logs'
+  | 'resize_playground';
+
 type EventData = { [key: string]: string | number | boolean | undefined };
 
 declare global {

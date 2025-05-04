@@ -1,12 +1,13 @@
 ---
 title: pipe
-description: >-
-  Adds a pipeline to a schema, that can validate and transform its input.
+description: Adds a pipeline to a schema, that can validate and transform its input.
 source: /methods/pipe/pipe.ts
 contributors:
   - fabian-hiller
-  - morinokami
+  - EltonLobo07
+  - muningis
   - jasperteo
+  - morinokami
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -84,6 +85,7 @@ The following APIs can be combined with `pipe`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -138,6 +140,7 @@ The following APIs can be combined with `pipe`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -154,6 +157,7 @@ The following APIs can be combined with `pipe`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -170,12 +174,14 @@ The following APIs can be combined with `pipe`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -192,11 +198,13 @@ The following APIs can be combined with `pipe`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -205,6 +213,7 @@ The following APIs can be combined with `pipe`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -214,23 +223,30 @@ The following APIs can be combined with `pipe`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
+    'slug',
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
@@ -244,6 +260,7 @@ The following APIs can be combined with `pipe`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

@@ -40,11 +40,57 @@ describe('toJsonSchema', () => {
               age: { type: 'number' },
             },
             required: ['name', 'email'],
-            additionalProperties: false,
             description: 'foo',
           },
         },
       });
+    });
+
+    test('for complex schema with any order of definitions', () => {
+      const stringSchema = v.string();
+      const aliasesSchema = v.array(stringSchema);
+      const complexSchema = v.pipe(
+        v.object({
+          name: v.lazy(() => stringSchema),
+          aliases: v.optional(aliasesSchema),
+          email: v.pipe(stringSchema, v.email(), v.minLength(10)),
+        }),
+        v.description('foo')
+      );
+      const expectedJsonSchema = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        $ref: '#/$defs/complexSchema',
+        $defs: {
+          stringSchema: { type: 'string' },
+          aliasesSchema: {
+            type: 'array',
+            items: { $ref: '#/$defs/stringSchema' },
+          },
+          complexSchema: {
+            type: 'object',
+            properties: {
+              name: { $ref: '#/$defs/stringSchema' },
+              aliases: { $ref: '#/$defs/aliasesSchema' },
+              email: { type: 'string', format: 'email', minLength: 10 },
+            },
+            required: ['name', 'email'],
+            description: 'foo',
+          },
+        },
+      };
+      const definitionPermutations = [
+        { stringSchema, aliasesSchema, complexSchema },
+        { stringSchema, complexSchema, aliasesSchema },
+        { aliasesSchema, stringSchema, complexSchema },
+        { aliasesSchema, complexSchema, stringSchema },
+        { complexSchema, stringSchema, aliasesSchema },
+        { complexSchema, aliasesSchema, stringSchema },
+      ];
+      for (const definitions of definitionPermutations) {
+        expect(toJsonSchema(complexSchema, { definitions })).toStrictEqual(
+          expectedJsonSchema
+        );
+      }
     });
 
     test('for recursive schema', () => {
@@ -65,7 +111,6 @@ describe('toJsonSchema', () => {
         $ref: '#/$defs/ul',
         $defs: {
           ul: {
-            additionalProperties: false,
             properties: {
               children: {
                 items: { $ref: '#/$defs/li' },
@@ -77,7 +122,6 @@ describe('toJsonSchema', () => {
             type: 'object',
           },
           li: {
-            additionalProperties: false,
             properties: {
               children: {
                 items: {

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO timestamp issue type.
+ * ISO timestamp issue interface.
  */
 export interface IsoTimestampIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface IsoTimestampIssue<TInput extends string>
 }
 
 /**
- * ISO timestamp action type.
+ * ISO timestamp action interface.
  */
 export interface IsoTimestampAction<
   TInput extends string,
@@ -78,6 +78,9 @@ export interface IsoTimestampAction<
  * year and month. For example, "2023-06-31T00:00:00.000Z" is valid although
  * June has only 30 days.
  *
+ * Hint: The regex also allows a space as a separator between the date and time
+ * parts instead of the "T" character.
+ *
  * @returns An ISO timestamp action.
  */
 export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
@@ -102,6 +105,9 @@ export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
  * year and month. For example, "2023-06-31T00:00:00.000Z" is valid although
  * June has only 30 days.
  *
+ * Hint: The regex also allows a space as a separator between the date and time
+ * parts instead of the "T" character.
+ *
  * @param message The error message.
  *
  * @returns An ISO timestamp action.
@@ -111,6 +117,7 @@ export function isoTimestamp<
   const TMessage extends ErrorMessage<IsoTimestampIssue<TInput>> | undefined,
 >(message: TMessage): IsoTimestampAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoTimestamp(
   message?: ErrorMessage<IsoTimestampIssue<string>>
 ): IsoTimestampAction<

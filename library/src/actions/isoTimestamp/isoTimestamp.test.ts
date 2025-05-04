@@ -118,6 +118,14 @@ describe('isoTimestamp', () => {
         '9999-12-31T23:59:59.999999999Z',
       ]);
     });
+
+    test('for space as separator', () => {
+      expectNoActionIssue(action, [
+        '0000-01-01 00:00:00.000Z',
+        '2023-07-11 17:26:27.243Z',
+        '9999-12-31 23:59:59.999Z',
+      ]);
+    });
   });
 
   describe('should return dataset with issues', () => {
@@ -142,7 +150,7 @@ describe('isoTimestamp', () => {
       ]);
     });
 
-    test('for missing seperators', () => {
+    test('for missing separators', () => {
       expectActionIssue(action, baseIssue, [
         '000001-01T00:00:00.000Z',
         '0000-0101T00:00:00.000Z',
@@ -155,7 +163,7 @@ describe('isoTimestamp', () => {
       ]);
     });
 
-    test('for double seperators', () => {
+    test('for double separators', () => {
       expectActionIssue(action, baseIssue, [
         '0000--01-01T00:00:00.000Z',
         '0000-01--01T00:00:00.000Z',
@@ -183,6 +191,8 @@ describe('isoTimestamp', () => {
         '0000-01-01A00:00:00.000Z',
         '0000-01-01U00:00:00.000Z',
         '0000-01-01Z00:00:00.000Z',
+        '0000-01-01_00:00:00.000Z',
+        '0000-01-01-00:00:00.000Z',
 
         // Time separators
         '0000-01-01T00 00 00.000Z',

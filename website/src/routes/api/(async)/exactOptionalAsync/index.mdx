@@ -1,0 +1,223 @@
+---
+title: exactOptionalAsync
+description: Creates an exact optional schema.
+source: /schemas/exactOptional/exactOptionalAsync.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# exactOptionalAsync
+
+Creates an exact optional schema.
+
+```ts
+const Schema = v.exactOptionalAsync<TWrapped, TDefault>(wrapped, default_);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+
+## Parameters
+
+- `wrapped` <Property {...properties.wrapped} />
+- `default_` {/* prettier-ignore */}<Property {...properties.default_} />
+
+### Explanation
+
+With `exactOptionalAsync` the validation of your schema will pass missing object entries, and if you specify a `default_` input value, the schema will use it if the object entry is missing. For this reason, the output type may differ from the input type of the schema.
+
+> The difference to <Link href="../optionalAsync/">`optionalAsync`</Link> is that this schema function follows the implementation of TypeScript's [`exactOptionalPropertyTypes` configuration](https://www.typescriptlang.org/tsconfig/#exactOptionalPropertyTypes) and only allows missing but not undefined object entries.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `exactOptionalAsync` can be used.
+
+### New user schema
+
+Schema to validate new user details.
+
+```ts
+import { isEmailUnique, isUsernameUnique } from '~/api';
+
+const NewUserSchema = v.objectAsync({
+  email: v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailUnique, 'The email is not unique.')
+  ),
+  username: v.exactOptionalAsync(
+    v.pipeAsync(
+      v.string(),
+      v.nonEmpty(),
+      v.checkAsync(isUsernameUnique, 'The username is not unique.')
+    )
+  ),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+/*
+  The input and output types of the schema:
+    {
+      email: string;
+      password: string;
+      username?: string;
+    }
+*/
+```
+
+### Unwrap exact optional schema
+
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `exactOptionalAsync`.
+
+```ts
+import { isUsernameUnique } from '~/api';
+
+const UsernameSchema = v.unwrap(
+  // Assume this schema is from a different file and is reused here
+  v.exactOptionalAsync(
+    v.pipeAsync(
+      v.string(),
+      v.nonEmpty(),
+      v.checkAsync(isUsernameUnique, 'The username is not unique.')
+    )
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `exactOptionalAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'exactOptional',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback', 'unwrap']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'description',
+    'metadata',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'title',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'awaitAsync',
+    'checkAsync',
+    'customAsync',
+    'exactOptionalAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

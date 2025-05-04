@@ -29,7 +29,7 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -88,7 +88,7 @@ export type SchemaWithOmit<
        *
        * @internal
        */
-      readonly '~standard': StandardSchemaProps<
+      readonly '~standard': StandardProps<
         InferObjectInput<Omit<TEntries, TKeys[number]>>,
         InferObjectOutput<Omit<TEntries, TKeys[number]>>
       >;
@@ -144,7 +144,7 @@ export type SchemaWithOmit<
          *
          * @internal
          */
-        readonly '~standard': StandardSchemaProps<
+        readonly '~standard': StandardProps<
           InferObjectInput<Omit<TEntries, TKeys[number]>>,
           InferObjectOutput<Omit<TEntries, TKeys[number]>>
         >;
@@ -197,7 +197,7 @@ export type SchemaWithOmit<
            *
            * @internal
            */
-          readonly '~standard': StandardSchemaProps<
+          readonly '~standard': StandardProps<
             InferObjectInput<Omit<TEntries, TKeys[number]>> & {
               [key: string]: unknown;
             },
@@ -262,7 +262,7 @@ export type SchemaWithOmit<
              *
              * @internal
              */
-            readonly '~standard': StandardSchemaProps<
+            readonly '~standard': StandardProps<
               InferObjectInput<Omit<TEntries, TKeys[number]>> & {
                 [key: string]: unknown;
               },
@@ -330,7 +330,7 @@ export type SchemaWithOmit<
                *
                * @internal
                */
-              readonly '~standard': StandardSchemaProps<
+              readonly '~standard': StandardProps<
                 InferObjectInput<Omit<TEntries, TKeys[number]>> & {
                   [key: string]: InferInput<TSchema['rest']>;
                 },
@@ -396,7 +396,7 @@ export type SchemaWithOmit<
                  *
                  * @internal
                  */
-                readonly '~standard': StandardSchemaProps<
+                readonly '~standard': StandardProps<
                   InferObjectInput<Omit<TEntries, TKeys[number]>> & {
                     [key: string]: InferInput<TSchema['rest']>;
                   },
@@ -463,6 +463,7 @@ export type SchemaWithOmit<
  *
  * @returns An object schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function omit<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
@@ -474,6 +475,7 @@ export function omit<
   };
   for (const key of keys) {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete entries[key];
   }
 

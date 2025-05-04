@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Regex issue type.
+ * Regex issue interface.
  */
 export interface RegexIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface RegexIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Regex action type.
+ * Regex action interface.
  */
 export interface RegexAction<
   TInput extends string,
@@ -63,6 +63,8 @@ export interface RegexAction<
 /**
  * Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
  *
+ * Hint: Be careful with the global flag `g` in your regex pattern, as it can lead to unexpected results. See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test#using_test_on_a_regex_with_the_global_flag) for more information.
+ *
  * @param requirement The regex pattern.
  *
  * @returns A regex action.
@@ -74,6 +76,8 @@ export function regex<TInput extends string>(
 /**
  * Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
  *
+ * Hint: Be careful with the global flag `g` in your regex pattern, as it can lead to unexpected results. See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test#using_test_on_a_regex_with_the_global_flag) for more information.
+ *
  * @param requirement The regex pattern.
  * @param message The error message.
  *
@@ -84,6 +88,7 @@ export function regex<
   const TMessage extends ErrorMessage<RegexIssue<TInput>> | undefined,
 >(requirement: RegExp, message: TMessage): RegexAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function regex(
   requirement: RegExp,
   message?: ErrorMessage<RegexIssue<string>>

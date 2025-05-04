@@ -4,6 +4,7 @@ description: Creates a strict object schema.
 source: /schemas/strictObject/strictObject.ts
 contributors:
   - fabian-hiller
+  - muningis
   - kazizi55
 ---
 
@@ -34,8 +35,6 @@ const Schema = v.strictObject<TEntries, TMessage>(entries, message);
 With `strictObject` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object or does include unknown entries, you can use `message` to customize the error message.
 
 > The difference to <Link href="../object/">`object`</Link> is that this schema returns an issue for unknown entries. It intentionally returns only one issue. Otherwise, attackers could send large objects to exhaust device resources. If you want an issue for every unknown key, use the <Link href="../objectWithRest/">`objectWithRest`</Link> schema with <Link href="../never/">`never`</Link> for the `rest` argument.
-
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
 
 ## Returns
 
@@ -111,6 +110,7 @@ The following APIs can be combined with `strictObject`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -164,6 +164,7 @@ The following APIs can be combined with `strictObject`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -184,7 +185,11 @@ The following APIs can be combined with `strictObject`.
     'brand',
     'flavor',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',

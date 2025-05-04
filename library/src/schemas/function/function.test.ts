@@ -51,6 +51,7 @@ describe('function', () => {
     const schema = function_();
 
     test('for functions', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       expectNoSchemaIssue(schema, [() => {}, function () {}]);
     });
   });

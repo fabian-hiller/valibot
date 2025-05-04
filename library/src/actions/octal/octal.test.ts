@@ -89,15 +89,6 @@ describe('octal', () => {
         '0o1234567',
       ]);
     });
-
-    test('for 0O prefix', () => {
-      expectNoActionIssue(action, [
-        '0O000000000000000',
-        '0O777777777777',
-        '0O01234567',
-        '0O1234567',
-      ]);
-    });
   });
 
   describe('should return dataset with issues', () => {

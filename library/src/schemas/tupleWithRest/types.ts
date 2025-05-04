@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Tuple with rest issue type.
+ * Tuple with rest issue interface.
  */
 export interface TupleWithRestIssue extends BaseIssue<unknown> {
   /**

@@ -6,6 +6,7 @@ description: >-
   shortcut.
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - fartinmartin
 ---
 
@@ -13,24 +14,27 @@ import { Link } from '@builder.io/qwik-city';
 
 # Optionals
 
-It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, Valibot offers a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link>.
+It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, Valibot offers a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/exactOptional/">`exactOptional`</Link>, <Link href="/api/undefinedable/">`undefinedable`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
 
 ## How it works
 
-To accept `undefined` and/or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link>, or <Link href="/api/undefinedable/">`undefinedable`</Link>.
+To accept `undefined` and/or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/exactOptional/">`exactOptional`</Link>, <Link href="/api/undefinedable/">`undefinedable`</Link>, <Link href="/api/nullable/">`nullable`</Link> or <Link href="/api/nullish/">`nullish`</Link>.
+
+> Note: <Link href="/api/exactOptional/">`exactOptional`</Link> allows missing entries in objects, but does not allow `undefined` as a specified value.
 
 ```ts
 import * as v from 'valibot';
 
 const OptionalStringSchema = v.optional(v.string()); // string | undefined
+const ExactOptionalStringSchema = v.exactOptional(v.string()); // string
+const UndefinedableStringSchema = v.undefinedable(v.string()); // string | undefined
 const NullableStringSchema = v.nullable(v.string()); // string | null
 const NullishStringSchema = v.nullish(v.string()); // string | null | undefined
-const UndefinedableStringSchema = v.undefinedable(v.string()); // string | undefined
 ```
 
 ### Use in objects
 
-When used inside of objects, <Link href="/api/optional/">`optional`</Link> and <Link href="/api/nullish/">`nullish`</Link> is a special case, as it also marks the value as optional in TypeScript with a question mark.
+When used inside of objects, <Link href="/api/optional/">`optional`</Link>, <Link href="/api/exactOptional/">`exactOptional`</Link> and <Link href="/api/nullish/">`nullish`</Link> is a special case, as it also marks the value as optional in TypeScript with a question mark.
 
 ```ts
 import * as v from 'valibot';
@@ -40,15 +44,15 @@ const OptionalKeySchema = v.object({ key: v.optional(v.string()) }); // { key?: 
 
 ## Default values
 
-The special thing about <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link> is that the schema functions accept a default value as the second argument. Depending on the schema function, this default value is always used if the input is `undefined` or `null`.
+What makes <Link href="/api/optional/">`optional`</Link>, <Link href="/api/exactOptional/">`exactOptional`</Link>, <Link href="/api/undefinedable/">`undefinedable`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link> unique is that the schema functions accept a default value as the second argument. Depending on the schema function, this default value is always used if the input is missing, `undefined` or `null`.
 
 ```ts
 import * as v from 'valibot';
 
 const OptionalStringSchema = v.optional(v.string(), "I'm the default!");
 
-type OptionalStringInput = v.Input<typeof OptionalStringSchema>; // string | undefined
-type OptionalStringOutput = v.Output<typeof OptionalStringSchema>; // string
+type OptionalStringInput = v.InferInput<typeof OptionalStringSchema>; // string | undefined
+type OptionalStringOutput = v.InferOutput<typeof OptionalStringSchema>; // string
 ```
 
 By providing a default value, the input type of the schema now differs from the output type. The schema in the example now accepts `string` and `undefined` as input, but returns a string as output in both cases.
@@ -70,17 +74,17 @@ The previous example thus creates a new instance of the [`Date`](https://develop
 In rare cases, a default value for an optional entry may depend on the values of another entries in the same object. This can be achieved by using <Link href="/api/transform/">`transform`</Link> in the <Link href="/api/pipe/">`pipe`</Link> of the object.
 
 ```ts
+import * as v from 'valibot';
+
 const CalculationSchema = v.pipe(
   v.object({
     a: v.number(),
     b: v.number(),
     sum: v.optional(v.number()),
   }),
-  v.transform((input) => {
-    if (input.sum === undefined) {
-      return { ...input, sum: input.a + input.b };
-    }
-    return input;
-  })
+  v.transform((input) => ({
+    ...input,
+    sum: input.sum === undefined ? input.a + input.b : input.sum,
+  }))
 );
 ```

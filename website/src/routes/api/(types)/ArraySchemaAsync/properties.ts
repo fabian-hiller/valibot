@@ -127,10 +127,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'arrayAsync',
-      href: '../arrayAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'array',
+          href: '../array/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'arrayAsync',
+          href: '../arrayAsync/',
+        },
+      ],
     },
   },
   expects: {

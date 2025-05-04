@@ -91,10 +91,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'tupleAsync',
-      href: '../tupleAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'tuple',
+          href: '../tuple/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'tupleAsync',
+          href: '../tupleAsync/',
+        },
+      ],
     },
   },
   expects: {

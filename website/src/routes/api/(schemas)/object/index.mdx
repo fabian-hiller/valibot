@@ -5,6 +5,7 @@ source: /schemas/object/object.ts
 contributors:
   - fabian-hiller
   - kazizi55
+  - muningis
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -34,8 +35,6 @@ const Schema = v.object<TEntries, TMessage>(entries, message);
 With `object` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object, you can use `message` to customize the error message.
 
 > This schema removes unknown entries. The output will only include the entries you specify. To include unknown entries, use <Link href="../looseObject/">`looseObject`</Link>. To return an issue for unknown entries, use <Link href="../strictObject/">`strictObject`</Link>. To include and validate unknown entries, use <Link href="../objectWithRest/">`objectWithRest`</Link>.
-
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
 
 ## Returns
 
@@ -111,6 +110,7 @@ The following APIs can be combined with `object`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -164,6 +164,7 @@ The following APIs can be combined with `object`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -184,7 +185,11 @@ The following APIs can be combined with `object`.
     'brand',
     'flavor',
     'description',
+    'entries',
+    'maxEntries',
     'metadata',
+    'minEntries',
+    'notEntries',
     'partialCheck',
     'rawCheck',
     'rawTransform',

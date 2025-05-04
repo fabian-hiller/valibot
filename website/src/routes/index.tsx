@@ -49,9 +49,15 @@ export default component$(() => {
       <section class="px-4 text-center">
         <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] md:leading-normal lg:text-[40px] lg:leading-normal xl:text-5xl xl:leading-normal dark:text-slate-200">
           <span class="block">
-            Validate <span class="blur-[1px] xl:blur-[2px]">unknown</span>
+            Validate{' '}
+            <span class="cursor-default blur-[1px] duration-[2s] hover:blur-none xl:blur-[2px]">
+              unknown
+            </span>
           </span>{' '}
-          <span class="blur-[2px] xl:blur-[3px]">data</span> with confidence
+          <span class="cursor-default blur-[2px] duration-[2s] hover:blur-none xl:blur-[3px]">
+            data
+          </span>{' '}
+          with confidence
         </h1>
         <p class="mt-6 leading-loose md:mt-10 md:text-[17px] md:leading-loose lg:mt-14 lg:text-lg lg:leading-loose xl:text-[22px] xl:leading-loose">
           <span class="sm:block">
@@ -64,7 +70,7 @@ export default component$(() => {
             variant="primary"
             label="Get started"
             type="link"
-            href="/guides/"
+            href="/guides/introduction/"
           />
           <ActionButton
             variant="secondary"
@@ -124,7 +130,7 @@ export default component$(() => {
             {
               emoji: '📦',
               heading: 'Small bundle size',
-              text: 'Due to the modular design of our API the bundle size starts at less than 600 bytes',
+              text: 'Due to the modular design of our API the bundle size starts at less than 700 bytes',
             },
             {
               emoji: '🚧',
@@ -186,9 +192,9 @@ export default component$(() => {
                   >
                     MIT License
                   </TextLink>
-                  . We finance the development from our own funds. If your
-                  company would like to support us, you can take a look at our
-                  sponsor page on{' '}
+                  . However, we rely on partners and sponsors to fund the
+                  project. If your company would like to support us, you can
+                  take a look at our sponsor page on{' '}
                   <TextLink
                     href="https://github.com/sponsors/fabian-hiller"
                     target="_blank"
@@ -236,8 +242,8 @@ export default component$(() => {
                   ability to reduce the bundle size to a minimum through tree
                   shaking and code splitting. Depending on the schema, Valibot
                   can reduce the bundle size up to 95% compared to Zod.
-                  Especially for client-side validation of forms, this can be a
-                  big advantage.
+                  Especially for client-side validation of forms and serverless
+                  environments this can be a big advantage.
                 </>
               ),
             },
@@ -259,9 +265,9 @@ export default component$(() => {
                     aria-expanded={isOpen}
                     aria-controls={`faq-${index}`}
                   >
-                    <h3 class="text-left font-medium leading-relaxed md:text-xl lg:text-2xl">
+                    <span class="text-left font-medium leading-relaxed md:text-xl lg:text-2xl">
                       {heading}
-                    </h3>
+                    </span>
                     <PlusIcon
                       class={clsx(
                         'mt-1.5 h-4 flex-shrink-0 transition-transform lg:h-5',
@@ -292,7 +298,7 @@ export default component$(() => {
           variant="primary"
           label="Get started"
           type="link"
-          href="/guides/"
+          href="/guides/introduction/"
         />
         <ActionButton
           variant="secondary"

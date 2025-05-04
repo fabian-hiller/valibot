@@ -2,12 +2,14 @@ import { component$ } from '@builder.io/qwik';
 import { useDocumentHead } from '@builder.io/qwik-city';
 import {
   AlgoliaLogo,
+  BoltLogo,
   BuilderLogo,
   DailyDevLogo,
   DigitalOceanLogo,
   HdmLogo,
   NetlifyLogo,
   PaceLogo,
+  StainlessLogo,
   VercelLogo,
 } from '~/logos';
 
@@ -40,7 +42,7 @@ export const Credits = component$(() => {
                     height="88"
                     loading="lazy"
                     src={`https://github.com/${contributor}.png?size=88`}
-                    alt={`GitHub profile picture of ${contributor}`}
+                    alt={`GitHub profile picture of @${contributor}`}
                     class="w-9 rounded-full md:w-10 lg:w-11"
                   />
                 </a>
@@ -59,12 +61,14 @@ export const Credits = component$(() => {
       <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-3 md:mt-5 md:gap-x-8 md:gap-y-4 lg:mt-6 lg:gap-x-10 lg:gap-y-5">
         {[
           { Logo: PaceLogo, href: 'https://www.pace.edu' },
+          { Logo: BoltLogo, href: 'https://bolt.new/' },
           { Logo: BuilderLogo, href: 'https://www.builder.io' },
           { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
           { Logo: DailyDevLogo, href: 'https://daily.dev/' },
-          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
-          { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+          { Logo: StainlessLogo, href: 'https://www.stainless.com/' },
           { Logo: VercelLogo, href: 'https://vercel.com' },
+          { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
         ].map(({ Logo, href }) => (
           <li key={href}>
@@ -89,14 +93,14 @@ export const Credits = component$(() => {
           'ruiaraujo012',
           'hyunbinseo',
           'F0rce',
-          'fabulousgk',
+          'UniquePixels',
           'jdgamble555',
           'nickytonline',
           'KubaJastrz',
+          'andrewmd5',
           'caegdeveloper',
-          'luckasnix',
-          'andrew-3kb',
           'dslatkin',
+          'BrianCurliss',
         ].map((sponsor) => (
           <li key={sponsor}>
             <a
@@ -109,7 +113,7 @@ export const Credits = component$(() => {
                 height="88"
                 loading="lazy"
                 src={`https://github.com/${sponsor}.png?size=88`}
-                alt={`GitHub profile picture of ${sponsor}`}
+                alt={`GitHub profile picture of @${sponsor}`}
                 class="w-9 rounded-full md:w-10 lg:w-11"
               />
             </a>

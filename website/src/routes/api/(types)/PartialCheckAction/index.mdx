@@ -1,6 +1,6 @@
 ---
 title: PartialCheckAction
-description: Partial check action type.
+description: Partial check action interface.
 contributors:
   - fabian-hiller
 ---
@@ -10,11 +10,12 @@ import { properties } from './properties';
 
 # PartialCheckAction
 
-Partial check action type.
+Partial check action interface.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TPaths` <Property {...properties.TPaths} />
 - `TSelection` <Property {...properties.TSelection} />
 - `TMessage` <Property {...properties.TMessage} />
 
@@ -24,5 +25,6 @@ Partial check action type.
   - `type` <Property {...properties.type} />
   - `reference` <Property {...properties.reference} />
   - `expects` <Property {...properties.expects} />
+  - `paths` <Property {...properties.paths} />
   - `requirement` <Property {...properties.requirement} />
   - `message` <Property {...properties.message} />
