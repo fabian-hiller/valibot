@@ -22,7 +22,7 @@ export const properties: Record<string, PropertyProps> = {
   kind: {
     type: {
       type: 'string',
-      value: 'validation',
+      value: 'transformation',
     },
   },
   type: {

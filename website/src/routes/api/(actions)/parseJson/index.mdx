@@ -4,6 +4,7 @@ description: Creates a JSON parse transformation action.
 source: /actions/parseJson/parseJson.ts
 contributors:
   - EskiMojo14
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -40,9 +41,9 @@ With `parseJson` you can parse a JSON string. If the input is not valid JSON, yo
 
 The following examples show how `parseJson` can be used.
 
-### Parse JSON
+### Parse and validate JSON
 
-Parse a JSON string.
+Parse a JSON string and validate the result.
 
 ```ts
 const StringifiedObjectSchema = v.pipe(
@@ -60,7 +61,8 @@ Parse a JSON string with a reviver function.
 const StringifiedObjectSchema = v.pipe(
   v.string(),
   v.parseJson({
-    reviver: (k, v) => (typeof v === 'string' ? v.toUpperCase() : v),
+    reviver: (key, value) =>
+      typeof value === 'string' ? value.toUpperCase() : value,
   }),
   v.object({ key: v.string() })
 );

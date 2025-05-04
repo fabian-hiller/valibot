@@ -30,13 +30,14 @@ export const properties: Record<string, PropertyProps> = {
             options: ['string', 'number'],
           },
         },
+        'undefined',
       ],
     },
   },
   space: {
     type: {
       type: 'union',
-      options: ['string', 'number'],
+      options: ['string', 'number', 'undefined'],
     },
   },
 };

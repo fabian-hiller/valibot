@@ -3,6 +3,7 @@ title: stringifyJson
 description: JSON stringify transformation action.
 contributors:
   - EskiMojo14
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -58,7 +59,8 @@ Stringify a JSON object with a replacer function.
 const StringifiedObjectSchema = v.pipe(
   v.object({ key: v.string() }),
   v.stringifyJson({
-    replacer: (k, v) => (typeof v === 'string' ? v.toUpperCase() : v),
+    replacer: (key, value) =>
+      typeof value === 'string' ? value.toUpperCase() : value,
   })
 );
 ```
@@ -75,9 +77,9 @@ The following APIs can be combined with `stringifyJson`.
     'array',
     'boolean',
     'custom',
+    'date',
     'enum',
     'exactOptional',
-    'function',
     'instance',
     'intersect',
     'lazy',
@@ -93,7 +95,6 @@ The following APIs can be combined with `stringifyJson`.
     'number',
     'object',
     'objectWithRest',
-    'optional',
     'picklist',
     'record',
     'strictObject',
