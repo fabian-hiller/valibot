@@ -20,7 +20,7 @@ runs:
     - name: Setup Deno
       uses: denoland/setup-deno@v2
       with:
-        deno-version: v2.x
+        deno-version: v2.2.12
 
     - name: Install dependencies
       shell: bash

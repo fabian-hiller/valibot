@@ -1,5 +1,6 @@
 import { component$, Fragment } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
+import clsx from 'clsx';
 
 type DefinitionData =
   | 'string'
@@ -272,7 +273,14 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
               {param.spread && (
                 <span class="text-red-600 dark:text-red-400">...</span>
               )}
-              <span class="italic text-orange-500 dark:text-orange-300">
+              <span
+                class={clsx(
+                  'italic',
+                  param.name === 'this' && index === 0
+                    ? 'text-red-600 dark:text-red-400'
+                    : 'text-orange-500 dark:text-orange-300'
+                )}
+              >
                 {param.name}
               </span>
               <span class="text-red-600 dark:text-red-400">
