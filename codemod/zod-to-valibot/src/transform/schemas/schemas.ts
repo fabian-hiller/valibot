@@ -109,7 +109,7 @@ function toValibotActionExp(
 function toValibotMethodExp(
   valibotIdentifier: string,
   zodMethodName: ZodMethodName,
-  schemaExp: j.CallExpression,
+  schemaExp: j.CallExpression | j.Identifier,
   args: j.CallExpression['arguments']
 ) {
   return j.callExpression(
@@ -123,10 +123,10 @@ function toValibotMethodExp(
 
 function addToPipe(
   valibotIdentifier: string,
-  addTo: j.CallExpression,
+  addTo: j.CallExpression | j.Identifier,
   add: j.CallExpression
 ): j.CallExpression {
-  if (isPipeSchemaExp(addTo)) {
+  if (addTo.type === 'CallExpression' && isPipeSchemaExp(addTo)) {
     addTo.arguments.push(add);
     return addTo;
   }
@@ -161,31 +161,38 @@ function getCoerce(schemaArgs: j.CallExpression['arguments']): boolean {
   return coerceOptionVal.type === 'BooleanLiteral' && coerceOptionVal.value;
 }
 
-export function transformSchemas(
+function transformSchemasHelper(
   root: j.Collection<unknown>,
-  valibotIdentifier: string
-) {
-  // get the first call exp of the chain
-  // example: v.string().email().trim() -> v.string()
-  // or
-  // get the first member exp with `coerce` property access of the chain
-  // example: v.coerce.string() -> v.coerce
-  const relevantExps = [
-    ...root
+  valibotIdentifier: string,
+  identifier: string
+): void {
+  const isValibotIdentifier = identifier === valibotIdentifier;
+  const relevantExps: (
+    | j.ASTPath<j.CallExpression>
+    | j.ASTPath<j.MemberExpression>
+  )[] =
+    // get the first call exp of the chain
+    // example: v.string().email().trim() -> v.string()
+    root
       .find(j.CallExpression, {
         callee: {
           type: 'MemberExpression',
-          object: { name: valibotIdentifier },
+          object: { name: identifier },
         },
       })
-      .paths(),
-    ...root
-      .find(j.MemberExpression, {
-        object: { name: valibotIdentifier },
-        property: { type: 'Identifier', name: 'coerce' },
-      })
-      .paths(),
-  ];
+      .paths();
+  if (isValibotIdentifier) {
+    // get the first member exp with `coerce` property access of the chain
+    // example: v.coerce.string() -> v.coerce
+    relevantExps.push(
+      ...root
+        .find(j.MemberExpression, {
+          object: { name: identifier },
+          property: { type: 'Identifier', name: 'coerce' },
+        })
+        .paths()
+    );
+  }
   for (const relevantExp of relevantExps) {
     let transformedExp: j.CallExpression | null = null;
     let cur: UnknownPath = relevantExp;
@@ -213,13 +220,7 @@ export function transformSchemas(
       }
       rootCallExpPath = cur;
       const propertyName = cur.value.callee.property.name;
-      if (transformedExp === null || isZodSchemaName(propertyName)) {
-        if (!isZodSchemaName(propertyName)) {
-          // the start of the transformed expression should always be a schema
-          // if it's not a schema, it's invalid
-          skipTransform = true;
-          break;
-        }
+      if (isZodSchemaName(propertyName)) {
         const exp = isZodCoerceableSchemaName(propertyName)
           ? toValibotSchemaExp(
               valibotIdentifier,
@@ -231,28 +232,36 @@ export function transformSchemas(
           transformedExp === null
             ? exp
             : addToPipe(valibotIdentifier, transformedExp, exp);
-      } else if (isZodValidatorName(propertyName)) {
-        transformedExp = addToPipe(
-          valibotIdentifier,
-          transformedExp,
-          toValibotActionExp(
+      } else {
+        if (isValibotIdentifier && transformedExp === null) {
+          // the start of the transformed expression should always be a schema
+          skipTransform = true;
+          break;
+        }
+        const curSchema = transformedExp ?? j.identifier(identifier);
+        if (isZodMethodName(propertyName)) {
+          transformedExp = toValibotMethodExp(
             valibotIdentifier,
             propertyName,
+            curSchema,
             cur.value.arguments
-          )
-        );
-      } else if (isZodMethodName(propertyName)) {
-        transformedExp = toValibotMethodExp(
-          valibotIdentifier,
-          propertyName,
-          transformedExp,
-          cur.value.arguments
-        );
-      } else {
-        // `propertyName` is not a schema, validator, or method name
-        // it's not safe to transform the chain
-        skipTransform = true;
-        break;
+          );
+        } else if (isZodValidatorName(propertyName)) {
+          transformedExp = addToPipe(
+            valibotIdentifier,
+            curSchema,
+            toValibotActionExp(
+              valibotIdentifier,
+              propertyName,
+              cur.value.arguments
+            )
+          );
+        } else {
+          // `propertyName` is not a schema, validator, or method name
+          // it's not safe to transform the chain
+          skipTransform = true;
+          break;
+        }
       }
       coerce = false;
       cur = cur.parentPath;
@@ -264,6 +273,24 @@ export function transformSchemas(
       rootCallExpPath !== null
     ) {
       rootCallExpPath.replace(transformedExp);
+      if (
+        rootCallExpPath.parentPath.value.type === 'VariableDeclarator' &&
+        rootCallExpPath.parentPath.value.id.type === 'Identifier'
+      ) {
+        // transform links
+        transformSchemasHelper(
+          root,
+          valibotIdentifier,
+          rootCallExpPath.parentPath.value.id.name
+        );
+      }
     }
   }
+}
+
+export function transformSchemas(
+  root: j.Collection<unknown>,
+  valibotIdentifier: string
+) {
+  transformSchemasHelper(root, valibotIdentifier, valibotIdentifier);
 }

@@ -7,3 +7,6 @@ const Schema3 = v.optional(v.string());
 const Schema4 = v.nullable(v.optional(v.string()));
 const Schema5 = v.optional(v.pipe(v.string(), v.email()));
 const Schema6 = v.nullable(v.optional(v.pipe(v.string(), v.email())));
+const Schema7 = v.string();
+const Schema8 = v.pipe(Schema7, v.trim(), v.email());
+const output = v.parse(Schema8, "valibot@example.com");
