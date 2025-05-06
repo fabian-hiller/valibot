@@ -41,8 +41,8 @@ type Schema =
 /**
  * Returns the title of the schema.
  *
- * If multiple titles are defined, the last top-level one is returned. If no
- * title is defined, `undefined` is returned.
+ * If multiple titles are defined, the last one of the highest level is
+ * returned. If no title is defined, `undefined` is returned.
  *
  * @param schema The schema to get the title from.
  *

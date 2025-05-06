@@ -4,6 +4,7 @@ description: Returns the title of the schema.
 source: /methods/metadata/getTitle/getTitle.ts
 contributors:
   - EskiMojo14
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -11,7 +12,9 @@ import { properties } from './properties';
 
 # getTitle
 
-Returns the title of the schema, using a reverse breadth-first search (meaning that the last title of the highest level is returned). If no title is defined, `undefined` is returned.
+Returns the title of the schema.
+
+> If multiple titles are defined, the last one of the highest level is returned. If no title is defined, `undefined` is returned.
 
 ```ts
 const title = v.getTitle<TSchema>(schema);
@@ -33,7 +36,7 @@ const title = v.getTitle<TSchema>(schema);
 
 The following examples show how `getTitle` can be used.
 
-### Get title of username schema
+### Get title of schema
 
 Get the title of a username schema.
 
@@ -47,25 +50,23 @@ const UsernameSchema = v.pipe(
   )
 );
 
-const title = v.getTitle(UsernameSchema);
-/*
-  'Username'
-*/
+const title = v.getTitle(UsernameSchema); // 'Username'
 ```
 
 ### Overriding inherited titles
 
-Get the title of a email schema with an overridden title.
+Get the title of a Gmail schema with an overridden title.
 
 ```ts
-const EmailSchema = v.pipe(v.string(), v.trim(), v.email(), v.title('Email'));
+const EmailSchema = v.pipe(v.string(), v.email(), v.title('Email'));
 
-const GmailSchema = v.pipe(v.string(), v.title('Gmail'), EmailSchema);
+const GmailSchema = v.pipe(
+  EmailSchema,
+  v.endsWith('@gmail.com'),
+  v.title('Gmail')
+);
 
-const title = v.getTitle(EmailSchema);
-/*
-  'Gmail'
-*/
+const title = v.getTitle(GmailSchema); // 'Gmail'
 ```
 
 ## Related

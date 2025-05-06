@@ -8,6 +8,36 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
           name: 'SchemaWithPipe',
           href: '../SchemaWithPipe/',
           generics: [
@@ -34,17 +64,28 @@ export const properties: Record<string, PropertyProps> = {
                   type: 'array',
                   spread: true,
                   item: {
-                    type: 'custom',
-                    name: 'PipeItem',
-                    href: '../PipeItem/',
-                    generics: [
-                      'any',
-                      'unknown',
+                    type: 'union',
+                    options: [
                       {
                         type: 'custom',
-                        name: 'BaseIssue',
-                        href: '../BaseIssue/',
-                        generics: ['unknown'],
+                        name: 'PipeItem',
+                        href: '../PipeItem/',
+                        generics: [
+                          'any',
+                          'unknown',
+                          {
+                            type: 'custom',
+                            name: 'BaseIssue',
+                            href: '../BaseIssue/',
+                            generics: ['unknown'],
+                          },
+                        ],
+                      },
+                      {
+                        type: 'custom',
+                        name: 'TitleAction',
+                        href: '../TitleAction/',
+                        generics: ['unknown', 'string'],
                       },
                     ],
                   },
@@ -132,6 +173,12 @@ export const properties: Record<string, PropertyProps> = {
                             generics: ['unknown'],
                           },
                         ],
+                      },
+                      {
+                        type: 'custom',
+                        name: 'TitleAction',
+                        href: '../TitleAction/',
+                        generics: ['unknown', 'string'],
                       },
                     ],
                   },

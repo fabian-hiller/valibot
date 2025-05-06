@@ -4,6 +4,7 @@ description: Returns the metadata of the schema.
 source: /methods/metadata/getMetadata/getMetadata.ts
 contributors:
   - EskiMojo14
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -11,7 +12,9 @@ import { properties } from './properties';
 
 # getMetadata
 
-Returns the metadata of the schema. If multiple metadata are defined, they are shallowly merged depth-first (meaning each inner pipe is deeply processed before progressing to the next pipe item). If no metadata is defined, `undefined` is returned.
+Returns the metadata of the schema.
+
+> If multiple metadata are defined, it shallowly merges them using depth-first search. If no metadata is defined, an empty object is returned.
 
 ```ts
 const metadata = v.getMetadata<TSchema>(schema);
@@ -33,7 +36,7 @@ const metadata = v.getMetadata<TSchema>(schema);
 
 The following examples show how `getMetadata` can be used.
 
-### Get metadata of username schema
+### Get metadata of schema
 
 Get the metadata of a username schema.
 
@@ -42,16 +45,13 @@ const UsernameSchema = v.pipe(
   v.string(),
   v.regex(/^[a-z0-9_-]{4,16}$/iu),
   v.title('Username'),
-  v.description(
-    'A username must be between 4 and 16 characters long and can only contain letters, numbers, underscores and hyphens.'
-  ),
-  v.metadata({ key: 'value' })
+  v.metadata({
+    length: { min: 4, max: 16 },
+    chars: ['letters', 'numbers', 'underscores', 'hyphens'],
+  })
 );
 
 const metadata = v.getMetadata(UsernameSchema);
-/*
-  { key: 'value' }
-*/
 ```
 
 ## Related
