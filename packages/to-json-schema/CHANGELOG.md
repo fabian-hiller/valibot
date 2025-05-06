@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v1.1.0 (May 06, 2025)
 
 - Add support for `minEntries` and `maxEntries` action (pull request #1100)
 - Add support for `entries` action (pull request #1156)

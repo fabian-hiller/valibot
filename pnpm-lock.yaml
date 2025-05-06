@@ -135,8 +135,8 @@ importers:
         specifier: ^8.25.0
         version: 8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
       valibot:
-        specifier: workspace:*
-        version: link:../../library
+        specifier: ^1.1.0
+        version: 1.1.0(typescript@5.7.3)
       vite:
         specifier: ^6.2.0
         version: 6.2.0(@types/node@22.13.5)(jiti@2.4.2)(yaml@2.7.0)
@@ -4915,8 +4915,8 @@ packages:
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
-  valibot@1.0.0:
-    resolution: {integrity: sha512-1Hc0ihzWxBar6NGeZv7fPLY0QuxFMyxwYR2sF1Blu7Wq7EnremwY2W02tit2ij2VJT8HcSkHAQqmFfl77f73Yw==}
+  valibot@1.1.0:
+    resolution: {integrity: sha512-Nk8lX30Qhu+9txPYTwM0cFlWLdPFsFr6LblzqIySfbZph9+BFsAHsNvHOymEviUepeIW6KFHzpX8TKhbptBXXw==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -5575,7 +5575,7 @@ snapshots:
       source-map: 0.7.4
       svgo: 3.3.2
       undici: 7.3.0
-      valibot: 1.0.0(typescript@5.7.3)
+      valibot: 1.1.0(typescript@5.7.3)
       vfile: 6.0.1
       vite: 5.4.14(@types/node@22.13.5)
       vite-imagetools: 7.0.5(rollup@4.34.8)
@@ -10421,7 +10421,7 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  valibot@1.0.0(typescript@5.7.3):
+  valibot@1.1.0(typescript@5.7.3):
     optionalDependencies:
       typescript: 5.7.3
 
