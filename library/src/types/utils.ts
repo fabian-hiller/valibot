@@ -52,6 +52,16 @@ export type MarkOptional<TObject, TKeys extends keyof TObject> =
     Partial<Pick<TObject, TKeys>>;
 
 /**
+ * Merges two objects. Overlapping entries from the second object overwrite
+ * properties from the first object.
+ */
+export type Merge<TFirstObject, TSecondObject> = Omit<
+  TFirstObject,
+  keyof TFirstObject & keyof TSecondObject
+> &
+  TSecondObject;
+
+/**
  * Extracts first tuple item.
  */
 export type FirstTupleItem<TTuple extends readonly [unknown, ...unknown[]]> =

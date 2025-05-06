@@ -9,10 +9,11 @@ All notable changes to the library will be documented in this file.
 - Add `minEntries` and `maxEntries` validation action to validate number of object entries (pull request #1100)
 - Add `entries` and `notEntries` validation action to validate number of object entries (pull request #1156)
 - Add support for bigints to `multipleOf` validation action (pull request #1164)
-- Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
-- Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
+- Add `getTitle`, `getDescription` and `getMetadata` methods to extract metadata of a schema (pull request #1154)
 - Add `parseJson` and `stringifyJson` transformation action to parse and stringify JSON (pull request #1137)
 - Add `flavor` transformation action to flavor the output type of a schema (pull request #950)
+- Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
+- Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
 - Fix `MarkOptional` type to fix input and output type of object in edge cases (issue #1176)
 
 ## v1.0.0 (March 18, 2025)
