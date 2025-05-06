@@ -6,9 +6,12 @@ import type {
   PipeItem,
   PipeItemAsync,
 } from '../../types/index.ts';
-import { _findLastMetadata } from '../../utils/_findLastMetadata/_findLastMetadata.ts';
+import { _getLastMetadata } from '../../utils/index.ts';
 import type { SchemaWithPipe, SchemaWithPipeAsync } from '../index.ts';
 
+/**
+ * Schema type.
+ */
 type Schema =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
@@ -16,7 +19,7 @@ type Schema =
       readonly [
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
+          | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
           | DescriptionAction<unknown, string>
         )[],
       ]
@@ -28,24 +31,27 @@ type Schema =
           | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
         ),
         ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
-          | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+          | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+          | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
           | DescriptionAction<unknown, string>
         )[],
       ]
     >;
 
 /**
- * Returns the description of the schema. If multiple descriptions are defined, the last one is returned (breadth-first). If no description is defined, `undefined` is returned.
+ * Returns the description of the schema.
+ *
+ * If multiple descriptions are defined, the last top-level one is returned. If
+ * no title is defined, `undefined` is returned.
  *
  * @param schema The schema to get the description from.
  *
- * @returns The description, or `undefined` if none.
+ * @returns The description, if any.
  *
  * @beta
  */
-// TODO: see if return type can be strongly typed (i.e. do same breadth-first search in types)
+// TODO: Investigate if return type can be strongly typed
 // @__NO_SIDE_EFFECTS__
 export function getDescription(schema: Schema): string | undefined {
-  return _findLastMetadata(schema, 'description');
+  return _getLastMetadata(schema, 'description');
 }

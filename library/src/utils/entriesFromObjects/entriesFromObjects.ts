@@ -17,9 +17,9 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  Merge,
   ObjectEntries,
   ObjectEntriesAsync,
-  Overwrite,
   Prettify,
 } from '../../types/index.ts';
 
@@ -64,7 +64,7 @@ type RecursiveMerge<TSchemas extends readonly [Schema, ...Schema[]]> =
           infer TFirstSchema extends Schema,
           ...infer TRestSchemas extends readonly [Schema, ...Schema[]],
         ]
-      ? Overwrite<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
+      ? Merge<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
       : never;
 
 /**

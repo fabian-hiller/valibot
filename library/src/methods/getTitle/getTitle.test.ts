@@ -1,24 +1,24 @@
 import { describe, expect, test } from 'vitest';
-import { title } from '../../actions/index.ts';
+import { description, title } from '../../actions/index.ts';
 import { string } from '../../schemas/index.ts';
 import { pipe } from '../pipe/index.ts';
 import { getTitle } from './getTitle.ts';
 
 describe('getTitle', () => {
-  test('should return title', () => {
+  test('should return undefined', () => {
+    expect(getTitle(string())).toBeUndefined();
     expect(getTitle(pipe(string()))).toBeUndefined();
-    expect(getTitle(pipe(string(), title('text')))).toBe('text');
-    expect(getTitle(pipe(string(), title('text'), title('text2')))).toBe(
-      'text2'
-    );
+    expect(getTitle(pipe(string(), description('foo')))).toBeUndefined();
   });
-  test('should work with nested pipes', () => {
-    expect(getTitle(pipe(pipe(string(), title('text')), title('text2')))).toBe(
-      'text2'
+
+  test('should return title', () => {
+    expect(getTitle(pipe(string(), title('foo')))).toBe('foo');
+    expect(getTitle(pipe(string(), title('foo'), title('bar')))).toBe('bar');
+    expect(getTitle(pipe(pipe(string(), title('foo')), title('bar')))).toBe(
+      'bar'
     );
-    // breadth-first, so higher level title should be returned
     expect(
-      getTitle(pipe(string(), title('text'), pipe(string(), title('text2'))))
-    ).toBe('text');
+      getTitle(pipe(string(), title('foo'), pipe(string(), title('bar'))))
+    ).toBe('foo');
   });
 });

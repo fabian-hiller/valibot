@@ -9,31 +9,26 @@ import type {
   BaseSchemaAsync,
   PipeItem,
   PipeItemAsync,
-  Satisfies,
 } from '../../types/index.ts';
 
-type KnownMetadata =
+/**
+ * Metadata action type.
+ */
+type MetadataAction =
   | TitleAction<unknown, string>
   | DescriptionAction<unknown, string>;
 
-// check that each known metadata type can be accessed by its type, meaning it's safe to do `return metadata[type]`
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type KnownMetadataCheck = {
-  [TMetadata in KnownMetadata as TMetadata['type']]: Satisfies<
-    TMetadata extends Record<TMetadata['type'], infer TValue>
-      ? TValue
-      : unknown,
-    string
-  >;
-};
-
+/**
+ * Schema type.
+ */
 type Schema =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
   | SchemaWithPipe<
       readonly [
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ...(PipeItem<unknown, unknown, BaseIssue<unknown>> | KnownMetadata)[],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ...(PipeItem<any, unknown, BaseIssue<unknown>> | MetadataAction)[],
       ]
     >
   | SchemaWithPipeAsync<
@@ -43,30 +38,33 @@ type Schema =
           | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
         ),
         ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
-          | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-          | KnownMetadata
+          | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+          | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+          | MetadataAction
         )[],
       ]
     >;
 
 /**
- * Retrieves the last instance of a given metadata type from a schema, using a reverse breadth-first search.
+ * Returns the last top-level value of a given metadata type from a schema
+ * using a breadth-first search that starts with the last item in the pipeline.
  *
  * @param schema The schema to search.
- * @param type The type of metadata to search for.
+ * @param type The metadata type.
  *
- * @returns The value of the last instance of the given metadata type, or undefined if not found.
+ * @returns The value, if any.
+ *
+ * @internal
  */
 // @__NO_SIDE_EFFECTS__
-export function _findLastMetadata(
+export function _getLastMetadata(
   schema: Schema,
-  type: KnownMetadata['type']
+  type: 'title' | 'description'
 ): string | undefined {
   if ('pipe' in schema) {
     const nestedSchemas: Schema[] = [];
-    for (let idx = schema.pipe.length - 1; idx >= 0; idx--) {
-      const item = schema.pipe[idx];
+    for (let index = schema.pipe.length - 1; index >= 0; index--) {
+      const item = schema.pipe[index];
       if (item.kind === 'schema' && 'pipe' in item) {
         nestedSchemas.push(item);
       } else if (item.kind === 'metadata' && item.type === type) {
@@ -75,8 +73,8 @@ export function _findLastMetadata(
       }
     }
     for (const nestedSchema of nestedSchemas) {
-      const result = _findLastMetadata(nestedSchema, type);
-      if (result) {
+      const result = _getLastMetadata(nestedSchema, type);
+      if (result !== undefined) {
         return result;
       }
     }

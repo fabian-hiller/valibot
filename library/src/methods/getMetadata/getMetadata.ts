@@ -1,11 +1,18 @@
-import type { MetadataAction } from '../../actions/metadata/metadata.ts';
-import type { BaseIssue } from '../../types/issue.ts';
-import type { PipeItem, PipeItemAsync } from '../../types/pipe.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
-import type { Overwrite, Prettify } from '../../types/utils.ts';
-import type { SchemaWithPipe } from '../pipe/pipe.ts';
-import type { SchemaWithPipeAsync } from '../pipe/pipeAsync.ts';
+import type { MetadataAction } from '../../actions/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  Merge,
+  PipeItem,
+  PipeItemAsync,
+  Prettify,
+} from '../../types/index.ts';
+import type { SchemaWithPipe, SchemaWithPipeAsync } from '../pipe/index.ts';
 
+/**
+ * Schema type.
+ */
 type Schema =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
@@ -13,7 +20,7 @@ type Schema =
       readonly [
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
+          | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
           | MetadataAction<unknown, Record<string, unknown>>
         )[],
       ]
@@ -25,63 +32,92 @@ type Schema =
           | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
         ),
         ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
-          | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+          | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+          | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
           | MetadataAction<unknown, Record<string, unknown>>
         )[],
       ]
     >;
 
-type Pipe = readonly (
-  | Schema
-  | PipeItem<unknown, unknown, BaseIssue<unknown>>
-  | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-  | MetadataAction<unknown, Record<string, unknown>>
-)[];
-
-export type ExtractMetadata<
-  TPipe extends Pipe,
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  Acc extends Record<string, unknown> = {},
-> = TPipe extends readonly [infer TFirst, ...infer TRest extends Pipe]
-  ? TFirst extends
-      | SchemaWithPipe<infer TPipe2>
-      | SchemaWithPipeAsync<infer TPipe2>
-    ? ExtractMetadata<TRest, ExtractMetadata<TPipe2, Acc>>
-    : TFirst extends MetadataAction<unknown, infer TMetadata>
-      ? ExtractMetadata<TRest, Overwrite<Acc, TMetadata>>
-      : ExtractMetadata<TRest, Acc>
-  : Acc;
-
-export type ExtractMetadataFromSchema<TSchema extends Schema> =
-  TSchema extends { pipe: Pipe }
-    ? ExtractMetadata<TSchema['pipe']>
-    : Record<string, unknown>;
+/**
+ * Basic pipe item type.
+ */
+type BasicPipeItem =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | PipeItem<any, unknown, BaseIssue<unknown>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | PipeItemAsync<any, unknown, BaseIssue<unknown>>
+  | MetadataAction<unknown, Record<string, unknown>>;
 
 /**
- * Extracts (depth first) metadata from a schema and shallowly merges, including nested metadata.
+ * Recursive merge type.
+ */
+type RecursiveMerge<
+  TRootPipe extends readonly BasicPipeItem[],
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  TCollectedMetadata extends Record<string, unknown> = {},
+> = TRootPipe extends readonly [
+  infer TFirstItem,
+  ...infer TPipeRest extends readonly BasicPipeItem[],
+]
+  ? TFirstItem extends
+      | SchemaWithPipe<infer TNestedPipe>
+      | SchemaWithPipeAsync<infer TNestedPipe>
+    ? RecursiveMerge<TPipeRest, RecursiveMerge<TNestedPipe, TCollectedMetadata>>
+    : TFirstItem extends MetadataAction<unknown, infer TCurrentMetadata>
+      ? RecursiveMerge<TPipeRest, Merge<TCollectedMetadata, TCurrentMetadata>>
+      : RecursiveMerge<TPipeRest, TCollectedMetadata>
+  : TCollectedMetadata;
+
+/**
+ * Infer metadata type.
  *
- * @param schema Schema to extract metadata from.
+ * @beta
+ */
+export type InferMetadata<TSchema extends Schema> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  BaseSchema<any, any, any> extends TSchema
+    ? Record<string, unknown>
+    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      BaseSchemaAsync<any, any, any> extends TSchema
+      ? Record<string, unknown>
+      : TSchema extends
+            | SchemaWithPipe<infer TPipe>
+            | SchemaWithPipeAsync<infer TPipe>
+        ? Prettify<RecursiveMerge<TPipe>>
+        : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+          {};
+
+/**
+ * Returns the metadata of a schema.
  *
- * @returns Shallowly merged metadata.
+ * If multiple metadata are defined, it shallowly merges them using depth-first
+ * search. If no metadata is defined, an empty object is returned.
+ *
+ * @param schema Schema to get the metadata from.
+ *
+ * @returns The metadata, if any.
+ *
+ * @beta
  */
 // @__NO_SIDE_EFFECTS__
 export function getMetadata<const TSchema extends Schema>(
   schema: TSchema
-): Prettify<ExtractMetadataFromSchema<TSchema>> {
-  const result: Record<string, unknown> = {};
-  function depthFirstMerge(pipe: Pipe) {
-    for (const item of pipe) {
-      if ('pipe' in item) {
-        depthFirstMerge(item.pipe);
-      } else if ('metadata' in item) {
-        Object.assign(result, item.metadata);
+): InferMetadata<TSchema> {
+  const result = {};
+  function depthFirstMerge(schema: Schema): void {
+    if ('pipe' in schema) {
+      for (const item of schema.pipe) {
+        if (item.kind === 'schema' && 'pipe' in item) {
+          depthFirstMerge(item);
+        } else if (item.kind === 'metadata' && item.type === 'metadata') {
+          // @ts-expect-error
+          Object.assign(result, item.metadata);
+        }
       }
     }
   }
-  if ('pipe' in schema) {
-    depthFirstMerge(schema.pipe);
-  }
+  depthFirstMerge(schema);
   // @ts-expect-error
   return result;
 }
