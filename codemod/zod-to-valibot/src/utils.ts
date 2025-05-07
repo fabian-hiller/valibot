@@ -76,3 +76,7 @@ export function getIsTypeFn<T extends string[]>(
   const st = new Set<string>(allowedValues);
   return (arg: string): arg is T[number] => st.has(arg);
 }
+
+export function assertNever(x: never): never {
+  throw new Error(`this should be unreachable. received: ${x}`);
+}

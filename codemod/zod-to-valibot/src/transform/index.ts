@@ -1,6 +1,6 @@
 import type { Transform } from 'jscodeshift';
 import { transformImports } from './imports';
-import { transformSchemas } from './schemas';
+import { transformSchemasAndProperties } from './schemas-and-properties';
 
 const transform: Transform = (fileInfo, api) => {
   const j = api.jscodeshift;
@@ -15,8 +15,8 @@ const transform: Transform = (fileInfo, api) => {
   }
   const valibotIdentifier = transformImportsResult.valibotIdentifier;
 
-  // ------------ Schemas ------------
-  transformSchemas(root, valibotIdentifier);
+  // ------------ Schemas and properties ------------
+  transformSchemasAndProperties(root, valibotIdentifier);
 
   return root.toSource();
 };

@@ -11,6 +11,7 @@ defineTests(transform, [
   'default-import',
   'default-import-with-alias',
   'default-import-with-specific-alias',
+  'describe',
   'named-import',
   'named-import-with-alias',
   'named-import-with-specific-alias',

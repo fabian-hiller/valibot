@@ -1,18 +1,22 @@
 import j from 'jscodeshift';
-import { getIsTypeFn } from '../../utils';
-import { transformBigint } from './bigint';
-import { transformBoolean } from './boolean';
+import { assertNever, getIsTypeFn } from '../../utils';
 import {
   VALIDATOR_TO_ACTION,
   ZOD_COERCEABLE_SCHEMAS,
   ZOD_METHODS,
+  ZOD_PROPERTIES,
   ZOD_SCHEMAS,
   ZOD_UNCOERCEABLE_SCHEMAS,
   ZOD_VALIDATORS,
 } from './constants';
-import { transformDate } from './date';
-import { transformNumber } from './number';
-import { transformString } from './string';
+import { transformDescription } from './properties';
+import {
+  transformBigint,
+  transformBoolean,
+  transformDate,
+  transformNumber,
+  transformString,
+} from './schemas';
 
 type UnknownPath = j.ASTPath<{ type: unknown }>;
 type ZodSchemaName = (typeof ZOD_SCHEMAS)[number];
@@ -20,6 +24,7 @@ type ZodCoerceableSchemaName = (typeof ZOD_COERCEABLE_SCHEMAS)[number];
 type ZodUncoerceableSchemaName = (typeof ZOD_UNCOERCEABLE_SCHEMAS)[number];
 type ZodValidatorName = (typeof ZOD_VALIDATORS)[number];
 type ZodMethodName = (typeof ZOD_METHODS)[number];
+type ZodPropertyName = (typeof ZOD_PROPERTIES)[number];
 
 function isCallExp(path: UnknownPath): path is j.ASTPath<j.CallExpression> {
   return path.value.type === 'CallExpression';
@@ -38,6 +43,7 @@ const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
 const isZodCoerceableSchemaName = getIsTypeFn(ZOD_COERCEABLE_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
 const isZodMethodName = getIsTypeFn(ZOD_METHODS);
+const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
 
 function toValibotSchemaExp(
   valibotIdentifier: string,
@@ -53,39 +59,22 @@ function toValibotSchemaExp(
   zodSchemaName: ZodSchemaName,
   coerce = false
 ): j.CallExpression {
-  let transformFn: (
-    valibotIdentifier: string,
-    coerce: boolean
-  ) => j.CallExpression;
+  const args = [valibotIdentifier, coerce] as const;
   switch (zodSchemaName) {
     case 'string':
-      transformFn = transformString;
-      break;
+      return transformString(...args);
     case 'boolean':
-      transformFn = transformBoolean;
-      break;
+      return transformBoolean(...args);
     case 'number':
-      transformFn = transformNumber;
-      break;
+      return transformNumber(...args);
     case 'bigint':
-      transformFn = transformBigint;
-      break;
+      return transformBigint(...args);
     case 'date':
-      transformFn = transformDate;
-      break;
+      return transformDate(...args);
     default: {
-      const _x: never = zodSchemaName;
-      transformFn = () =>
-        j.callExpression(
-          j.memberExpression(
-            j.identifier(valibotIdentifier),
-            j.identifier(zodSchemaName)
-          ),
-          []
-        );
+      assertNever(zodSchemaName);
     }
   }
-  return transformFn(valibotIdentifier, coerce);
 }
 
 function toValibotActionExp(
@@ -104,6 +93,19 @@ function toValibotActionExp(
     ),
     args
   );
+}
+
+function toValibotPropertyExp(
+  accessFrom: j.CallExpression | j.Identifier,
+  propertyName: ZodPropertyName
+): j.OptionalMemberExpression | j.CallExpression {
+  const args = [accessFrom] as const;
+  switch (propertyName) {
+    case 'description':
+      return transformDescription(...args);
+    default:
+      assertNever(propertyName);
+  }
 }
 
 function toValibotMethodExp(
@@ -161,7 +163,7 @@ function getCoerce(schemaArgs: j.CallExpression['arguments']): boolean {
   return coerceOptionVal.type === 'BooleanLiteral' && coerceOptionVal.value;
 }
 
-function transformSchemasHelper(
+function transformSchemasAndPropertiesHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
   identifier: string
@@ -171,7 +173,7 @@ function transformSchemasHelper(
     | j.ASTPath<j.CallExpression>
     | j.ASTPath<j.MemberExpression>
   )[] =
-    // get the first call exp of the chain
+    // the first call exp of the chain
     // example: v.string().email().trim() -> v.string()
     root
       .find(j.CallExpression, {
@@ -182,7 +184,7 @@ function transformSchemasHelper(
       })
       .paths();
   if (isValibotIdentifier) {
-    // get the first member exp with `coerce` property access of the chain
+    // the first member exp with `coerce` property access of the chain
     // example: v.coerce.string() -> v.coerce
     relevantExps.push(
       ...root
@@ -192,8 +194,20 @@ function transformSchemasHelper(
         })
         .paths()
     );
+  } else {
+    // property access
+    relevantExps.push(
+      ...root
+        .find(j.MemberExpression, { object: { name: identifier } })
+        .filter(
+          (p) =>
+            p.value.property.type === 'Identifier' &&
+            isZodPropertyName(p.value.property.name)
+        )
+        .paths()
+    );
   }
-  for (const relevantExp of relevantExps) {
+  main: for (const relevantExp of relevantExps) {
     let transformedExp: j.CallExpression | null = null;
     let cur: UnknownPath = relevantExp;
     let skipTransform = false;
@@ -201,10 +215,32 @@ function transformSchemasHelper(
     let coerce = false;
     while (isMemberExp(cur) || isCallExp(cur)) {
       if (isMemberExp(cur)) {
-        coerce =
-          coerce ||
-          (cur.value.property.type === 'Identifier' &&
-            cur.value.property.name === 'coerce');
+        if (cur.value.property.type !== 'Identifier') {
+          // should always be an identifier
+          skipTransform = true;
+          break;
+        }
+        const propertyName = cur.value.property.name;
+        // `coerce` is a special case
+        if (propertyName === 'coerce') {
+          coerce = true;
+        } else if (isZodPropertyName(propertyName)) {
+          if (coerce || isValibotIdentifier) {
+            // 1. `coerce` directly before a property is invalid
+            // 2. property access should always be from a schema not from the import identifier
+            skipTransform = true;
+            break;
+          }
+          const exp = toValibotPropertyExp(
+            transformedExp ?? j.identifier(identifier),
+            propertyName
+          );
+          if (exp.type !== 'CallExpression') {
+            relevantExp.replace(exp);
+            continue main;
+          }
+          transformedExp = exp;
+        }
         cur = cur.parentPath;
         continue;
       }
@@ -213,8 +249,7 @@ function transformSchemasHelper(
         cur.value.callee.type !== 'MemberExpression' ||
         cur.value.callee.property.type !== 'Identifier'
       ) {
-        // should always be: <SOME_PATH>.<IDENTIFIER>() else it's ambiguous enough
-        // for now
+        // should always be: <SOME_PATH>.<IDENTIFIER>() else it's ambiguous enough for now
         skipTransform = true;
         break;
       }
@@ -278,7 +313,7 @@ function transformSchemasHelper(
         rootCallExpPath.parentPath.value.id.type === 'Identifier'
       ) {
         // transform links
-        transformSchemasHelper(
+        transformSchemasAndPropertiesHelper(
           root,
           valibotIdentifier,
           rootCallExpPath.parentPath.value.id.name
@@ -288,9 +323,13 @@ function transformSchemasHelper(
   }
 }
 
-export function transformSchemas(
+export function transformSchemasAndProperties(
   root: j.Collection<unknown>,
   valibotIdentifier: string
 ) {
-  transformSchemasHelper(root, valibotIdentifier, valibotIdentifier);
+  transformSchemasAndPropertiesHelper(
+    root,
+    valibotIdentifier,
+    valibotIdentifier
+  );
 }

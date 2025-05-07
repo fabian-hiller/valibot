@@ -22,6 +22,7 @@ export const ZOD_SCHEMAS = [
 ] as const;
 
 export const ZOD_VALIDATORS = [
+  'describe',
   'email',
   'finite',
   'max',
@@ -36,10 +37,13 @@ export const ZOD_VALIDATORS = [
 export const VALIDATOR_TO_ACTION: Partial<
   Record<(typeof ZOD_VALIDATORS)[number], string>
 > = {
+  describe: 'description',
   max: 'maxValue',
   min: 'minValue',
   gt: 'gtValue',
   lt: 'ltValue',
 };
+
+export const ZOD_PROPERTIES = ['description'] as const;
 
 export const ZOD_METHODS = ['optional', 'nullable', 'parse'] as const;
