@@ -75,6 +75,7 @@
 - [required](/api/required/)
 - [safeParse](/api/safeParse/)
 - [safeParser](/api/safeParser/)
+- [summarize](/api/summarize/)
 - [unwrap](/api/unwrap/)
 
 ## Actions
