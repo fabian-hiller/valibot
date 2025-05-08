@@ -200,6 +200,12 @@ export function convertSchema(
       break;
     }
 
+    case 'file': {
+      jsonSchema.type = 'string';
+      jsonSchema.format = 'binary';
+      break;
+    }
+
     // Complex schemas
 
     case 'array': {
