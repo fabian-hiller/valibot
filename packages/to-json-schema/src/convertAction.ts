@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
 import { handleError } from './utils/index.ts';
@@ -65,6 +65,7 @@ type Action =
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
+  | v.MetadataAction<unknown, Record<string, unknown>>
   | v.MinEntriesAction<
       v.EntriesInput,
       number,
@@ -244,6 +245,17 @@ export function convertAction(
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'metadata': {
+      if (
+        valibotAction.metadata.examples !== undefined &&
+        valibotAction.metadata.examples !== null
+      ) {
+        jsonSchema.examples = valibotAction.metadata
+          .examples as JSONSchema7Type;
+      }
       break;
     }
 
