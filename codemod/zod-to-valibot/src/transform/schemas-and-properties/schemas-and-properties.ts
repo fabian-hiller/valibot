@@ -96,10 +96,11 @@ function toValibotActionExp(
 }
 
 function toValibotPropertyExp(
-  accessFrom: j.CallExpression | j.Identifier,
+  valibotIdentifier: string,
+  schema: j.CallExpression | j.Identifier,
   propertyName: ZodPropertyName
-): j.OptionalMemberExpression | j.CallExpression {
-  const args = [accessFrom] as const;
+): j.CallExpression {
+  const args = [valibotIdentifier, schema] as const;
   switch (propertyName) {
     case 'description':
       return transformDescription(...args);
@@ -231,15 +232,14 @@ function transformSchemasAndPropertiesHelper(
             skipTransform = true;
             break;
           }
-          const exp = toValibotPropertyExp(
-            transformedExp ?? j.identifier(identifier),
-            propertyName
+          relevantExp.replace(
+            toValibotPropertyExp(
+              valibotIdentifier,
+              transformedExp ?? j.identifier(identifier),
+              propertyName
+            )
           );
-          if (exp.type !== 'CallExpression') {
-            relevantExp.replace(exp);
-            continue main;
-          }
-          transformedExp = exp;
+          continue main;
         }
         cur = cur.parentPath;
         continue;
