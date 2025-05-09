@@ -457,6 +457,12 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert metadata action', () => {
+    expect(
+      convertAction({}, v.metadata({ examples: ['test'] }), undefined)
+    ).toStrictEqual({ examples: ['test'] });
+  });
+
   test('should convert min length action for strings', () => {
     expect(
       convertAction(
