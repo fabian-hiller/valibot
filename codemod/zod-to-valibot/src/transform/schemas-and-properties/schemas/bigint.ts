@@ -1,6 +1,17 @@
 import j from 'jscodeshift';
+import {
+  getDescription,
+  getSchema,
+  getSchemaWithOptionalDescription,
+} from './helpers';
+import type { SchemaOptionsToASTVal } from './types';
 
-export function transformBigint(valibotIdentifier: string, coerce: boolean) {
+export function transformBigint(
+  valibotIdentifier: string,
+  schemaOptions: SchemaOptionsToASTVal,
+  coerce: boolean
+) {
+  const baseSchema = getSchema(valibotIdentifier, 'bigint', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -40,18 +51,16 @@ export function transformBigint(valibotIdentifier: string, coerce: boolean) {
             ),
           ]
         ),
-        j.callExpression(
-          j.memberExpression(
-            j.identifier(valibotIdentifier),
-            j.identifier('bigint')
-          ),
-          []
-        ),
+        baseSchema,
+        ...(schemaOptions.description
+          ? [getDescription(valibotIdentifier, schemaOptions.description)]
+          : []),
       ]
     );
   }
-  return j.callExpression(
-    j.memberExpression(j.identifier(valibotIdentifier), j.identifier('bigint')),
-    []
+  return getSchemaWithOptionalDescription(
+    valibotIdentifier,
+    baseSchema,
+    schemaOptions.description
   );
 }

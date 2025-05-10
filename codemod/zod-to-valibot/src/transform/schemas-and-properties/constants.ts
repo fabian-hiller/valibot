@@ -6,15 +6,7 @@ export const ZOD_COERCEABLE_SCHEMAS = [
   'string',
 ] as const;
 
-export const ZOD_UNCOERCEABLE_SCHEMAS = [
-  // 'any',
-  // 'never',
-  // 'null',
-  // 'symbol',
-  // 'undefined',
-  // 'unknown',
-  // 'void',
-] as const;
+export const ZOD_UNCOERCEABLE_SCHEMAS = ['literal'] as const;
 
 export const ZOD_SCHEMAS = [
   ...ZOD_COERCEABLE_SCHEMAS,

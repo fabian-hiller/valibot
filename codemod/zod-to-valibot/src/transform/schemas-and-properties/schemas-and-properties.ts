@@ -11,9 +11,11 @@ import {
 } from './constants';
 import { transformDescription } from './properties';
 import {
+  type SchemaOptionsToASTVal,
   transformBigint,
   transformBoolean,
   transformDate,
+  transformLiteral,
   transformNumber,
   transformString,
 } from './schemas';
@@ -48,29 +50,38 @@ const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
 function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodCoerceableSchemaName,
-  coerce: boolean
+  options: SchemaOptionsToASTVal,
+  argsExceptOptions: j.CallExpression['arguments'],
+  coerceOption: boolean
 ): j.CallExpression;
 function toValibotSchemaExp(
   valibotIdentifier: string,
-  zodSchemaName: ZodUncoerceableSchemaName
+  zodSchemaName: ZodUncoerceableSchemaName,
+  options: SchemaOptionsToASTVal,
+  argsExceptOptions: j.CallExpression['arguments']
 ): j.CallExpression;
 function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodSchemaName,
-  coerce = false
+  options: SchemaOptionsToASTVal,
+  argsExceptOptions: j.CallExpression['arguments'],
+  coerceOption = false
 ): j.CallExpression {
-  const args = [valibotIdentifier, coerce] as const;
+  const args = [valibotIdentifier, options] as const;
+  const argsWithCoerce = [...args, coerceOption] as const;
   switch (zodSchemaName) {
     case 'string':
-      return transformString(...args);
+      return transformString(...argsWithCoerce);
     case 'boolean':
-      return transformBoolean(...args);
+      return transformBoolean(...argsWithCoerce);
     case 'number':
-      return transformNumber(...args);
+      return transformNumber(...argsWithCoerce);
     case 'bigint':
-      return transformBigint(...args);
+      return transformBigint(...argsWithCoerce);
     case 'date':
-      return transformDate(...args);
+      return transformDate(...argsWithCoerce);
+    case 'literal':
+      return transformLiteral(...args, argsExceptOptions);
     default: {
       assertNever(zodSchemaName);
     }
@@ -139,29 +150,46 @@ function addToPipe(
   );
 }
 
-// todo: support non boolean literal `coerce` values - z.string({coerce: someFuncCall()})
-function getCoerce(schemaArgs: j.CallExpression['arguments']): boolean {
+export function getSchemaOptionVal(
+  schemaArgs: j.CallExpression['arguments'],
+  optionName: string
+) {
   if (schemaArgs.length === 0) {
-    return false;
+    return null;
   }
-  const [schemaArg] = schemaArgs;
+  const schemaArg = schemaArgs[schemaArgs.length - 1];
   if (schemaArg.type !== 'ObjectExpression') {
-    return false;
+    return null;
   }
-  const coerceOptionVals = schemaArg.properties
+  const optionVals = schemaArg.properties
     .map((p) =>
       p.type === 'ObjectProperty' &&
       p.key.type === 'Identifier' &&
-      p.key.name === 'coerce'
+      p.key.name === optionName
         ? p.value
         : null
     )
     .filter((v) => v !== null);
-  if (coerceOptionVals.length === 0) {
-    return false;
-  }
-  const [coerceOptionVal] = coerceOptionVals;
-  return coerceOptionVal.type === 'BooleanLiteral' && coerceOptionVal.value;
+  const optionVal = optionVals.at(0);
+  return optionVal === undefined ||
+    optionVal.type === 'RestElement' ||
+    optionVal.type === 'SpreadElementPattern' ||
+    optionVal.type === 'PropertyPattern' ||
+    optionVal.type === 'ObjectPattern' ||
+    optionVal.type === 'ArrayPattern' ||
+    optionVal.type === 'AssignmentPattern' ||
+    optionVal.type === 'SpreadPropertyPattern' ||
+    optionVal.type === 'TSParameterProperty'
+    ? null
+    : optionVal;
+}
+
+// todo: support non boolean literal `coerce` values - z.string({coerce: someFuncCall()})
+function getCoerce(schemaArgs: j.CallExpression['arguments']): boolean {
+  const optionVal = getSchemaOptionVal(schemaArgs, 'coerce');
+  return (
+    optionVal !== null && optionVal.type === 'BooleanLiteral' && optionVal.value
+  );
 }
 
 function transformSchemasAndPropertiesHelper(
@@ -256,13 +284,34 @@ function transformSchemasAndPropertiesHelper(
       rootCallExpPath = cur;
       const propertyName = cur.value.callee.property.name;
       if (isZodSchemaName(propertyName)) {
+        const schemaArgs = cur.value.arguments;
+        const schemaOptionsToASTVal = {
+          description: getSchemaOptionVal(schemaArgs, 'description'),
+          invalid_type_error: getSchemaOptionVal(
+            schemaArgs,
+            'invalid_type_error'
+          ),
+          required_error: getSchemaOptionVal(schemaArgs, 'required_error'),
+          message: getSchemaOptionVal(schemaArgs, 'message'),
+        };
+        const schemaArgsExceptOptions = schemaArgs.slice(
+          0,
+          schemaArgs.length - 1
+        );
         const exp = isZodCoerceableSchemaName(propertyName)
           ? toValibotSchemaExp(
               valibotIdentifier,
               propertyName,
+              schemaOptionsToASTVal,
+              schemaArgsExceptOptions,
               coerce || getCoerce(cur.value.arguments)
             )
-          : toValibotSchemaExp(valibotIdentifier, propertyName);
+          : toValibotSchemaExp(
+              valibotIdentifier,
+              propertyName,
+              schemaOptionsToASTVal,
+              schemaArgsExceptOptions
+            );
         transformedExp =
           transformedExp === null
             ? exp

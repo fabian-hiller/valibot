@@ -1,6 +1,17 @@
 import j from 'jscodeshift';
+import {
+  getDescription,
+  getSchema,
+  getSchemaWithOptionalDescription,
+} from './helpers';
+import type { SchemaOptionsToASTVal } from './types';
 
-export function transformString(valibotIdentifier: string, coerce: boolean) {
+export function transformString(
+  valibotIdentifier: string,
+  schemaOptions: SchemaOptionsToASTVal,
+  coerce: boolean
+) {
+  const baseSchema = getSchema(valibotIdentifier, 'string', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -19,11 +30,16 @@ export function transformString(valibotIdentifier: string, coerce: boolean) {
           ),
           [j.identifier('String')]
         ),
+        baseSchema,
+        ...(schemaOptions.description
+          ? [getDescription(valibotIdentifier, schemaOptions.description)]
+          : []),
       ]
     );
   }
-  return j.callExpression(
-    j.memberExpression(j.identifier(valibotIdentifier), j.identifier('string')),
-    []
+  return getSchemaWithOptionalDescription(
+    valibotIdentifier,
+    baseSchema,
+    schemaOptions.description
   );
 }

@@ -1,6 +1,13 @@
 import j from 'jscodeshift';
+import { getSchema, getSchemaWithOptionalDescription } from './helpers';
+import type { SchemaOptionsToASTVal } from './types';
 
-export function transformDate(valibotIdentifier: string, coerce: boolean) {
+export function transformDate(
+  valibotIdentifier: string,
+  schemaOptions: SchemaOptionsToASTVal,
+  coerce: boolean
+) {
+  const baseSchema = getSchema(valibotIdentifier, 'date', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -40,18 +47,16 @@ export function transformDate(valibotIdentifier: string, coerce: boolean) {
             ),
           ]
         ),
-        j.callExpression(
-          j.memberExpression(
-            j.identifier(valibotIdentifier),
-            j.identifier('date')
-          ),
-          []
-        ),
+        baseSchema,
+        ...(schemaOptions.description
+          ? [getSchema(valibotIdentifier, 'description', schemaOptions)]
+          : []),
       ]
     );
   }
-  return j.callExpression(
-    j.memberExpression(j.identifier(valibotIdentifier), j.identifier('bigint')),
-    []
+  return getSchemaWithOptionalDescription(
+    valibotIdentifier,
+    baseSchema,
+    schemaOptions.description
   );
 }

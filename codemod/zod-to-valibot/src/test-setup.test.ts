@@ -17,6 +17,7 @@ defineTests(transform, [
   'named-import-with-specific-alias',
   'namespace-import',
   'schema-chain',
+  'schema-options',
   'specific-default-import',
   'specific-namespace-import',
 ]);
