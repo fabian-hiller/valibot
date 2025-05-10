@@ -19,6 +19,11 @@ type Action =
       v.LengthInput,
       v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
     >
+  | v.EntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.EntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.HexadecimalAction<
       string,
       v.ErrorMessage<v.HexadecimalIssue<string>> | undefined
@@ -45,32 +50,30 @@ type Action =
       number,
       v.ErrorMessage<v.LengthIssue<v.LengthInput, number>> | undefined
     >
+  | v.MaxEntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.MaxEntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.MaxLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MaxLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MaxPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MaxPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MaxValueAction<
       v.ValueInput,
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
+  | v.MinEntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.MinEntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.MinLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MinLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MinPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MinPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MinValueAction<
       v.ValueInput,
@@ -82,7 +85,7 @@ type Action =
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >
-  | v.NanoIDAction<string, v.ErrorMessage<v.NanoIDIssue<string>> | undefined>
+  | v.NanoIdAction<string, v.ErrorMessage<v.NanoIdIssue<string>> | undefined>
   | v.NonEmptyAction<
       v.LengthInput,
       v.ErrorMessage<v.NonEmptyIssue<v.LengthInput>> | undefined
@@ -158,6 +161,12 @@ export function convertAction(
       break;
     }
 
+    case 'entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
+      jsonSchema.maxProperties = valibotAction.requirement;
+      break;
+    }
+
     case 'integer': {
       jsonSchema.type = 'integer';
       break;
@@ -206,6 +215,11 @@ export function convertAction(
       break;
     }
 
+    case 'max_entries': {
+      jsonSchema.maxProperties = valibotAction.requirement;
+      break;
+    }
+
     case 'max_length': {
       if (jsonSchema.type === 'array') {
         jsonSchema.maxItems = valibotAction.requirement;
@@ -221,11 +235,6 @@ export function convertAction(
       break;
     }
 
-    case 'max_props': {
-      jsonSchema.maxProperties = valibotAction.requirement;
-      break;
-    }
-
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
         handleError(
@@ -235,6 +244,11 @@ export function convertAction(
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'min_entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 
@@ -250,11 +264,6 @@ export function convertAction(
         }
         jsonSchema.minLength = valibotAction.requirement;
       }
-      break;
-    }
-
-    case 'min_props': {
-      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 

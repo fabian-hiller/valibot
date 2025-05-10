@@ -7,6 +7,7 @@ import {
   DailyDevLogo,
   DigitalOceanLogo,
   HdmLogo,
+  MotionLogo,
   NetlifyLogo,
   PaceLogo,
   StainlessLogo,
@@ -61,15 +62,16 @@ export const Credits = component$(() => {
       <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-3 md:mt-5 md:gap-x-8 md:gap-y-4 lg:mt-6 lg:gap-x-10 lg:gap-y-5">
         {[
           { Logo: PaceLogo, href: 'https://www.pace.edu' },
-          { Logo: BoltLogo, href: 'https://bolt.new/' },
-          { Logo: BuilderLogo, href: 'https://www.builder.io' },
           { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
+          { Logo: BoltLogo, href: 'https://bolt.new/' },
+          { Logo: MotionLogo, href: 'https://www.usemotion.com/' },
+          { Logo: BuilderLogo, href: 'https://www.builder.io' },
+          { Logo: VercelLogo, href: 'https://vercel.com' },
           { Logo: DailyDevLogo, href: 'https://daily.dev/' },
           { Logo: StainlessLogo, href: 'https://www.stainless.com/' },
-          { Logo: VercelLogo, href: 'https://vercel.com' },
           { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
-          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
+          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
         ].map(({ Logo, href }) => (
           <li key={href}>
             <a href={href} target="_blank" rel="noreferrer">

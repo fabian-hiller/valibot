@@ -23,6 +23,70 @@ describe('convertSchema', () => {
         $ref: '#/$defs/foo',
       });
     });
+
+    test('should skip definition if specified', () => {
+      const stringSchema = v.string();
+      expect(
+        convertSchema(
+          {},
+          stringSchema,
+          undefined,
+          createContext({
+            definitions: { foo: { type: 'string' } },
+            referenceMap: new Map().set(stringSchema, 'foo'),
+          }),
+          true
+        )
+      ).toStrictEqual({
+        type: 'string',
+      });
+    });
+
+    test('should not skip definition if specified', () => {
+      const stringSchema = v.string();
+      expect(
+        convertSchema(
+          {},
+          stringSchema,
+          undefined,
+          createContext({
+            definitions: { foo: { type: 'string' } },
+            referenceMap: new Map().set(stringSchema, 'foo'),
+          }),
+          false
+        )
+      ).toStrictEqual({
+        $ref: '#/$defs/foo',
+      });
+    });
+
+    test('should skip only root definition of nested schema if specified', () => {
+      const stringSchema = v.string();
+      const arraySchema = v.array(stringSchema);
+      const definitions = {
+        string: { type: 'string' },
+        array: {
+          type: 'array',
+          items: { $ref: '#/$defs/string' },
+        },
+      } as const;
+      const referenceMap = new Map<v.GenericSchema, string>([
+        [stringSchema, 'string'],
+        [arraySchema, 'array'],
+      ]);
+      expect(
+        convertSchema(
+          {},
+          arraySchema,
+          undefined,
+          createContext({ definitions, referenceMap }),
+          true
+        )
+      ).toStrictEqual({
+        type: 'array',
+        items: { $ref: '#/$defs/string' },
+      });
+    });
   });
 
   describe('schema with pipe', () => {
@@ -150,7 +214,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
-        additionalItems: false,
+        minItems: 2,
       });
     });
 
@@ -165,6 +229,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: { type: 'boolean' },
       });
     });
@@ -180,7 +245,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
-        additionalItems: true,
+        minItems: 2,
       });
     });
 
@@ -195,6 +260,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: false,
       });
     });
