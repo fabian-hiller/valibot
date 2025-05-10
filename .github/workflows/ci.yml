@@ -137,6 +137,8 @@ jobs:
     name: Run Vitest in codemod/zod-to-valibot
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'zod-to-valibot-codemod'
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
