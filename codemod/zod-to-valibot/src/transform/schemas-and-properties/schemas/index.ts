@@ -1,4 +1,4 @@
-export * from './bigint';
+export * from './bigint/bigint';
 export * from './boolean';
 export * from './date';
 export * from './number';

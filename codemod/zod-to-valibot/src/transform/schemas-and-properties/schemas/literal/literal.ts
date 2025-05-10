@@ -1,6 +1,6 @@
 import j from 'jscodeshift';
-import { getSchema, getSchemaWithOptionalDescription } from './helpers';
-import type { SchemaOptionsToASTVal } from './types';
+import { getSchema, getSchemaWithOptionalDescription } from '../helpers';
+import type { SchemaOptionsToASTVal } from '../types';
 
 export function transformLiteral(
   valibotIdentifier: string,

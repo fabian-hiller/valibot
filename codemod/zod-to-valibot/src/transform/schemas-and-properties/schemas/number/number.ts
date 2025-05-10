@@ -3,8 +3,8 @@ import {
   getDescription,
   getSchema,
   getSchemaWithOptionalDescription,
-} from './helpers';
-import type { SchemaOptionsToASTVal } from './types';
+} from '../helpers';
+import type { SchemaOptionsToASTVal } from '../types';
 
 export function transformNumber(
   valibotIdentifier: string,

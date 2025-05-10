@@ -3,15 +3,15 @@ import {
   getDescription,
   getSchema,
   getSchemaWithOptionalDescription,
-} from './helpers';
-import type { SchemaOptionsToASTVal } from './types';
+} from '../helpers';
+import type { SchemaOptionsToASTVal } from '../types';
 
-export function transformBoolean(
+export function transformBigint(
   valibotIdentifier: string,
   schemaOptions: SchemaOptionsToASTVal,
   coerce: boolean
 ) {
-  const baseSchema = getSchema(valibotIdentifier, 'boolean', schemaOptions);
+  const baseSchema = getSchema(valibotIdentifier, 'bigint', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -19,7 +19,7 @@ export function transformBoolean(
         j.callExpression(
           j.memberExpression(
             j.identifier(valibotIdentifier),
-            j.identifier('unknown')
+            j.identifier('any')
           ),
           []
         ),
@@ -28,7 +28,28 @@ export function transformBoolean(
             j.identifier(valibotIdentifier),
             j.identifier('transform')
           ),
-          [j.identifier('Boolean')]
+          [
+            j.arrowFunctionExpression(
+              [j.identifier('input')],
+              j.blockStatement([
+                j.tryStatement(
+                  j.blockStatement([
+                    j.returnStatement(
+                      j.callExpression(j.identifier('BigInt'), [
+                        j.identifier('input'),
+                      ])
+                    ),
+                  ]),
+                  j.catchClause(
+                    null,
+                    null,
+                    j.blockStatement([j.returnStatement(j.identifier('input'))])
+                  )
+                ),
+              ]),
+              false
+            ),
+          ]
         ),
         baseSchema,
         ...(schemaOptions.description

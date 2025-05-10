@@ -3,15 +3,15 @@ import {
   getDescription,
   getSchema,
   getSchemaWithOptionalDescription,
-} from './helpers';
-import type { SchemaOptionsToASTVal } from './types';
+} from '../helpers';
+import type { SchemaOptionsToASTVal } from '../types';
 
-export function transformString(
+export function transformBoolean(
   valibotIdentifier: string,
   schemaOptions: SchemaOptionsToASTVal,
   coerce: boolean
 ) {
-  const baseSchema = getSchema(valibotIdentifier, 'string', schemaOptions);
+  const baseSchema = getSchema(valibotIdentifier, 'boolean', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -28,7 +28,7 @@ export function transformString(
             j.identifier(valibotIdentifier),
             j.identifier('transform')
           ),
-          [j.identifier('String')]
+          [j.identifier('Boolean')]
         ),
         baseSchema,
         ...(schemaOptions.description

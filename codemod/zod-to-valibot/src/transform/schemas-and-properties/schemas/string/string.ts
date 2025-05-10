@@ -3,15 +3,15 @@ import {
   getDescription,
   getSchema,
   getSchemaWithOptionalDescription,
-} from './helpers';
-import type { SchemaOptionsToASTVal } from './types';
+} from '../helpers';
+import type { SchemaOptionsToASTVal } from '../types';
 
-export function transformBigint(
+export function transformString(
   valibotIdentifier: string,
   schemaOptions: SchemaOptionsToASTVal,
   coerce: boolean
 ) {
-  const baseSchema = getSchema(valibotIdentifier, 'bigint', schemaOptions);
+  const baseSchema = getSchema(valibotIdentifier, 'string', schemaOptions);
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -19,7 +19,7 @@ export function transformBigint(
         j.callExpression(
           j.memberExpression(
             j.identifier(valibotIdentifier),
-            j.identifier('any')
+            j.identifier('unknown')
           ),
           []
         ),
@@ -28,28 +28,7 @@ export function transformBigint(
             j.identifier(valibotIdentifier),
             j.identifier('transform')
           ),
-          [
-            j.arrowFunctionExpression(
-              [j.identifier('input')],
-              j.blockStatement([
-                j.tryStatement(
-                  j.blockStatement([
-                    j.returnStatement(
-                      j.callExpression(j.identifier('BigInt'), [
-                        j.identifier('input'),
-                      ])
-                    ),
-                  ]),
-                  j.catchClause(
-                    null,
-                    null,
-                    j.blockStatement([j.returnStatement(j.identifier('input'))])
-                  )
-                ),
-              ]),
-              false
-            ),
-          ]
+          [j.identifier('String')]
         ),
         baseSchema,
         ...(schemaOptions.description
