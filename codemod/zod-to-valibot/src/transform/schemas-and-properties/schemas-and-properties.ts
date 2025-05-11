@@ -6,7 +6,10 @@ import {
   ZOD_COERCEABLE_SCHEMAS,
   ZOD_METHODS,
   ZOD_PROPERTIES,
+  ZOD_RESULT_PROPERTIES,
+  ZOD_SCHEMA_PROPERTIES,
   ZOD_SCHEMAS,
+  ZOD_TO_VALI_METHOD,
   ZOD_UNCOERCEABLE_SCHEMAS,
   ZOD_VALIDATORS,
 } from './constants';
@@ -27,7 +30,8 @@ type ZodCoerceableSchemaName = (typeof ZOD_COERCEABLE_SCHEMAS)[number];
 type ZodUncoerceableSchemaName = (typeof ZOD_UNCOERCEABLE_SCHEMAS)[number];
 type ZodValidatorName = (typeof ZOD_VALIDATORS)[number];
 type ZodMethodName = (typeof ZOD_METHODS)[number];
-type ZodPropertyName = (typeof ZOD_PROPERTIES)[number];
+type ZodResultPropertyName = (typeof ZOD_RESULT_PROPERTIES)[number];
+type ZodSchemaPropertyName = (typeof ZOD_SCHEMA_PROPERTIES)[number];
 
 function isCallExp(path: UnknownPath): path is j.ASTPath<j.CallExpression> {
   return path.value.type === 'CallExpression';
@@ -46,6 +50,7 @@ const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
 const isZodCoerceableSchemaName = getIsTypeFn(ZOD_COERCEABLE_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
 const isZodMethodName = getIsTypeFn(ZOD_METHODS);
+const isZodResultPropertyName = getIsTypeFn(ZOD_RESULT_PROPERTIES);
 const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
 
 function toValibotSchemaExp(
@@ -144,12 +149,30 @@ function toValibotActionExp(
   );
 }
 
-function toValibotPropertyExp(
+function toResultValiPropExp(
+  objIdentifier: string,
+  propertyName: ZodResultPropertyName
+): j.MemberExpression {
+  const codeShiftIdentifier = j.identifier(objIdentifier);
+  switch (propertyName) {
+    case 'data':
+      return j.memberExpression(codeShiftIdentifier, j.identifier('output'));
+    case 'error':
+      return j.memberExpression(codeShiftIdentifier, j.identifier('issues'));
+    default:
+      assertNever(propertyName);
+  }
+}
+
+function toSchemaValiPropExp(
   valibotIdentifier: string,
-  schema: j.CallExpression | j.Identifier,
-  propertyName: ZodPropertyName
+  obj: j.CallExpression | string,
+  propertyName: ZodSchemaPropertyName
 ): j.CallExpression {
-  const args = [valibotIdentifier, schema] as const;
+  const args = [
+    valibotIdentifier,
+    typeof obj === 'string' ? j.identifier(obj) : obj,
+  ] as const;
   switch (propertyName) {
     case 'description':
       return transformDescription(...args);
@@ -167,7 +190,7 @@ function toValibotMethodExp(
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
-      j.identifier(zodMethodName)
+      j.identifier(ZOD_TO_VALI_METHOD[zodMethodName] ?? zodMethodName)
     ),
     [schemaExp, ...args]
   );
@@ -298,13 +321,22 @@ function transformSchemasAndPropertiesHelper(
             skipTransform = true;
             break;
           }
-          relevantExp.replace(
-            toValibotPropertyExp(
-              valibotIdentifier,
-              transformedExp ?? j.identifier(identifier),
-              propertyName
-            )
-          );
+          if (isZodResultPropertyName(propertyName)) {
+            // should always be a direct property access
+            if (transformedExp !== null) {
+              skipTransform = true;
+              break;
+            }
+            relevantExp.replace(toResultValiPropExp(identifier, propertyName));
+          } else {
+            relevantExp.replace(
+              toSchemaValiPropExp(
+                valibotIdentifier,
+                transformedExp ?? identifier,
+                propertyName
+              )
+            );
+          }
           continue main;
         }
         cur = cur.parentPath;
@@ -395,15 +427,18 @@ function transformSchemasAndPropertiesHelper(
       rootCallExpPath !== null
     ) {
       rootCallExpPath.replace(transformedExp);
+      const nxtPath = j.AwaitExpression.check(rootCallExpPath.parentPath.value)
+        ? rootCallExpPath.parentPath
+        : rootCallExpPath;
       if (
-        rootCallExpPath.parentPath.value.type === 'VariableDeclarator' &&
-        rootCallExpPath.parentPath.value.id.type === 'Identifier'
+        j.VariableDeclarator.check(nxtPath.parentPath.value) &&
+        j.Identifier.check(nxtPath.parentPath.value.id)
       ) {
         // transform links
         transformSchemasAndPropertiesHelper(
           root,
           valibotIdentifier,
-          rootCallExpPath.parentPath.value.id.name
+          nxtPath.parentPath.value.id.name
         );
       }
     }

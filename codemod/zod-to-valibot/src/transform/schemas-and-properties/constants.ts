@@ -61,6 +61,27 @@ export const VALIDATOR_TO_NUM_ARGS: Partial<Record<ZodValidator, number>> = {
   startsWith: 2,
 };
 
-export const ZOD_PROPERTIES = ['description'] as const;
+export const ZOD_SCHEMA_PROPERTIES = ['description'] as const;
 
-export const ZOD_METHODS = ['optional', 'nullable', 'parse'] as const;
+export const ZOD_RESULT_PROPERTIES = ['data', 'error'] as const;
+
+export const ZOD_PROPERTIES = [
+  ...ZOD_SCHEMA_PROPERTIES,
+  ...ZOD_RESULT_PROPERTIES,
+] as const;
+
+export const ZOD_METHODS = [
+  'optional',
+  'nullable',
+  'parse',
+  'parseAsync',
+  'safeParse',
+  'safeParseAsync',
+  'spa',
+] as const;
+
+export const ZOD_TO_VALI_METHOD: Partial<
+  Record<(typeof ZOD_METHODS)[number], string>
+> = {
+  spa: 'safeParseAsync',
+};
