@@ -20,4 +20,5 @@ defineTests(transform, [
   'schema-options',
   'specific-default-import',
   'specific-namespace-import',
+  'validation-error-msg',
 ]);

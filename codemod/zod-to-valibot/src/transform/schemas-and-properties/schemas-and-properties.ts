@@ -2,6 +2,7 @@ import j from 'jscodeshift';
 import { assertNever, getIsTypeFn } from '../../utils';
 import {
   VALIDATOR_TO_ACTION,
+  VALIDATOR_TO_NUM_ARGS,
   ZOD_COERCEABLE_SCHEMAS,
   ZOD_METHODS,
   ZOD_PROPERTIES,
@@ -88,11 +89,48 @@ function toValibotSchemaExp(
   }
 }
 
+function getValidatorMsg(msgArg: j.CallExpression['arguments'][number]) {
+  if (msgArg.type !== 'ObjectExpression') {
+    return msgArg;
+  }
+  const msgVals = msgArg.properties
+    .map((p) =>
+      p.type === 'ObjectProperty' &&
+      p.key.type === 'Identifier' &&
+      p.key.name === 'message'
+        ? p.value
+        : null
+    )
+    .filter((v) => v !== null);
+  const msgVal = msgVals.at(0);
+  return msgVal === undefined ||
+    msgVal.type === 'RestElement' ||
+    msgVal.type === 'SpreadElementPattern' ||
+    msgVal.type === 'PropertyPattern' ||
+    msgVal.type === 'ObjectPattern' ||
+    msgVal.type === 'ArrayPattern' ||
+    msgVal.type === 'AssignmentPattern' ||
+    msgVal.type === 'SpreadPropertyPattern' ||
+    msgVal.type === 'TSParameterProperty'
+    ? null
+    : msgVal;
+}
+
 function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
   args: j.CallExpression['arguments']
 ) {
+  const numArgs = VALIDATOR_TO_NUM_ARGS[zodValidatorName] ?? 1;
+  let argsExceptMsg = args;
+  const msgArg: j.CallExpression['arguments'] = [];
+  if (args.length === numArgs) {
+    argsExceptMsg = args.slice(0, args.length - 1);
+    const msgVal = getValidatorMsg(args[args.length - 1]);
+    if (msgVal !== null) {
+      msgArg.push(msgVal);
+    }
+  }
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
@@ -102,7 +140,7 @@ function toValibotActionExp(
           : null) ?? zodValidatorName
       )
     ),
-    args
+    [...argsExceptMsg, ...msgArg]
   );
 }
 
