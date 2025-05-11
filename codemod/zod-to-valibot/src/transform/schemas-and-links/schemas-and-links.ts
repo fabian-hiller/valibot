@@ -253,7 +253,7 @@ function getCoerce(schemaArgs: j.CallExpression['arguments']): boolean {
   );
 }
 
-function transformSchemasAndPropertiesHelper(
+function transformSchemasAndLinksHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
   identifier: string
@@ -435,7 +435,7 @@ function transformSchemasAndPropertiesHelper(
         j.Identifier.check(nxtPath.parentPath.value.id)
       ) {
         // transform links
-        transformSchemasAndPropertiesHelper(
+        transformSchemasAndLinksHelper(
           root,
           valibotIdentifier,
           nxtPath.parentPath.value.id.name
@@ -445,13 +445,9 @@ function transformSchemasAndPropertiesHelper(
   }
 }
 
-export function transformSchemasAndProperties(
+export function transformSchemasAndLinks(
   root: j.Collection<unknown>,
   valibotIdentifier: string
 ) {
-  transformSchemasAndPropertiesHelper(
-    root,
-    valibotIdentifier,
-    valibotIdentifier
-  );
+  transformSchemasAndLinksHelper(root, valibotIdentifier, valibotIdentifier);
 }
