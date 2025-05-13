@@ -763,7 +763,7 @@ describe('convertSchema', () => {
           createContext()
         )
       ).toStrictEqual({
-        anyOf: [
+        oneOf: [
           {
             type: 'object',
             properties: {

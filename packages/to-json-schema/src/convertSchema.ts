@@ -384,9 +384,15 @@ export function convertSchema(
       break;
     }
 
-    case 'union':
-    case 'variant': {
+    case 'union': {
       jsonSchema.anyOf = valibotSchema.options.map((option) =>
+        convertSchema({}, option as SchemaOrPipe, config, context)
+      );
+      break;
+    }
+
+    case 'variant': {
+      jsonSchema.oneOf = valibotSchema.options.map((option) =>
         convertSchema({}, option as SchemaOrPipe, config, context)
       );
       break;
