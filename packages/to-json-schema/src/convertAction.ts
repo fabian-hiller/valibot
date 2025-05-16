@@ -1,4 +1,4 @@
-import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
 import { handleError } from './utils/index.ts';
@@ -249,12 +249,14 @@ export function convertAction(
     }
 
     case 'metadata': {
-      if (
-        valibotAction.metadata.examples !== undefined &&
-        valibotAction.metadata.examples !== null
-      ) {
-        jsonSchema.examples = valibotAction.metadata
-          .examples as JSONSchema7Type;
+      if (typeof valibotAction.metadata.title === 'string') {
+        jsonSchema.title = valibotAction.metadata.title;
+      }
+      if (typeof valibotAction.metadata.description === 'string') {
+        jsonSchema.description = valibotAction.metadata.description;
+      }
+      if (Array.isArray(valibotAction.metadata.examples)) {
+        jsonSchema.examples = valibotAction.metadata.examples;
       }
       break;
     }
