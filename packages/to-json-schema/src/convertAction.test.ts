@@ -457,6 +457,40 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert metadata action', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 'title',
+          description: 'description',
+          examples: ['example'],
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({
+      title: 'title',
+      description: 'description',
+      examples: ['example'],
+    });
+  });
+
+  test('should skip invalid metadata properties', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 123,
+          description: null,
+          examples: { foo: 'bar' },
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({});
+  });
+
   test('should convert min length action for strings', () => {
     expect(
       convertAction(

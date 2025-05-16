@@ -65,6 +65,7 @@ type Action =
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
+  | v.MetadataAction<unknown, Record<string, unknown>>
   | v.MinEntriesAction<
       v.EntriesInput,
       number,
@@ -244,6 +245,19 @@ export function convertAction(
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'metadata': {
+      if (typeof valibotAction.metadata.title === 'string') {
+        jsonSchema.title = valibotAction.metadata.title;
+      }
+      if (typeof valibotAction.metadata.description === 'string') {
+        jsonSchema.description = valibotAction.metadata.description;
+      }
+      if (Array.isArray(valibotAction.metadata.examples)) {
+        jsonSchema.examples = valibotAction.metadata.examples;
+      }
       break;
     }
 

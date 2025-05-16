@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for title, description and examples in `metadata` action (pull request #1189)
+
 ## v1.1.0 (May 06, 2025)
 
 - Add support for `minEntries` and `maxEntries` action (pull request #1100)
