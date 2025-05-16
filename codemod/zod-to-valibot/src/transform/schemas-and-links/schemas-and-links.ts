@@ -121,21 +121,34 @@ function getValidatorMsg(msgArg: j.CallExpression['arguments'][number]) {
     : msgVal;
 }
 
+function splitLastArg(
+  maxArgs: number,
+  args: j.CallExpression['arguments']
+): {
+  firstArgs: j.CallExpression['arguments'];
+  lastArg: j.CallExpression['arguments'][number] | null;
+} {
+  let firstArgs = args;
+  let lastArg: j.CallExpression['arguments'][number] | null = null;
+  if (args.length === maxArgs && maxArgs > 0) {
+    firstArgs = args.slice(0, args.length - 1);
+    lastArg = args[args.length - 1];
+  }
+  return { firstArgs, lastArg };
+}
+
 function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
   args: j.CallExpression['arguments']
 ) {
-  const numArgs = VALIDATOR_TO_NUM_ARGS[zodValidatorName] ?? 1;
-  let argsExceptMsg = args;
-  const msgArg: j.CallExpression['arguments'] = [];
-  if (args.length === numArgs) {
-    argsExceptMsg = args.slice(0, args.length - 1);
-    const msgVal = getValidatorMsg(args[args.length - 1]);
-    if (msgVal !== null) {
-      msgArg.push(msgVal);
-    }
-  }
+  const { firstArgs: argsExceptMsg, lastArg } = splitLastArg(
+    VALIDATOR_TO_NUM_ARGS[zodValidatorName],
+    args
+  );
+  const msgArg = [lastArg !== null ? getValidatorMsg(lastArg) : null].filter(
+    (v) => v !== null
+  );
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
