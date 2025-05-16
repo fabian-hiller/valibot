@@ -6,12 +6,15 @@ contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
 # decimal
 
 Creates a [decimal](https://en.wikipedia.org/wiki/Decimal) validation action.
+
+> The difference between `decimal` and <Link href="../digits/">`digits`</Link> is that `decimal` accepts floating point numbers and negative numbers, while <Link href="../digits/">`digits`</Link> accepts only the digits 0-9.
 
 ```ts
 const Action = v.decimal<TInput, TMessage>(message);
