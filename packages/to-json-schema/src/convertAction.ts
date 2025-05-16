@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
-import { handleError } from './utils/index.ts';
+import { handleError, handleErrors } from './utils/index.ts';
 
 /**
  * Action type.
@@ -117,6 +117,10 @@ export function convertAction(
   valibotAction: Action,
   config: ConversionConfig | undefined
 ): JSONSchema7 {
+  // Create errors array
+  const errors: string[] = [];
+
+  // Convert Valibot action to JSON Schema
   switch (valibotAction.type) {
     case 'base64': {
       jsonSchema.contentEncoding = 'base64';
@@ -152,9 +156,8 @@ export function convertAction(
         jsonSchema.maxItems = 0;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors.push(
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.maxLength = 0;
@@ -226,9 +229,8 @@ export function convertAction(
         jsonSchema.maxItems = valibotAction.requirement;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors.push(
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.maxLength = valibotAction.requirement;
@@ -238,9 +240,8 @@ export function convertAction(
 
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
-        handleError(
-          `The "max_value" action is not supported on type "${jsonSchema.type}".`,
-          config
+        errors.push(
+          `The "max_value" action is not supported on type "${jsonSchema.type}".`
         );
       }
       // @ts-expect-error
@@ -271,9 +272,8 @@ export function convertAction(
         jsonSchema.minItems = valibotAction.requirement;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors.push(
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.minLength = valibotAction.requirement;
@@ -283,9 +283,8 @@ export function convertAction(
 
     case 'min_value': {
       if (jsonSchema.type !== 'number') {
-        handleError(
-          `The "min_value" action is not supported on type "${jsonSchema.type}".`,
-          config
+        errors.push(
+          `The "min_value" action is not supported on type "${jsonSchema.type}".`
         );
       }
       // @ts-expect-error
@@ -303,9 +302,8 @@ export function convertAction(
         jsonSchema.minItems = 1;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors.push(
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.minLength = 1;
@@ -315,7 +313,7 @@ export function convertAction(
 
     case 'regex': {
       if (valibotAction.requirement.flags) {
-        handleError('RegExp flags are not supported by JSON Schema.', config);
+        errors.push('RegExp flags are not supported by JSON Schema.');
       }
       jsonSchema.pattern = valibotAction.requirement.source;
       break;
@@ -346,15 +344,28 @@ export function convertAction(
     }
 
     default: {
-      handleError(
+      errors.push(
         // @ts-expect-error
-        `The "${valibotAction.type}" action cannot be converted to JSON Schema.`,
-        config
+        `The "${valibotAction.type}" action cannot be converted to JSON Schema.`
       );
     }
   }
 
-  return config?.overrideAction
-    ? config.overrideAction({ valibotAction, jsonSchema })
-    : jsonSchema;
+  // Override JSON Schema if specified and necessary
+  if (config?.overrideAction) {
+    const actionOverride = config.overrideAction({
+      valibotAction,
+      jsonSchema,
+      errors,
+    });
+    if (actionOverride) {
+      return { ...actionOverride };
+    }
+  }
+
+  // Handle errors based on configuration
+  handleErrors(errors, config);
+
+  // Return converted JSON Schema
+  return jsonSchema;
 }
