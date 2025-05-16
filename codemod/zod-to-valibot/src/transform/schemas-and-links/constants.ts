@@ -46,19 +46,25 @@ export const VALIDATOR_TO_ACTION: Partial<Record<ZodValidator, string>> = {
   lte: 'maxValue',
 };
 
-export const VALIDATOR_TO_NUM_ARGS: Partial<Record<ZodValidator, number>> = {
+export const VALIDATOR_TO_NUM_ARGS: Record<ZodValidator, number> = {
+  describe: 1,
+  email: 1,
   endsWith: 2,
-  gte: 2,
+  finite: 1,
   includes: 2,
   length: 2,
-  lt: 2,
-  lte: 2,
   max: 2,
   min: 2,
   multipleOf: 2,
   regex: 2,
   size: 2,
   startsWith: 2,
+  trim: 0,
+  url: 1,
+  gt: 2,
+  gte: 2,
+  lt: 2,
+  lte: 2,
 };
 
 export const ZOD_SCHEMA_PROPERTIES = ['description'] as const;
