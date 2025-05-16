@@ -134,6 +134,13 @@ export function convertSchema(
     const referenceId = context.referenceMap.get(valibotSchema);
     if (referenceId) {
       jsonSchema.$ref = `#/$defs/${referenceId}`;
+      if (config?.overrideRef) {
+        jsonSchema.$ref = config.overrideRef({
+          refId: referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+      }
       return jsonSchema;
     }
   }
@@ -173,7 +180,9 @@ export function convertSchema(
     }
 
     // Return converted JSON Schema
-    return jsonSchema;
+    return config?.overrideSchema
+      ? config.overrideSchema({ valibotSchema, jsonSchema })
+      : jsonSchema;
   }
 
   // Otherwise, convert individual schema to JSON Schema
@@ -428,6 +437,15 @@ export function convertSchema(
       // Add reference to JSON Schema object
       jsonSchema.$ref = `#/$defs/${referenceId}`;
 
+      // Override reference, if necessary
+      if (config?.overrideRef) {
+        jsonSchema.$ref = config.overrideRef({
+          refId: referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+      }
+
       break;
     }
 
@@ -443,5 +461,7 @@ export function convertSchema(
   }
 
   // Return converted JSON Schema
-  return jsonSchema;
+  return config?.overrideSchema
+    ? config.overrideSchema({ valibotSchema, jsonSchema })
+    : jsonSchema;
 }

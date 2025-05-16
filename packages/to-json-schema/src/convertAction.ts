@@ -353,5 +353,8 @@ export function convertAction(
       );
     }
   }
-  return jsonSchema;
+
+  return config?.overrideAction
+    ? config.overrideAction({ valibotAction, jsonSchema })
+    : jsonSchema;
 }
