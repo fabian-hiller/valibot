@@ -1,4 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
+import { pipe } from '../../methods/index.ts';
+import { string } from '../../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { examples, type ExamplesAction } from './examples.ts';
 
@@ -8,6 +10,16 @@ describe('examples', () => {
     expectTypeOf(
       examples<string, ['foo', 'bar']>(['foo', 'bar'])
     ).toEqualTypeOf<Action>();
+  });
+  test("should error if example doesn't match input", () => {
+    pipe(
+      string(),
+      examples([
+        'foo',
+        // @ts-expect-error
+        123,
+      ])
+    );
   });
 
   describe('should infer correct types', () => {

@@ -1,10 +1,9 @@
 import type { BaseMetadata } from '../../types';
-import type { ArrayInput } from '../types';
 
 /**
  * Examples action interface.
  */
-export interface ExamplesAction<TInput, TExamples extends ArrayInput>
+export interface ExamplesAction<TInput, TExamples extends readonly TInput[]>
   extends BaseMetadata<TInput> {
   /**
    * The action type.
@@ -28,7 +27,7 @@ export interface ExamplesAction<TInput, TExamples extends ArrayInput>
  * @returns An examples action.
  */
 // @__NO_SIDE_EFFECTS__
-export function examples<TInput, const TExamples extends ArrayInput>(
+export function examples<TInput, const TExamples extends readonly TInput[]>(
   examples_: TExamples
 ): ExamplesAction<TInput, TExamples> {
   return {
