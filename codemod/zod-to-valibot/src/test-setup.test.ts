@@ -1,0 +1,27 @@
+import transform from './transform';
+import { defineTests } from './utils';
+
+// maintain the sorted order
+defineTests(transform, [
+  'coerce-bigint-schema',
+  'coerce-boolean-schema',
+  'coerce-date-schema',
+  'coerce-number-schema',
+  'coerce-string-schema',
+  'date-validation-methods',
+  'default-import',
+  'default-import-with-alias',
+  'default-import-with-specific-alias',
+  'describe',
+  'literal-schema',
+  'named-import',
+  'named-import-with-alias',
+  'named-import-with-specific-alias',
+  'namespace-import',
+  'parsing',
+  'schema-chain',
+  'schema-options',
+  'specific-default-import',
+  'specific-namespace-import',
+  'validation-error-msg',
+]);
