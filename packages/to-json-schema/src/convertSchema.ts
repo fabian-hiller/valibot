@@ -129,24 +129,24 @@ export function convertSchema(
   context: ConversionContext,
   skipRef = false
 ): JSONSchema7 {
-  // Get reference ID of Valibot schema
-  const referenceId = context.referenceMap.get(valibotSchema);
-
-  // If schema is in reference map use reference and skip conversion
-  if (!skipRef && referenceId) {
-    jsonSchema.$ref = `#/$defs/${referenceId}`;
-    if (config?.overrideRef) {
-      const refOverride = config.overrideRef({
-        ...context,
-        referenceId,
-        valibotSchema,
-        jsonSchema,
-      });
-      if (refOverride) {
-        jsonSchema.$ref = refOverride;
+  if (!skipRef) {
+    // If schema is in reference map use reference and skip conversion
+    const referenceId = context.referenceMap.get(valibotSchema);
+    if (referenceId) {
+      jsonSchema.$ref = `#/$defs/${referenceId}`;
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
       }
+      return jsonSchema;
     }
-    return jsonSchema;
   }
 
   // If it is schema with pipe, convert each item of pipe
@@ -473,7 +473,7 @@ export function convertSchema(
   if (config?.overrideSchema) {
     const schemaOverride = config.overrideSchema({
       ...context,
-      referenceId,
+      referenceId: context.referenceMap.get(valibotSchema),
       valibotSchema,
       jsonSchema,
       errors,
