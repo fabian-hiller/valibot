@@ -2,6 +2,8 @@ import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
 import { convertAction } from './convertAction.ts';
 
+// TODO: Add tests for `overrideAction` config
+
 console.warn = vi.fn();
 
 describe('convertAction', () => {

@@ -5,6 +5,9 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add support for title, description and examples in `metadata` action (pull request #1189)
+- Add new override configurations to override default behaviour of JSON Schema conversion (pull request #1197)
+- Add storage for global definitions with `addGlobalDefs` and `getGlobalDefs` (pull request #1197)
+- Add new `toJsonSchemaDefs` function to convert Valibot schema definitions to JSON Schema definitions (pull request #1197)
 
 ## v1.1.0 (May 06, 2025)
 

@@ -3,6 +3,8 @@ import { describe, expect, test, vi } from 'vitest';
 import { convertSchema } from './convertSchema.ts';
 import { createContext } from './vitest/index.ts';
 
+// TODO: Add tests for `overrideSchema` and `overrideRef` config
+
 console.warn = vi.fn();
 
 describe('convertSchema', () => {

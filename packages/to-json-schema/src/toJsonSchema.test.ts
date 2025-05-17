@@ -2,6 +2,8 @@ import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
 import { toJsonSchema } from './toJsonSchema.ts';
 
+// TODO: Add tests for override configs
+
 console.warn = vi.fn();
 
 describe('toJsonSchema', () => {

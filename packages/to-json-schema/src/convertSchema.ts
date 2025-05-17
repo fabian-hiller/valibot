@@ -2,7 +2,7 @@ import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
-import { handleError } from './utils/index.ts';
+import { addError, handleError } from './utils/index.ts';
 
 /**
  * Schema type.
@@ -134,6 +134,17 @@ export function convertSchema(
     const referenceId = context.referenceMap.get(valibotSchema);
     if (referenceId) {
       jsonSchema.$ref = `#/$defs/${referenceId}`;
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
       return jsonSchema;
     }
   }
@@ -175,6 +186,9 @@ export function convertSchema(
     // Return converted JSON Schema
     return jsonSchema;
   }
+
+  // Create errors variable
+  let errors: [string, ...string[]] | undefined;
 
   // Otherwise, convert individual schema to JSON Schema
   switch (valibotSchema.type) {
@@ -277,15 +291,15 @@ export function convertSchema(
 
     case 'record': {
       if ('pipe' in valibotSchema.key) {
-        handleError(
-          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.',
-          config
+        errors = addError(
+          errors,
+          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
         );
       }
       if (valibotSchema.key.type !== 'string') {
-        handleError(
-          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`,
-          config
+        errors = addError(
+          errors,
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
         );
       }
       jsonSchema.type = 'object';
@@ -353,9 +367,9 @@ export function convertSchema(
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        handleError(
-          'The value of the "literal" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'The value of the "literal" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -374,9 +388,9 @@ export function convertSchema(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        handleError(
-          'An option of the "picklist" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'An option of the "picklist" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -428,17 +442,51 @@ export function convertSchema(
       // Add reference to JSON Schema object
       jsonSchema.$ref = `#/$defs/${referenceId}`;
 
+      // Override reference, if necessary
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
+
       break;
     }
 
     // Other schemas
 
     default: {
-      handleError(
+      errors = addError(
+        errors,
         // @ts-expect-error
-        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`,
-        config
+        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
       );
+    }
+  }
+
+  // Override JSON Schema if specified and necessary
+  if (config?.overrideSchema) {
+    const schemaOverride = config.overrideSchema({
+      ...context,
+      referenceId: context.referenceMap.get(valibotSchema),
+      valibotSchema,
+      jsonSchema,
+      errors,
+    });
+    if (schemaOverride) {
+      return { ...schemaOverride };
+    }
+  }
+
+  // Handle errors based on configuration
+  if (errors) {
+    for (const message of errors) {
+      handleError(message, config);
     }
   }
 
