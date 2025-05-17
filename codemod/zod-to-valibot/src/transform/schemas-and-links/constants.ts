@@ -46,39 +46,6 @@ export const ZOD_VALIDATORS = [
   'lte',
 ] as const;
 
-type ZodValidator = (typeof ZOD_VALIDATORS)[number];
-
-export const VALIDATOR_TO_ACTION: Partial<Record<ZodValidator, string>> = {
-  describe: 'description',
-  max: 'maxValue',
-  min: 'minValue',
-  gt: 'gtValue',
-  gte: 'minValue',
-  lt: 'ltValue',
-  lte: 'maxValue',
-};
-
-export const VALIDATOR_TO_NUM_ARGS: Record<ZodValidator, number> = {
-  describe: 1,
-  email: 1,
-  endsWith: 2,
-  finite: 1,
-  includes: 2,
-  length: 2,
-  max: 2,
-  min: 2,
-  multipleOf: 2,
-  regex: 2,
-  size: 2,
-  startsWith: 2,
-  trim: 0,
-  url: 1,
-  gt: 2,
-  gte: 2,
-  lt: 2,
-  lte: 2,
-};
-
 export const ZOD_SCHEMA_PROPERTIES = ['description'] as const;
 
 export const ZOD_RESULT_PROPERTIES = ['data', 'error'] as const;

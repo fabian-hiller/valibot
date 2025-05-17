@@ -1,8 +1,6 @@
 import j from 'jscodeshift';
 import { assertNever, getIsTypeFn } from '../../utils';
 import {
-  VALIDATOR_TO_ACTION,
-  VALIDATOR_TO_NUM_ARGS,
   ZOD_COERCEABLE_SCHEMAS,
   ZOD_METHODS,
   ZOD_PROPERTIES,
@@ -23,6 +21,26 @@ import {
   transformNumber,
   transformString,
 } from './schemas';
+import {
+  transformDescribe,
+  transformEmail,
+  transformEndsWith,
+  transformFinite,
+  transformGt,
+  transformGte,
+  transformIncludes,
+  transformLength,
+  transformLt,
+  transformLte,
+  transformMax,
+  transformMin,
+  transformMultipleOf,
+  transformRegex,
+  transformSize,
+  transformStartsWith,
+  transformTrim,
+  transformUrl,
+} from './validators';
 
 type UnknownPath = j.ASTPath<{ type: unknown }>;
 type ZodSchemaName = (typeof ZOD_SCHEMAS)[number];
@@ -146,26 +164,49 @@ function splitLastArg(
 function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
-  args: j.CallExpression['arguments']
+  inputArgs: j.CallExpression['arguments']
 ) {
-  const { firstArgs: argsExceptMsg, lastArg } = splitLastArg(
-    VALIDATOR_TO_NUM_ARGS[zodValidatorName],
-    args
-  );
-  const msgArg = [lastArg !== null ? getValidatorMsg(lastArg) : null].filter(
-    (v) => v !== null
-  );
-  return j.callExpression(
-    j.memberExpression(
-      j.identifier(valibotIdentifier),
-      j.identifier(
-        (zodValidatorName in VALIDATOR_TO_ACTION
-          ? VALIDATOR_TO_ACTION[zodValidatorName]
-          : null) ?? zodValidatorName
-      )
-    ),
-    [...argsExceptMsg, ...msgArg]
-  );
+  const args = [valibotIdentifier, inputArgs] as const;
+  switch (zodValidatorName) {
+    case 'describe':
+      return transformDescribe(...args);
+    case 'email':
+      return transformEmail(...args);
+    case 'endsWith':
+      return transformEndsWith(...args);
+    case 'finite':
+      return transformFinite(...args);
+    case 'includes':
+      return transformIncludes(...args);
+    case 'length':
+      return transformLength(...args);
+    case 'max':
+      return transformMax(...args);
+    case 'min':
+      return transformMin(...args);
+    case 'multipleOf':
+      return transformMultipleOf(...args);
+    case 'regex':
+      return transformRegex(...args);
+    case 'size':
+      return transformSize(...args);
+    case 'startsWith':
+      return transformStartsWith(...args);
+    case 'trim':
+      return transformTrim(...args);
+    case 'url':
+      return transformUrl(...args);
+    case 'gt':
+      return transformGt(...args);
+    case 'gte':
+      return transformGte(...args);
+    case 'lt':
+      return transformLt(...args);
+    case 'lte':
+      return transformLte(...args);
+    default:
+      assertNever(zodValidatorName);
+  }
 }
 
 function toResultValiPropExp(
