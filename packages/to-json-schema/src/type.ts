@@ -27,6 +27,8 @@ export interface ConversionContext {
 
 /**
  * JSON Schema override context interface for schemas.
+ *
+ * @beta
  */
 export interface OverrideSchemaContext extends ConversionContext {
   /**
@@ -44,11 +46,13 @@ export interface OverrideSchemaContext extends ConversionContext {
   /**
    * The errors of the current Valibot schema conversion.
    */
-  errors: string[];
+  errors: [string, ...string[]] | undefined;
 }
 
 /**
  * JSON Schema override context interface for actions.
+ *
+ * @beta
  */
 export interface OverrideActionContext {
   /**
@@ -63,11 +67,13 @@ export interface OverrideActionContext {
   /**
    * The errors of the current Valibot action conversion.
    */
-  errors: string[];
+  errors: [string, ...string[]] | undefined;
 }
 
 /**
  * JSON Schema override context interface for references.
+ *
+ * @beta
  */
 export interface OverrideRefContext extends ConversionContext {
   /**
@@ -106,6 +112,8 @@ export interface ConversionConfig {
    * @param context The conversion context.
    *
    * @returns A JSON Schema, if overridden.
+   *
+   * @beta
    */
   readonly overrideSchema?: (
     context: OverrideSchemaContext
@@ -116,6 +124,8 @@ export interface ConversionConfig {
    * @param context The conversion context.
    *
    * @returns A JSON Schema, if overridden.
+   *
+   * @beta
    */
   readonly overrideAction?: (
     context: OverrideActionContext
@@ -126,6 +136,8 @@ export interface ConversionConfig {
    * @param context The conversion context.
    *
    * @returns A reference ID, if overridden.
+   *
+   * @beta
    */
   readonly overrideRef?: (
     context: OverrideRefContext

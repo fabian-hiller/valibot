@@ -2,7 +2,7 @@ import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
-import { handleError, handleErrors } from './utils/index.ts';
+import { addError, handleError } from './utils/index.ts';
 
 /**
  * Schema type.
@@ -187,8 +187,8 @@ export function convertSchema(
     return jsonSchema;
   }
 
-  // Create errors array
-  const errors: string[] = [];
+  // Create errors variable
+  let errors: [string, ...string[]] | undefined;
 
   // Otherwise, convert individual schema to JSON Schema
   switch (valibotSchema.type) {
@@ -291,12 +291,14 @@ export function convertSchema(
 
     case 'record': {
       if ('pipe' in valibotSchema.key) {
-        errors.push(
+        errors = addError(
+          errors,
           'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
         );
       }
       if (valibotSchema.key.type !== 'string') {
-        errors.push(
+        errors = addError(
+          errors,
           `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
         );
       }
@@ -365,7 +367,8 @@ export function convertSchema(
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        errors.push(
+        errors = addError(
+          errors,
           'The value of the "literal" schema is not JSON compatible.'
         );
       }
@@ -385,7 +388,8 @@ export function convertSchema(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        errors.push(
+        errors = addError(
+          errors,
           'An option of the "picklist" schema is not JSON compatible.'
         );
       }
@@ -457,7 +461,8 @@ export function convertSchema(
     // Other schemas
 
     default: {
-      errors.push(
+      errors = addError(
+        errors,
         // @ts-expect-error
         `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
       );
@@ -479,7 +484,11 @@ export function convertSchema(
   }
 
   // Handle errors based on configuration
-  handleErrors(errors, config);
+  if (errors) {
+    for (const message of errors) {
+      handleError(message, config);
+    }
+  }
 
   // Return converted JSON Schema
   return jsonSchema;
