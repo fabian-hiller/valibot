@@ -8,9 +8,12 @@ export const properties: Record<string, PropertyProps> = {
   TExamples: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'ArrayInput',
-      href: '../ArrayInput/',
+      modifier: 'readonly',
+      type: 'array',
+      item: {
+        type: 'custom',
+        name: 'TInput',
+      },
     },
   },
   examples_: {
