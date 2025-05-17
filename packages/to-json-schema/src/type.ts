@@ -34,19 +34,19 @@ export interface OverrideSchemaContext extends ConversionContext {
   /**
    * The JSON Schema reference ID.
    */
-  referenceId: string | undefined;
+  readonly referenceId: string | undefined;
   /**
    * The Valibot schema to be converted.
    */
-  valibotSchema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
+  readonly valibotSchema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
   /**
    * The converted JSON Schema.
    */
-  jsonSchema: JSONSchema7;
+  readonly jsonSchema: JSONSchema7;
   /**
    * The errors of the current Valibot schema conversion.
    */
-  errors: [string, ...string[]] | undefined;
+  readonly errors: [string, ...string[]] | undefined;
 }
 
 /**
@@ -59,15 +59,15 @@ export interface OverrideActionContext {
    * The Valibot action to be converted.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valibotAction: v.PipeAction<any, any, v.BaseIssue<unknown>>;
+  readonly valibotAction: v.PipeAction<any, any, v.BaseIssue<unknown>>;
   /**
    * The converted JSON Schema.
    */
-  jsonSchema: JSONSchema7;
+  readonly jsonSchema: JSONSchema7;
   /**
    * The errors of the current Valibot action conversion.
    */
-  errors: [string, ...string[]] | undefined;
+  readonly errors: [string, ...string[]] | undefined;
 }
 
 /**
@@ -79,15 +79,15 @@ export interface OverrideRefContext extends ConversionContext {
   /**
    * The JSON Schema reference ID.
    */
-  referenceId: string;
+  readonly referenceId: string;
   /**
    * The Valibot schema to be converted.
    */
-  valibotSchema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
+  readonly valibotSchema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
   /**
    * The converted JSON Schema.
    */
-  jsonSchema: JSONSchema7;
+  readonly jsonSchema: JSONSchema7;
 }
 
 /**
