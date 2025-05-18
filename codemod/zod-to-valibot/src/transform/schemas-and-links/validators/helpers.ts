@@ -31,3 +31,17 @@ export function getValidatorMsg(
     ? null
     : msgVal;
 }
+
+export function transformUnimplemented(
+  valibotIdentifier: string,
+  args: j.CallExpression['arguments'],
+  validatorName: string
+) {
+  return j.callExpression(
+    j.memberExpression(
+      j.identifier(valibotIdentifier),
+      j.identifier(validatorName)
+    ),
+    args
+  );
+}

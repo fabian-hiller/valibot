@@ -31,3 +31,9 @@ const TimeWithPrecisionSchema = z.string().time({ precision: 3 });
 const DateTimeSchema = z.string().datetime();
 // none of the customizations are supported by Valibot
 const DateTimeWithCustomizatonsSchema = z.string().datetime({ offset: true, local: false, precision: 2 });
+// validators that are not supported by Valibot
+const CUIDSchema = z.string().cuid();
+const Base64UrlSchema = z.string().base64url();
+const JWTSchema = z.string().jwt();
+const CIDRSchema = z.string().cidr();
+const DurationSchema = z.string().duration();

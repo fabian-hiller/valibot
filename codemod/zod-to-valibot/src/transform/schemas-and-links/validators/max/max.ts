@@ -4,7 +4,8 @@ import { getValidatorMsg } from '../helpers';
 
 export function transformMax(
   valibotIdentifier: string,
-  args: j.CallExpression['arguments']
+  args: j.CallExpression['arguments'],
+  schemaType: 'value' | 'length'
 ) {
   const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(2, args);
   const msgArg = getValidatorMsg(lastArg);
@@ -12,7 +13,7 @@ export function transformMax(
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
-      j.identifier('maxValue')
+      j.identifier(`max${schemaType === 'value' ? 'Value' : 'Length'}`)
     ),
     [...argsExceptOptions, ...(msgArg !== null ? [msgArg] : [])]
   );

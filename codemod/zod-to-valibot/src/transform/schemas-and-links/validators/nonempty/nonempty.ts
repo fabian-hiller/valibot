@@ -2,18 +2,17 @@ import j from 'jscodeshift';
 import { splitLastArg } from '../../helpers';
 import { getValidatorMsg } from '../helpers';
 
-export function transformMin(
+export function transformNonEmpty(
   valibotIdentifier: string,
-  args: j.CallExpression['arguments'],
-  schemaType: 'value' | 'length'
+  args: j.CallExpression['arguments']
 ) {
-  const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(2, args);
+  const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(1, args);
   const msgArg = getValidatorMsg(lastArg);
 
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
-      j.identifier(`min${schemaType === 'value' ? 'Value' : 'Length'}`)
+      j.identifier('nonEmpty')
     ),
     [...argsExceptOptions, ...(msgArg !== null ? [msgArg] : [])]
   );

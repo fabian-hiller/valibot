@@ -7,6 +7,7 @@ import {
   ZOD_RESULT_PROPERTIES,
   ZOD_SCHEMA_PROPERTIES,
   ZOD_SCHEMA_TO_NUM_ARGS,
+  ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
   ZOD_TO_VALI_METHOD,
   ZOD_UNCOERCEABLE_SCHEMAS,
@@ -22,24 +23,38 @@ import {
   transformString,
 } from './schemas';
 import {
+  transformBase64,
+  transformCUID2,
+  transformDateTime,
+  transformDate as transformDateValidator,
   transformDescribe,
   transformEmail,
+  transformEmoji,
   transformEndsWith,
   transformFinite,
   transformGt,
   transformGte,
   transformIncludes,
+  transformIp,
   transformLength,
   transformLt,
   transformLte,
   transformMax,
   transformMin,
   transformMultipleOf,
+  transformNanoid,
+  transformNonEmpty,
   transformRegex,
   transformSize,
   transformStartsWith,
+  transformTime,
+  transformToLowerCase,
+  transformToUpperCase,
   transformTrim,
+  transformULID,
+  transformUnimplemented,
   transformUrl,
+  transformUUID,
 } from './validators';
 
 type UnknownPath = j.ASTPath<{ type: unknown }>;
@@ -118,33 +133,6 @@ function toValibotSchemaExp(
   }
 }
 
-function getValidatorMsg(msgArg: j.CallExpression['arguments'][number]) {
-  if (msgArg.type !== 'ObjectExpression') {
-    return msgArg;
-  }
-  const msgVals = msgArg.properties
-    .map((p) =>
-      p.type === 'ObjectProperty' &&
-      p.key.type === 'Identifier' &&
-      p.key.name === 'message'
-        ? p.value
-        : null
-    )
-    .filter((v) => v !== null);
-  const msgVal = msgVals.at(0);
-  return msgVal === undefined ||
-    msgVal.type === 'RestElement' ||
-    msgVal.type === 'SpreadElementPattern' ||
-    msgVal.type === 'PropertyPattern' ||
-    msgVal.type === 'ObjectPattern' ||
-    msgVal.type === 'ArrayPattern' ||
-    msgVal.type === 'AssignmentPattern' ||
-    msgVal.type === 'SpreadPropertyPattern' ||
-    msgVal.type === 'TSParameterProperty'
-    ? null
-    : msgVal;
-}
-
 function splitLastArg(
   maxArgs: number,
   args: j.CallExpression['arguments']
@@ -164,34 +152,65 @@ function splitLastArg(
 function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
-  inputArgs: j.CallExpression['arguments']
+  inputArgs: j.CallExpression['arguments'],
+  schemaType: 'value' | 'length'
 ) {
   const args = [valibotIdentifier, inputArgs] as const;
   switch (zodValidatorName) {
+    case 'base64':
+      return transformBase64(...args);
+    case 'base64url':
+      return transformUnimplemented(...args, 'base64url');
+    case 'cidr':
+      return transformUnimplemented(...args, 'cidr');
+    case 'cuid':
+      return transformUnimplemented(...args, 'cuid');
+    case 'cuid2':
+      return transformCUID2(...args);
+    case 'date':
+      return transformDateValidator(...args);
+    case 'datetime':
+      return transformDateTime(...args);
     case 'describe':
       return transformDescribe(...args);
+    case 'duration':
+      return transformUnimplemented(...args, 'duration');
     case 'email':
       return transformEmail(...args);
+    case 'emoji':
+      return transformEmoji(...args);
     case 'endsWith':
       return transformEndsWith(...args);
     case 'finite':
       return transformFinite(...args);
     case 'includes':
       return transformIncludes(...args);
+    case 'ip':
+      return transformIp(...args);
+    case 'jwt':
+      return transformUnimplemented(...args, 'jwt');
     case 'length':
       return transformLength(...args);
     case 'max':
-      return transformMax(...args);
+      return transformMax(...args, schemaType);
     case 'min':
-      return transformMin(...args);
+      return transformMin(...args, schemaType);
     case 'multipleOf':
       return transformMultipleOf(...args);
+    case 'nanoid':
+      return transformNanoid(...args);
+    case 'nonempty':
+      return transformNonEmpty(...args);
     case 'regex':
       return transformRegex(...args);
     case 'size':
       return transformSize(...args);
     case 'startsWith':
       return transformStartsWith(...args);
+    case 'toLowerCase':
+      return transformToLowerCase(...args);
+    case 'toUpperCase':
+      return transformToUpperCase(...args);
     case 'trim':
       return transformTrim(...args);
     case 'url':
@@ -204,6 +223,12 @@ function toValibotActionExp(
       return transformLt(...args);
     case 'lte':
       return transformLte(...args);
+    case 'time':
+      return transformTime(...args);
+    case 'ulid':
+      return transformULID(...args);
+    case 'uuid':
+      return transformUUID(...args);
     default:
       assertNever(zodValidatorName);
   }
@@ -325,7 +350,8 @@ function getSchemaOptions(
 function transformSchemasAndLinksHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
-  identifier: string
+  identifier: string,
+  schemaType: 'value' | 'length' | null
 ): void {
   const isValibotIdentifier = identifier === valibotIdentifier;
   const relevantExps: (
@@ -372,6 +398,7 @@ function transformSchemasAndLinksHelper(
     let skipTransform = false;
     let rootCallExpPath: j.ASTPath<j.CallExpression> | null = null;
     let coerce = false;
+    let curSchemaType = schemaType;
     while (isMemberExp(cur) || isCallExp(cur)) {
       if (isMemberExp(cur)) {
         if (cur.value.property.type !== 'Identifier') {
@@ -422,8 +449,16 @@ function transformSchemasAndLinksHelper(
       }
       rootCallExpPath = cur;
       const propertyName = cur.value.callee.property.name;
-      if (isZodSchemaName(propertyName)) {
-        const exp = isZodCoerceableSchemaName(propertyName)
+      // null check is needed for transforming validators that have same name as a schema
+      // example: v.date(), v.string().date()
+      if (transformedExp === null && isZodSchemaName(propertyName)) {
+        // if the schema is already parsed, it's not safe to proceed
+        if (curSchemaType !== null) {
+          skipTransform = true;
+          break;
+        }
+        curSchemaType = ZOD_SCHEMA_TO_TYPE[propertyName];
+        transformedExp = isZodCoerceableSchemaName(propertyName)
           ? toValibotSchemaExp(
               valibotIdentifier,
               propertyName,
@@ -435,10 +470,6 @@ function transformSchemasAndLinksHelper(
               propertyName,
               cur.value.arguments
             );
-        transformedExp =
-          transformedExp === null
-            ? exp
-            : addToPipe(valibotIdentifier, transformedExp, exp);
       } else {
         if (isValibotIdentifier && transformedExp === null) {
           // the start of the transformed expression should always be a schema
@@ -454,13 +485,19 @@ function transformSchemasAndLinksHelper(
             cur.value.arguments
           );
         } else if (isZodValidatorName(propertyName)) {
+          if (curSchemaType === null) {
+            // validators can only be applied to parsed schemas
+            skipTransform = true;
+            break;
+          }
           transformedExp = addToPipe(
             valibotIdentifier,
             curSchema,
             toValibotActionExp(
               valibotIdentifier,
               propertyName,
-              cur.value.arguments
+              cur.value.arguments,
+              curSchemaType
             )
           );
         } else {
@@ -491,7 +528,8 @@ function transformSchemasAndLinksHelper(
         transformSchemasAndLinksHelper(
           root,
           valibotIdentifier,
-          nxtPath.parentPath.value.id.name
+          nxtPath.parentPath.value.id.name,
+          curSchemaType
         );
       }
     }
@@ -502,5 +540,10 @@ export function transformSchemasAndLinks(
   root: j.Collection<unknown>,
   valibotIdentifier: string
 ) {
-  transformSchemasAndLinksHelper(root, valibotIdentifier, valibotIdentifier);
+  transformSchemasAndLinksHelper(
+    root,
+    valibotIdentifier,
+    valibotIdentifier,
+    null
+  );
 }
