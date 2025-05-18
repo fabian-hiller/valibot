@@ -144,7 +144,8 @@ function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
   inputArgs: j.CallExpression['arguments'],
-  schemaType: 'value' | 'length'
+  schemaType: 'value' | 'length',
+  useBigInt: boolean
 ) {
   const args = [valibotIdentifier, inputArgs] as const;
   switch (zodValidatorName) {
@@ -193,15 +194,15 @@ function toValibotActionExp(
     case 'nanoid':
       return transformNanoid(...args);
     case 'negative':
-      return transformNegative(...args);
+      return transformNegative(...args, useBigInt);
     case 'nonempty':
       return transformNonEmpty(...args);
     case 'nonnegative':
-      return transformNonNegative(...args);
+      return transformNonNegative(...args, useBigInt);
     case 'nonpositive':
-      return transformNonPositive(...args);
+      return transformNonPositive(...args, useBigInt);
     case 'positive':
-      return transformPositive(...args);
+      return transformPositive(...args, useBigInt);
     case 'regex':
       return transformRegex(...args);
     case 'safe':
@@ -402,6 +403,7 @@ function transformSchemasAndLinksHelper(
     let rootCallExpPath: j.ASTPath<j.CallExpression> | null = null;
     let coerce = false;
     let curSchemaType = schemaType;
+    let useBigInt = false;
     while (isMemberExp(cur) || isCallExp(cur)) {
       if (isMemberExp(cur)) {
         if (cur.value.property.type !== 'Identifier') {
@@ -461,6 +463,7 @@ function transformSchemasAndLinksHelper(
           break;
         }
         curSchemaType = ZOD_SCHEMA_TO_TYPE[propertyName];
+        useBigInt = propertyName === 'bigint';
         transformedExp = isZodCoerceableSchemaName(propertyName)
           ? toValibotSchemaExp(
               valibotIdentifier,
@@ -500,7 +503,8 @@ function transformSchemasAndLinksHelper(
               valibotIdentifier,
               propertyName,
               cur.value.arguments,
-              curSchemaType
+              curSchemaType,
+              useBigInt
             )
           );
         } else {
