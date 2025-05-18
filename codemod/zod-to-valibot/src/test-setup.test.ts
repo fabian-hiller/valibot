@@ -23,5 +23,6 @@ defineTests(transform, [
   'schema-options',
   'specific-default-import',
   'specific-namespace-import',
+  'string-validation-methods',
   'validation-error-msg',
 ]);

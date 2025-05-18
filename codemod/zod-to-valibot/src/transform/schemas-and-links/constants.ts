@@ -13,6 +13,18 @@ export const ZOD_SCHEMAS = [
   ...ZOD_UNCOERCEABLE_SCHEMAS,
 ] as const;
 
+export const ZOD_SCHEMA_TO_TYPE: Record<
+  (typeof ZOD_SCHEMAS)[number],
+  'value' | 'length' | null
+> = {
+  bigint: 'value',
+  boolean: null,
+  date: 'value',
+  number: 'value',
+  string: 'length',
+  literal: null,
+};
+
 export const ZOD_SCHEMA_TO_NUM_ARGS: Record<
   (typeof ZOD_SCHEMAS)[number],
   number
@@ -26,24 +38,42 @@ export const ZOD_SCHEMA_TO_NUM_ARGS: Record<
 };
 
 export const ZOD_VALIDATORS = [
+  'base64',
+  'base64url',
+  'cidr',
+  'cuid',
+  'cuid2',
+  'date',
+  'datetime',
   'describe',
+  'duration',
   'email',
+  'emoji',
   'endsWith',
   'finite',
   'includes',
+  'ip',
   'length',
+  'jwt',
   'max',
   'min',
   'multipleOf',
+  'nanoid',
+  'nonempty',
   'regex',
   'size',
   'startsWith',
+  'toLowerCase',
+  'toUpperCase',
   'trim',
   'url',
   'gt',
   'gte',
   'lt',
   'lte',
+  'time',
+  'ulid',
+  'uuid',
 ] as const;
 
 export const ZOD_SCHEMA_PROPERTIES = ['description'] as const;

@@ -31,3 +31,9 @@ const TimeWithPrecisionSchema = v.pipe(v.string(), v.isoTimeSecond());
 const DateTimeSchema = v.pipe(v.string(), v.isoTimestamp());
 // none of the customizations are supported by Valibot
 const DateTimeWithCustomizatonsSchema = v.pipe(v.string(), v.isoTimestamp());
+// validators that are not supported by Valibot
+const CUIDSchema = v.pipe(v.string(), v.cuid());
+const Base64UrlSchema = v.pipe(v.string(), v.base64url());
+const JWTSchema = v.pipe(v.string(), v.jwt());
+const CIDRSchema = v.pipe(v.string(), v.cidr());
+const DurationSchema = v.pipe(v.string(), v.duration());
