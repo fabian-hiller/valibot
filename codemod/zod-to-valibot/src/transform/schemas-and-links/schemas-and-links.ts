@@ -36,6 +36,7 @@ import {
   transformGt,
   transformGte,
   transformIncludes,
+  transformInt,
   transformIp,
   transformLength,
   transformLt,
@@ -44,8 +45,13 @@ import {
   transformMin,
   transformMultipleOf,
   transformNanoid,
+  transformNegative,
   transformNonEmpty,
+  transformNonNegative,
+  transformNonPositive,
+  transformPositive,
   transformRegex,
+  transformSafe,
   transformSize,
   transformStartsWith,
   transformTime,
@@ -170,6 +176,8 @@ function toValibotActionExp(
       return transformFinite(...args);
     case 'includes':
       return transformIncludes(...args);
+    case 'int':
+      return transformInt(...args);
     case 'ip':
       return transformIp(...args);
     case 'jwt':
@@ -184,10 +192,20 @@ function toValibotActionExp(
       return transformMultipleOf(...args);
     case 'nanoid':
       return transformNanoid(...args);
+    case 'negative':
+      return transformNegative(...args);
     case 'nonempty':
       return transformNonEmpty(...args);
+    case 'nonnegative':
+      return transformNonNegative(...args);
+    case 'nonpositive':
+      return transformNonPositive(...args);
+    case 'positive':
+      return transformPositive(...args);
     case 'regex':
       return transformRegex(...args);
+    case 'safe':
+      return transformSafe(...args);
     case 'size':
       return transformSize(...args);
     case 'startsWith':
