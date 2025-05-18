@@ -3,6 +3,7 @@ import { defineTests } from './utils';
 
 // maintain the sorted order
 defineTests(transform, [
+  'bigint-validation-methods',
   'coerce-bigint-schema',
   'coerce-boolean-schema',
   'coerce-date-schema',
