@@ -1,13 +1,22 @@
 import j from 'jscodeshift';
-import { getSchema, getSchemaWithOptionalDescription } from '../helpers';
-import type { SchemaOptionsToASTVal } from '../types';
+import {
+  getDescription,
+  getSchemaComps,
+  getSchemaWithOptionalDescription,
+} from '../helpers';
 
 export function transformDate(
   valibotIdentifier: string,
-  schemaOptions: SchemaOptionsToASTVal,
-  coerce: boolean
+  args: j.CallExpression['arguments'],
+  coerceSchema: boolean
 ) {
-  const baseSchema = getSchema(valibotIdentifier, 'date', schemaOptions);
+  const { baseSchema, coerce, description } = getSchemaComps(
+    valibotIdentifier,
+    'date',
+    args,
+    1,
+    coerceSchema
+  );
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -48,8 +57,8 @@ export function transformDate(
           ]
         ),
         baseSchema,
-        ...(schemaOptions.description
-          ? [getSchema(valibotIdentifier, 'description', schemaOptions)]
+        ...(description
+          ? [getDescription(valibotIdentifier, description)]
           : []),
       ]
     );
@@ -57,6 +66,6 @@ export function transformDate(
   return getSchemaWithOptionalDescription(
     valibotIdentifier,
     baseSchema,
-    schemaOptions.description
+    description
   );
 }

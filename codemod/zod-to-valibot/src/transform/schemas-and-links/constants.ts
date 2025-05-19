@@ -25,18 +25,6 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   literal: null,
 };
 
-export const ZOD_SCHEMA_TO_NUM_ARGS: Record<
-  (typeof ZOD_SCHEMAS)[number],
-  number
-> = {
-  bigint: 1,
-  boolean: 1,
-  date: 1,
-  number: 1,
-  string: 1,
-  literal: 2,
-};
-
 export const ZOD_VALIDATORS = [
   'base64',
   'base64url',
