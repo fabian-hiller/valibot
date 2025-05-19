@@ -1,17 +1,22 @@
 import j from 'jscodeshift';
 import {
   getDescription,
-  getSchema,
+  getSchemaComps,
   getSchemaWithOptionalDescription,
 } from '../helpers';
-import type { SchemaOptionsToASTVal } from '../types';
 
 export function transformBoolean(
   valibotIdentifier: string,
-  schemaOptions: SchemaOptionsToASTVal,
-  coerce: boolean
+  args: j.CallExpression['arguments'],
+  coerceSchema: boolean
 ) {
-  const baseSchema = getSchema(valibotIdentifier, 'boolean', schemaOptions);
+  const { baseSchema, coerce, description } = getSchemaComps(
+    valibotIdentifier,
+    'boolean',
+    args,
+    1,
+    coerceSchema
+  );
   if (coerce) {
     return j.callExpression(
       j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
@@ -31,8 +36,8 @@ export function transformBoolean(
           [j.identifier('Boolean')]
         ),
         baseSchema,
-        ...(schemaOptions.description
-          ? [getDescription(valibotIdentifier, schemaOptions.description)]
+        ...(description
+          ? [getDescription(valibotIdentifier, description)]
           : []),
       ]
     );
@@ -40,6 +45,6 @@ export function transformBoolean(
   return getSchemaWithOptionalDescription(
     valibotIdentifier,
     baseSchema,
-    schemaOptions.description
+    description
   );
 }

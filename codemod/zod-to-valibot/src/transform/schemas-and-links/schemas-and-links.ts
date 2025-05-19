@@ -6,14 +6,12 @@ import {
   ZOD_PROPERTIES,
   ZOD_RESULT_PROPERTIES,
   ZOD_SCHEMA_PROPERTIES,
-  ZOD_SCHEMA_TO_NUM_ARGS,
   ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
   ZOD_TO_VALI_METHOD,
   ZOD_UNCOERCEABLE_SCHEMAS,
   ZOD_VALIDATORS,
 } from './constants';
-import { splitLastArg } from './helpers';
 import { transformDescription } from './properties';
 import {
   transformBigint,
@@ -110,17 +108,8 @@ function toValibotSchemaExp(
   inputArgs: j.CallExpression['arguments'],
   coerceOption = false
 ): j.CallExpression {
-  const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(
-    ZOD_SCHEMA_TO_NUM_ARGS[zodSchemaName],
-    inputArgs
-  );
-  const options = lastArg !== null ? getSchemaOptions(lastArg) : {};
-  const args = [valibotIdentifier, options] as const;
-  const argsWithCoerce = [
-    ...args,
-    coerceOption ||
-      (options.coerce?.type === 'BooleanLiteral' && options.coerce.value),
-  ] as const;
+  const args = [valibotIdentifier, inputArgs] as const;
+  const argsWithCoerce = [...args, coerceOption] as const;
   switch (zodSchemaName) {
     case 'string':
       return transformString(...argsWithCoerce);
@@ -133,7 +122,7 @@ function toValibotSchemaExp(
     case 'date':
       return transformDate(...argsWithCoerce);
     case 'literal':
-      return transformLiteral(...args, argsExceptOptions);
+      return transformLiteral(...args);
     default: {
       assertNever(zodSchemaName);
     }
@@ -298,57 +287,6 @@ function addToPipe(
     j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
     [addTo, add]
   );
-}
-
-function getSchemaOption(
-  optionsArgs: j.CallExpression['arguments'][number],
-  optionName: string
-) {
-  if (optionsArgs.type !== 'ObjectExpression') {
-    return null;
-  }
-  const optionVals = optionsArgs.properties
-    .map((p) =>
-      p.type === 'ObjectProperty' &&
-      p.key.type === 'Identifier' &&
-      p.key.name === optionName
-        ? p.value
-        : null
-    )
-    .filter((v) => v !== null);
-  const optionVal = optionVals.at(0);
-  return optionVal === undefined ||
-    optionVal.type === 'RestElement' ||
-    optionVal.type === 'SpreadElementPattern' ||
-    optionVal.type === 'PropertyPattern' ||
-    optionVal.type === 'ObjectPattern' ||
-    optionVal.type === 'ArrayPattern' ||
-    optionVal.type === 'AssignmentPattern' ||
-    optionVal.type === 'SpreadPropertyPattern' ||
-    optionVal.type === 'TSParameterProperty'
-    ? null
-    : optionVal;
-}
-
-function getSchemaOptions(
-  optionsArgs: j.CallExpression['arguments'][number]
-): Partial<
-  Record<
-    | 'description'
-    | 'invalid_type_error'
-    | 'required_error'
-    | 'message'
-    | 'coerce',
-    ReturnType<typeof getSchemaOption>
-  >
-> {
-  return {
-    description: getSchemaOption(optionsArgs, 'description'),
-    invalid_type_error: getSchemaOption(optionsArgs, 'invalid_type_error'),
-    required_error: getSchemaOption(optionsArgs, 'required_error'),
-    message: getSchemaOption(optionsArgs, 'message'),
-    coerce: getSchemaOption(optionsArgs, 'coerce'),
-  };
 }
 
 function transformSchemasAndLinksHelper(
