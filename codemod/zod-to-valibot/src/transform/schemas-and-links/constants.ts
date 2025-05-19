@@ -6,7 +6,11 @@ export const ZOD_COERCEABLE_SCHEMAS = [
   'string',
 ] as const;
 
-export const ZOD_UNCOERCEABLE_SCHEMAS = ['literal', 'optional'] as const;
+export const ZOD_UNCOERCEABLE_SCHEMAS = [
+  'literal',
+  'nullable',
+  'optional',
+] as const;
 
 export const ZOD_SCHEMAS = [
   ...ZOD_COERCEABLE_SCHEMAS,
@@ -21,6 +25,7 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   boolean: null,
   date: 'value',
   literal: null,
+  nullable: null,
   number: 'value',
   optional: null,
   string: 'length',

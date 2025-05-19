@@ -19,6 +19,7 @@ defineTests(transform, [
   'named-import-with-alias',
   'named-import-with-specific-alias',
   'namespace-import',
+  'nullable-schema',
   'number-validation-methods',
   'optional-schema',
   'parsing',
