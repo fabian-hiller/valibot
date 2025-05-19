@@ -19,6 +19,7 @@ import {
   transformDate,
   transformLiteral,
   transformNumber,
+  transformOptional,
   transformString,
 } from './schemas';
 import {
@@ -123,6 +124,8 @@ function toValibotSchemaExp(
       return transformDate(...argsWithCoerce);
     case 'literal':
       return transformLiteral(...args);
+    case 'optional':
+      return transformOptional(...args);
     default: {
       assertNever(zodSchemaName);
     }
@@ -244,7 +247,7 @@ function toResultValiPropExp(
 
 function toSchemaValiPropExp(
   valibotIdentifier: string,
-  obj: j.CallExpression | string,
+  obj: j.CallExpression | j.Identifier,
   propertyName: ZodSchemaPropertyName
 ): j.CallExpression {
   const args = [
@@ -334,8 +337,11 @@ function transformSchemasAndLinksHelper(
         .paths()
     );
   }
+  // to make sure nested schemas are transformed first
+  relevantExps.reverse();
   main: for (const relevantExp of relevantExps) {
-    let transformedExp: j.CallExpression | null = null;
+    let transformedExp: j.CallExpression | j.Identifier | null =
+      isValibotIdentifier ? null : j.identifier(identifier);
     let cur: UnknownPath = relevantExp;
     let skipTransform = false;
     let rootCallExpPath: j.ASTPath<j.CallExpression> | null = null;
@@ -362,16 +368,16 @@ function transformSchemasAndLinksHelper(
           }
           if (isZodResultPropertyName(propertyName)) {
             // should always be a direct property access
-            if (transformedExp !== null) {
-              skipTransform = true;
-              break;
-            }
+            // if (transformedExp !== null) {
+            //   skipTransform = true;
+            //   break;
+            // }
             relevantExp.replace(toResultValiPropExp(identifier, propertyName));
           } else {
             relevantExp.replace(
               toSchemaValiPropExp(
                 valibotIdentifier,
-                transformedExp ?? identifier,
+                transformedExp ?? j.identifier(identifier),
                 propertyName
               )
             );

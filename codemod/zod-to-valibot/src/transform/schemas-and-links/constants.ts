@@ -6,7 +6,7 @@ export const ZOD_COERCEABLE_SCHEMAS = [
   'string',
 ] as const;
 
-export const ZOD_UNCOERCEABLE_SCHEMAS = ['literal'] as const;
+export const ZOD_UNCOERCEABLE_SCHEMAS = ['literal', 'optional'] as const;
 
 export const ZOD_SCHEMAS = [
   ...ZOD_COERCEABLE_SCHEMAS,
@@ -20,9 +20,10 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   bigint: 'value',
   boolean: null,
   date: 'value',
-  number: 'value',
-  string: 'length',
   literal: null,
+  number: 'value',
+  optional: null,
+  string: 'length',
 };
 
 export const ZOD_VALIDATORS = [
@@ -87,6 +88,7 @@ export const ZOD_METHODS = [
   'safeParse',
   'safeParseAsync',
   'spa',
+  'unwrap',
 ] as const;
 
 export const ZOD_TO_VALI_METHOD: Partial<
