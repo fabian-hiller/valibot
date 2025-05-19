@@ -18,6 +18,7 @@ import {
   transformBoolean,
   transformDate,
   transformLiteral,
+  transformNullable,
   transformNumber,
   transformOptional,
   transformString,
@@ -116,6 +117,8 @@ function toValibotSchemaExp(
       return transformString(...argsWithCoerce);
     case 'boolean':
       return transformBoolean(...argsWithCoerce);
+    case 'nullable':
+      return transformNullable(...args);
     case 'number':
       return transformNumber(...argsWithCoerce);
     case 'bigint':
