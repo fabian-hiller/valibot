@@ -8,10 +8,19 @@ import {
   ZOD_SCHEMA_PROPERTIES,
   ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
-  ZOD_TO_VALI_METHOD,
   ZOD_UNCOERCEABLE_SCHEMAS,
   ZOD_VALIDATORS,
 } from './constants';
+import {
+  transformNullable as transformNullableMethod,
+  transformNullish,
+  transformOptional as transformOptionalMethod,
+  transformParse,
+  transformParseAsync,
+  transformSafeParse,
+  transformSafeParseAsync,
+  transformUnwrap,
+} from './methods';
 import { transformDescription } from './properties';
 import {
   transformBigint,
@@ -269,15 +278,30 @@ function toValibotMethodExp(
   valibotIdentifier: string,
   zodMethodName: ZodMethodName,
   schemaExp: j.CallExpression | j.Identifier,
-  args: j.CallExpression['arguments']
+  inputArgs: j.CallExpression['arguments']
 ) {
-  return j.callExpression(
-    j.memberExpression(
-      j.identifier(valibotIdentifier),
-      j.identifier(ZOD_TO_VALI_METHOD[zodMethodName] ?? zodMethodName)
-    ),
-    [schemaExp, ...args]
-  );
+  const args = [valibotIdentifier, schemaExp, inputArgs] as const;
+  switch (zodMethodName) {
+    case 'optional':
+      return transformOptionalMethod(...args);
+    case 'nullable':
+      return transformNullableMethod(...args);
+    case 'parse':
+      return transformParse(...args);
+    case 'parseAsync':
+      return transformParseAsync(...args);
+    case 'safeParse':
+      return transformSafeParse(...args);
+    case 'safeParseAsync':
+    case 'spa':
+      return transformSafeParseAsync(...args);
+    case 'unwrap':
+      return transformUnwrap(...args);
+    case 'nullish':
+      return transformNullish(...args);
+    default:
+      assertNever(zodMethodName);
+  }
 }
 
 function addToPipe(
