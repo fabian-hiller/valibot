@@ -1,15 +1,13 @@
 import j from 'jscodeshift';
 import { assertNever, getIsTypeFn } from '../../utils';
 import {
-  ZOD_COERCEABLE_SCHEMAS,
   ZOD_METHODS,
   ZOD_PROPERTIES,
   ZOD_RESULT_PROPERTIES,
   ZOD_SCHEMA_PROPERTIES,
-  ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
-  ZOD_UNCOERCEABLE_SCHEMAS,
   ZOD_VALIDATORS,
+  ZOD_VALUE_TYPE_SCHEMAS,
 } from './constants';
 import {
   transformNullable as transformNullableMethod,
@@ -75,8 +73,6 @@ import {
 
 type UnknownPath = j.ASTPath<{ type: unknown }>;
 type ZodSchemaName = (typeof ZOD_SCHEMAS)[number];
-type ZodCoerceableSchemaName = (typeof ZOD_COERCEABLE_SCHEMAS)[number];
-type ZodUncoerceableSchemaName = (typeof ZOD_UNCOERCEABLE_SCHEMAS)[number];
 type ZodValidatorName = (typeof ZOD_VALIDATORS)[number];
 type ZodMethodName = (typeof ZOD_METHODS)[number];
 type ZodResultPropertyName = (typeof ZOD_RESULT_PROPERTIES)[number];
@@ -96,23 +92,12 @@ const isPipeSchemaExp = (callExp: j.CallExpression) =>
   callExp.callee.property.name === 'pipe';
 
 const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
-const isZodCoerceableSchemaName = getIsTypeFn(ZOD_COERCEABLE_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
 const isZodMethodName = getIsTypeFn(ZOD_METHODS);
 const isZodResultPropertyName = getIsTypeFn(ZOD_RESULT_PROPERTIES);
 const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
+const isZodValueTypeSchemaName = getIsTypeFn(ZOD_VALUE_TYPE_SCHEMAS);
 
-function toValibotSchemaExp(
-  valibotIdentifier: string,
-  zodSchemaName: ZodCoerceableSchemaName,
-  inputArgs: j.CallExpression['arguments'],
-  coerceOption: boolean
-): j.CallExpression;
-function toValibotSchemaExp(
-  valibotIdentifier: string,
-  zodSchemaName: ZodUncoerceableSchemaName,
-  inputArgs: j.CallExpression['arguments']
-): j.CallExpression;
 function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodSchemaName,
@@ -148,7 +133,7 @@ function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
   inputArgs: j.CallExpression['arguments'],
-  schemaType: 'value' | 'length',
+  isValueTypeSchema: boolean,
   useBigInt: boolean
 ) {
   const args = [valibotIdentifier, inputArgs] as const;
@@ -190,9 +175,9 @@ function toValibotActionExp(
     case 'length':
       return transformLength(...args);
     case 'max':
-      return transformMax(...args, schemaType);
+      return transformMax(...args, isValueTypeSchema);
     case 'min':
-      return transformMin(...args, schemaType);
+      return transformMin(...args, isValueTypeSchema);
     case 'multipleOf':
       return transformMultipleOf(...args);
     case 'nanoid':
@@ -323,62 +308,29 @@ function transformSchemasAndLinksHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
   identifier: string,
-  schemaType: 'value' | 'length' | null
+  isValueTypeSchema: boolean | null
 ): void {
   const isValibotIdentifier = identifier === valibotIdentifier;
-  const relevantExps: (
-    | j.ASTPath<j.CallExpression>
-    | j.ASTPath<j.MemberExpression>
-  )[] =
-    // the first call exp of the chain
-    // example: v.string().email().trim() -> v.string()
-    root
-      .find(j.CallExpression, {
-        callee: {
-          type: 'MemberExpression',
-          object: { name: identifier },
-        },
-      })
-      .paths();
-  if (isValibotIdentifier) {
-    // the first member exp with `coerce` property access of the chain
-    // example: v.coerce.string() -> v.coerce
-    relevantExps.push(
-      ...root
-        .find(j.MemberExpression, {
-          object: { name: identifier },
-          property: { type: 'Identifier', name: 'coerce' },
-        })
-        .paths()
-    );
-  } else {
-    // property access
-    relevantExps.push(
-      ...root
-        .find(j.MemberExpression, { object: { name: identifier } })
-        .filter(
-          (p) =>
-            p.value.property.type === 'Identifier' &&
-            isZodPropertyName(p.value.property.name)
-        )
-        .paths()
-    );
-  }
-  // to make sure nested schemas are transformed first
-  relevantExps.reverse();
+  const relevantExps = root
+    .find(j.MemberExpression, {
+      object: { name: identifier },
+    })
+    .paths()
+    // to make sure nested schemas are transformed first
+    .reverse();
   main: for (const relevantExp of relevantExps) {
-    let transformedExp: j.CallExpression | j.Identifier | null =
-      isValibotIdentifier ? null : j.identifier(identifier);
-    let cur: UnknownPath = relevantExp;
+    let transformedExp: j.CallExpression | null = null;
     let skipTransform = false;
-    let rootCallExpPath: j.ASTPath<j.CallExpression> | null = null;
+    let rootCallExp: j.ASTPath<j.CallExpression> | null = null;
     let coerce = false;
-    let curSchemaType = schemaType;
+    let isCurValueTypeSchema = isValueTypeSchema;
     let useBigInt = false;
+    let cur: UnknownPath = relevantExp;
     while (isMemberExp(cur) || isCallExp(cur)) {
       if (isMemberExp(cur)) {
         if (cur.value.property.type !== 'Identifier') {
-          // should always be an identifier
+          // the property name must always be an indentifier as
+          // extracting the property name might get tricky otherwise
           skipTransform = true;
           break;
         }
@@ -395,10 +347,10 @@ function transformSchemasAndLinksHelper(
           }
           if (isZodResultPropertyName(propertyName)) {
             // should always be a direct property access
-            // if (transformedExp !== null) {
-            //   skipTransform = true;
-            //   break;
-            // }
+            if (transformedExp !== null) {
+              skipTransform = true;
+              break;
+            }
             relevantExp.replace(toResultValiPropExp(identifier, propertyName));
           } else {
             relevantExp.replace(
@@ -419,37 +371,35 @@ function transformSchemasAndLinksHelper(
         cur.value.callee.type !== 'MemberExpression' ||
         cur.value.callee.property.type !== 'Identifier'
       ) {
-        // should always be: <SOME_PATH>.<IDENTIFIER>() else it's ambiguous enough for now
+        // the property name must always be an indentifier as
+        // extracting the property name might get tricky otherwise
         skipTransform = true;
         break;
       }
-      rootCallExpPath = cur;
+      const prevRootCallExp = rootCallExp;
+      rootCallExp = cur;
       const propertyName = cur.value.callee.property.name;
-      // null check is needed for transforming validators that have same name as a schema
-      // example: v.date(), v.string().date()
-      if (transformedExp === null && isZodSchemaName(propertyName)) {
-        // if the schema is already parsed, it's not safe to proceed
-        if (curSchemaType !== null) {
+      if (
+        isValibotIdentifier &&
+        prevRootCallExp === null &&
+        isZodSchemaName(propertyName)
+      ) {
+        // the schema is already parsed
+        if (transformedExp !== null || isCurValueTypeSchema !== null) {
           skipTransform = true;
           break;
         }
-        curSchemaType = ZOD_SCHEMA_TO_TYPE[propertyName];
+        isCurValueTypeSchema = isZodValueTypeSchemaName(propertyName);
         useBigInt = propertyName === 'bigint';
-        transformedExp = isZodCoerceableSchemaName(propertyName)
-          ? toValibotSchemaExp(
-              valibotIdentifier,
-              propertyName,
-              cur.value.arguments,
-              coerce
-            )
-          : toValibotSchemaExp(
-              valibotIdentifier,
-              propertyName,
-              cur.value.arguments
-            );
+        transformedExp = toValibotSchemaExp(
+          valibotIdentifier,
+          propertyName,
+          cur.value.arguments,
+          coerce
+        );
       } else {
         if (isValibotIdentifier && transformedExp === null) {
-          // the start of the transformed expression should always be a schema
+          // the schema should be known
           skipTransform = true;
           break;
         }
@@ -462,7 +412,7 @@ function transformSchemasAndLinksHelper(
             cur.value.arguments
           );
         } else if (isZodValidatorName(propertyName)) {
-          if (curSchemaType === null) {
+          if (isCurValueTypeSchema === null) {
             // validators can only be applied to parsed schemas
             skipTransform = true;
             break;
@@ -474,7 +424,7 @@ function transformSchemasAndLinksHelper(
               valibotIdentifier,
               propertyName,
               cur.value.arguments,
-              curSchemaType,
+              isCurValueTypeSchema,
               useBigInt
             )
           );
@@ -490,14 +440,14 @@ function transformSchemasAndLinksHelper(
     }
     if (
       !skipTransform &&
-      // If either of the values is null, it's a bug
+      // the values should be set
       transformedExp !== null &&
-      rootCallExpPath !== null
+      rootCallExp !== null
     ) {
-      rootCallExpPath.replace(transformedExp);
-      const nxtPath = j.AwaitExpression.check(rootCallExpPath.parentPath.value)
-        ? rootCallExpPath.parentPath
-        : rootCallExpPath;
+      rootCallExp.replace(transformedExp);
+      const nxtPath = j.AwaitExpression.check(rootCallExp.parentPath.value)
+        ? rootCallExp.parentPath
+        : rootCallExp;
       if (
         j.VariableDeclarator.check(nxtPath.parentPath.value) &&
         j.Identifier.check(nxtPath.parentPath.value.id)
@@ -507,7 +457,7 @@ function transformSchemasAndLinksHelper(
           root,
           valibotIdentifier,
           nxtPath.parentPath.value.id.name,
-          curSchemaType
+          isCurValueTypeSchema
         );
       }
     }

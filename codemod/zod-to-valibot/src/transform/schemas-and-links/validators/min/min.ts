@@ -5,7 +5,7 @@ import { getValidatorMsg } from '../helpers';
 export function transformMin(
   valibotIdentifier: string,
   args: j.CallExpression['arguments'],
-  schemaType: 'value' | 'length'
+  isValueTypeSchema: boolean
 ) {
   const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(2, args);
   const msgArg = getValidatorMsg(lastArg);
@@ -13,7 +13,7 @@ export function transformMin(
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
-      j.identifier(`min${schemaType === 'value' ? 'Value' : 'Length'}`)
+      j.identifier(`min${isValueTypeSchema ? 'Value' : 'Length'}`)
     ),
     [...argsExceptOptions, ...(msgArg !== null ? [msgArg] : [])]
   );
