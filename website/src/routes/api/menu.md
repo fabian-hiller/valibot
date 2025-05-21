@@ -159,7 +159,6 @@
 - [partialCheck](/api/partialCheck/)
 - [rawCheck](/api/rawCheck/)
 - [rawTransform](/api/rawTransform/)
-- [rawTransformAsync](/api/rawTransformAsync/)
 - [readonly](/api/readonly/)
 - [reduceItems](/api/reduceItems/)
 - [regex](/api/regex/)
