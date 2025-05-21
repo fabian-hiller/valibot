@@ -88,6 +88,7 @@ export const ZOD_PROPERTIES = [
 export const ZOD_METHODS = [
   'optional',
   'nullable',
+  'nullish',
   'parse',
   'parseAsync',
   'safeParse',
@@ -95,9 +96,3 @@ export const ZOD_METHODS = [
   'spa',
   'unwrap',
 ] as const;
-
-export const ZOD_TO_VALI_METHOD: Partial<
-  Record<(typeof ZOD_METHODS)[number], string>
-> = {
-  spa: 'safeParseAsync',
-};
