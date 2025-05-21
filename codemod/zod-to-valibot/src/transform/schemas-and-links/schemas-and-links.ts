@@ -10,6 +10,7 @@ import {
   ZOD_VALUE_TYPE_SCHEMAS,
 } from './constants';
 import {
+  transformExtract,
   transformNullable as transformNullableMethod,
   transformNullish,
   transformOptional as transformOptionalMethod,
@@ -24,6 +25,7 @@ import {
   transformBigint,
   transformBoolean,
   transformDate,
+  transformEnum,
   transformLiteral,
   transformNullable,
   transformNumber,
@@ -119,6 +121,8 @@ function toValibotSchemaExp(
       return transformBigint(...argsWithCoerce);
     case 'date':
       return transformDate(...argsWithCoerce);
+    case 'enum':
+      return transformEnum(...args);
     case 'literal':
       return transformLiteral(...args);
     case 'optional':
@@ -267,6 +271,8 @@ function toValibotMethodExp(
 ) {
   const args = [valibotIdentifier, schemaExp, inputArgs] as const;
   switch (zodMethodName) {
+    case 'extract':
+      return transformExtract(valibotIdentifier, inputArgs);
     case 'optional':
       return transformOptionalMethod(...args);
     case 'nullable':
