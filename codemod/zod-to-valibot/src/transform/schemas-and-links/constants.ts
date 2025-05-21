@@ -1,35 +1,19 @@
-export const ZOD_COERCEABLE_SCHEMAS = [
+export const ZOD_SCHEMAS = [
   'bigint',
   'boolean',
   'date',
+  'literal',
+  'nullable',
   'number',
+  'optional',
   'string',
 ] as const;
 
-export const ZOD_UNCOERCEABLE_SCHEMAS = [
-  'literal',
-  'nullable',
-  'optional',
-] as const;
-
-export const ZOD_SCHEMAS = [
-  ...ZOD_COERCEABLE_SCHEMAS,
-  ...ZOD_UNCOERCEABLE_SCHEMAS,
-] as const;
-
-export const ZOD_SCHEMA_TO_TYPE: Record<
-  (typeof ZOD_SCHEMAS)[number],
-  'value' | 'length' | null
-> = {
-  bigint: 'value',
-  boolean: null,
-  date: 'value',
-  literal: null,
-  nullable: null,
-  number: 'value',
-  optional: null,
-  string: 'length',
-};
+export const ZOD_VALUE_TYPE_SCHEMAS: readonly (typeof ZOD_SCHEMAS)[number][] = [
+  'bigint',
+  'date',
+  'number',
+];
 
 export const ZOD_VALIDATORS = [
   'base64',
