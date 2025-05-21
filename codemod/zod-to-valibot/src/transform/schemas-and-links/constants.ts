@@ -2,6 +2,7 @@ export const ZOD_SCHEMAS = [
   'bigint',
   'boolean',
   'date',
+  'enum',
   'literal',
   'nullable',
   'number',
@@ -70,6 +71,7 @@ export const ZOD_PROPERTIES = [
 ] as const;
 
 export const ZOD_METHODS = [
+  'extract',
   'optional',
   'nullable',
   'nullish',

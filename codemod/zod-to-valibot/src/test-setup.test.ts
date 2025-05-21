@@ -30,4 +30,5 @@ defineTests(transform, [
   'specific-namespace-import',
   'string-validation-methods',
   'validation-error-msg',
+  'zod-enum',
 ]);

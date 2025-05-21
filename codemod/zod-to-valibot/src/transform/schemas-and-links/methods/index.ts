@@ -1,3 +1,4 @@
+export * from './extract';
 export * from './nullable';
 export * from './nullish';
 export * from './optional';
