@@ -4,6 +4,7 @@ export const ZOD_SCHEMAS = [
   'date',
   'enum',
   'literal',
+  'nativeEnum',
   'nullable',
   'number',
   'optional',
