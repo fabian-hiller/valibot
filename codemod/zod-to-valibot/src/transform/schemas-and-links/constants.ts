@@ -7,6 +7,7 @@ export const ZOD_SCHEMAS = [
   'nativeEnum',
   'nullable',
   'number',
+  'object',
   'optional',
   'string',
 ] as const;
@@ -62,7 +63,7 @@ export const ZOD_VALIDATORS = [
   'uuid',
 ] as const;
 
-export const ZOD_SCHEMA_PROPERTIES = ['description'] as const;
+export const ZOD_SCHEMA_PROPERTIES = ['description', 'shape'] as const;
 
 export const ZOD_RESULT_PROPERTIES = ['data', 'error'] as const;
 
