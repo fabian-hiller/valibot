@@ -20,7 +20,7 @@ import {
   transformSafeParseAsync,
   transformUnwrap,
 } from './methods';
-import { transformDescription } from './properties';
+import { transformDescription, transformShape } from './properties';
 import {
   transformBigint,
   transformBoolean,
@@ -30,6 +30,7 @@ import {
   transformNativeEnum,
   transformNullable,
   transformNumber,
+  transformObject,
   transformOptional,
   transformString,
 } from './schemas';
@@ -128,6 +129,8 @@ function toValibotSchemaExp(
       return transformEnum(...args);
     case 'literal':
       return transformLiteral(...args);
+    case 'object':
+      return transformObject(...args);
     case 'optional':
       return transformOptional(...args);
     default: {
@@ -253,14 +256,13 @@ function toSchemaValiPropExp(
   valibotIdentifier: string,
   obj: j.CallExpression | j.Identifier,
   propertyName: ZodSchemaPropertyName
-): j.CallExpression {
-  const args = [
-    valibotIdentifier,
-    typeof obj === 'string' ? j.identifier(obj) : obj,
-  ] as const;
+): j.CallExpression | j.MemberExpression {
+  const args = [valibotIdentifier, obj] as const;
   switch (propertyName) {
     case 'description':
       return transformDescription(...args);
+    case 'shape':
+      return transformShape(obj);
     default:
       assertNever(propertyName);
   }
