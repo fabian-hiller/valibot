@@ -17,6 +17,7 @@ import {
   transformOptional as transformOptionalMethod,
   transformParse,
   transformParseAsync,
+  transformPassthrough,
   transformSafeParse,
   transformSafeParseAsync,
   transformUnwrap,
@@ -289,6 +290,8 @@ function toValibotMethodExp(
       return transformParse(...args);
     case 'parseAsync':
       return transformParseAsync(...args);
+    case 'passthrough':
+      return transformPassthrough(valibotIdentifier, schemaExp);
     case 'safeParse':
       return transformSafeParse(...args);
     case 'safeParseAsync':

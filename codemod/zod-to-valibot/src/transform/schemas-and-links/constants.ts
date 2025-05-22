@@ -80,6 +80,7 @@ export const ZOD_METHODS = [
   'nullish',
   'parse',
   'parseAsync',
+  'passthrough',
   'safeParse',
   'safeParseAsync',
   'spa',
