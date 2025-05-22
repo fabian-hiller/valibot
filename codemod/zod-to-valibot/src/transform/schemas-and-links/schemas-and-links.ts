@@ -11,6 +11,7 @@ import {
 } from './constants';
 import {
   transformExtract,
+  transformKeyof,
   transformNullable as transformNullableMethod,
   transformNullish,
   transformOptional as transformOptionalMethod,
@@ -278,6 +279,8 @@ function toValibotMethodExp(
   switch (zodMethodName) {
     case 'extract':
       return transformExtract(valibotIdentifier, inputArgs);
+    case 'keyof':
+      return transformKeyof(...args);
     case 'optional':
       return transformOptionalMethod(...args);
     case 'nullable':
