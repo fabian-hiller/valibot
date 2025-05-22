@@ -83,6 +83,7 @@ export const ZOD_METHODS = [
   'passthrough',
   'safeParse',
   'safeParseAsync',
+  'strict',
   'spa',
   'unwrap',
 ] as const;
