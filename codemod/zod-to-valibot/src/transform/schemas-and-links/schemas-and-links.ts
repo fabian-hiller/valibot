@@ -21,6 +21,7 @@ import {
   transformSafeParse,
   transformSafeParseAsync,
   transformStrict,
+  transformStrip,
   transformUnwrap,
 } from './methods';
 import { transformDescription, transformShape } from './properties';
@@ -300,6 +301,8 @@ function toValibotMethodExp(
       return transformSafeParseAsync(...args);
     case 'strict':
       return transformStrict(valibotIdentifier, schemaExp);
+    case 'strip':
+      return transformStrip(valibotIdentifier, schemaExp);
     case 'unwrap':
       return transformUnwrap(...args);
     case 'nullish':
