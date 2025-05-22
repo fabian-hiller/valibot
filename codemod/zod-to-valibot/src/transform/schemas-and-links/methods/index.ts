@@ -5,6 +5,7 @@ export * from './nullish';
 export * from './optional';
 export * from './parse';
 export * from './parseAsync';
+export * from './passthrough';
 export * from './safeParse';
 export * from './safeParseAsync';
 export * from './unwrap';
