@@ -26,6 +26,7 @@ defineTests(transform, [
   'object-keyof',
   'object-passthrough',
   'object-shape',
+  'object-strict',
   'optional-schema',
   'parsing',
   'schema-chain',

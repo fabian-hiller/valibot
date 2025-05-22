@@ -8,4 +8,5 @@ export * from './parseAsync';
 export * from './passthrough';
 export * from './safeParse';
 export * from './safeParseAsync';
+export * from './strict';
 export * from './unwrap';
