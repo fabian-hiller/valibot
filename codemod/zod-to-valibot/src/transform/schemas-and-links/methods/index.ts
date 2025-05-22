@@ -9,4 +9,5 @@ export * from './passthrough';
 export * from './safeParse';
 export * from './safeParseAsync';
 export * from './strict';
+export * from './strip';
 export * from './unwrap';

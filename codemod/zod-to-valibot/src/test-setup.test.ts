@@ -27,6 +27,7 @@ defineTests(transform, [
   'object-passthrough',
   'object-shape',
   'object-strict',
+  'object-strip',
   'optional-schema',
   'parsing',
   'schema-chain',
