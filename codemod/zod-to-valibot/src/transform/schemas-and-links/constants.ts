@@ -74,6 +74,7 @@ export const ZOD_PROPERTIES = [
 
 export const ZOD_METHODS = [
   'extract',
+  'keyof',
   'optional',
   'nullable',
   'nullish',

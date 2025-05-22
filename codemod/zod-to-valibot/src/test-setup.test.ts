@@ -23,6 +23,7 @@ defineTests(transform, [
   'nullable-schema',
   'nullish-schema',
   'number-validation-methods',
+  'object-keyof',
   'object-shape',
   'optional-schema',
   'parsing',
