@@ -9,6 +9,7 @@ export * from './parseAsync';
 export * from './partial';
 export * from './passthrough';
 export * from './pick';
+export * from './required';
 export * from './safeParse';
 export * from './safeParseAsync';
 export * from './strict';

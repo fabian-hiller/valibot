@@ -21,6 +21,7 @@ import {
   transformPartial,
   transformPassthrough,
   transformPick,
+  transformRequired,
   transformSafeParse,
   transformSafeParseAsync,
   transformStrict,
@@ -303,6 +304,8 @@ function toValibotMethodExp(
       return transformPassthrough(valibotIdentifier, schemaExp);
     case 'pick':
       return transformPick(...args);
+    case 'required':
+      return transformRequired(...args);
     case 'safeParse':
       return transformSafeParse(...args);
     case 'safeParseAsync':
