@@ -14,6 +14,7 @@ import {
   transformKeyof,
   transformNullable as transformNullableMethod,
   transformNullish,
+  transformOmit,
   transformOptional as transformOptionalMethod,
   transformParse,
   transformParseAsync,
@@ -285,6 +286,8 @@ function toValibotMethodExp(
       return transformExtract(valibotIdentifier, inputArgs);
     case 'keyof':
       return transformKeyof(...args);
+    case 'omit':
+      return transformOmit(...args);
     case 'optional':
       return transformOptionalMethod(...args);
     case 'nullable':
@@ -345,7 +348,7 @@ function transformSchemasAndLinksHelper(
     // to make sure nested schemas are transformed first
     .reverse();
   main: for (const relevantExp of relevantExps) {
-    let transformedExp: j.CallExpression | null = null;
+    let transformedExp: j.CallExpression | j.Identifier | null = null;
     let skipTransform = false;
     let rootCallExp: j.ASTPath<j.CallExpression> | null = null;
     let coerce = false;

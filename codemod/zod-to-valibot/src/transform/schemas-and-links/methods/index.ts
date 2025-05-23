@@ -2,6 +2,7 @@ export * from './extract';
 export * from './keyof';
 export * from './nullable';
 export * from './nullish';
+export * from './omit';
 export * from './optional';
 export * from './parse';
 export * from './parseAsync';
