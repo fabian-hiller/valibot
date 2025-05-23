@@ -5,7 +5,14 @@ const Schema1 = v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolea
 const Schema2 = v.required(Schema1);
 const Schema3 = v.required(v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolean()})));
 
+// make none of the keys required
+const Schema4 = v.partial(Schema1);
+const Schema5 = v.partial(v.object({key: v.string()}));
+
 // make some keys required
-const Schema4 = v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolean()}));
-const Schema5 = v.required(Schema4, ["k1", "k3"]);
-const Schema6 = v.required(v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolean()})), ["k2"]);
+const Schema6 = v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolean()}));
+const Schema7 = v.required(Schema6, ["k1", "k3"]);
+const Schema8 = v.required(
+  v.partial(v.object({k1: v.string(), k2: v.number(), k3: v.boolean()})),
+  ["k2"]
+);

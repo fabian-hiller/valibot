@@ -28,6 +28,7 @@ defineTests(transform, [
   'object-partial',
   'object-passthrough',
   'object-pick',
+  'object-required',
   'object-shape',
   'object-strict',
   'object-strip',
