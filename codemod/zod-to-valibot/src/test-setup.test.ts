@@ -25,6 +25,7 @@ defineTests(transform, [
   'number-validation-methods',
   'object-keyof',
   'object-passthrough',
+  'object-pick',
   'object-shape',
   'object-strict',
   'object-strip',

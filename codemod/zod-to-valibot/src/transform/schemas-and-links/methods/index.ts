@@ -6,6 +6,7 @@ export * from './optional';
 export * from './parse';
 export * from './parseAsync';
 export * from './passthrough';
+export * from './pick';
 export * from './safeParse';
 export * from './safeParseAsync';
 export * from './strict';
