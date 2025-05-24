@@ -4,6 +4,7 @@ import { defineTests } from './utils';
 // maintain the sorted order
 defineTests(transform, [
   'array-schema',
+  'array-validation-methods',
   'bigint-validation-methods',
   'coerce-bigint-schema',
   'coerce-boolean-schema',
