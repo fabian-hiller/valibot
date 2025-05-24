@@ -10,6 +10,7 @@ import {
   ZOD_VALUE_TYPE_SCHEMAS,
 } from './constants';
 import {
+  transformArray as transformArrayMethod,
   transformExtract,
   transformKeyof,
   transformNullable as transformNullableMethod,
@@ -30,6 +31,7 @@ import {
 } from './methods';
 import { transformDescription, transformShape } from './properties';
 import {
+  transformArray,
   transformBigint,
   transformBoolean,
   transformDate,
@@ -119,6 +121,8 @@ function toValibotSchemaExp(
   const args = [valibotIdentifier, inputArgs] as const;
   const argsWithCoerce = [...args, coerceOption] as const;
   switch (zodSchemaName) {
+    case 'array':
+      return transformArray(...args);
     case 'string':
       return transformString(...argsWithCoerce);
     case 'boolean':
@@ -284,6 +288,8 @@ function toValibotMethodExp(
 ) {
   const args = [valibotIdentifier, schemaExp, inputArgs] as const;
   switch (zodMethodName) {
+    case 'array':
+      return transformArrayMethod(...args);
     case 'extract':
       return transformExtract(valibotIdentifier, inputArgs);
     case 'keyof':

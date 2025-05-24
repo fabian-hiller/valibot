@@ -1,3 +1,4 @@
+export * from './array';
 export * from './extract';
 export * from './keyof';
 export * from './nullable';

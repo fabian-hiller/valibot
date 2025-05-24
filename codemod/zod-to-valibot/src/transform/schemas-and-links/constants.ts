@@ -1,4 +1,5 @@
 export const ZOD_SCHEMAS = [
+  'array',
   'bigint',
   'boolean',
   'date',
@@ -73,6 +74,7 @@ export const ZOD_PROPERTIES = [
 ] as const;
 
 export const ZOD_METHODS = [
+  'array',
   'extract',
   'keyof',
   'omit',
