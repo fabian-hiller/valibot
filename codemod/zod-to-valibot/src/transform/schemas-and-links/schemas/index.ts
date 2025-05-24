@@ -1,3 +1,4 @@
+export * from './array';
 export * from './bigint/bigint';
 export * from './boolean';
 export * from './date';
