@@ -5,20 +5,11 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  TGuard: {
+  TOutput: {
     modifier: 'extends',
     type: {
-      type: 'function',
-      params: [
-        {
-          name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
-        },
-      ],
-      return: 'boolean',
+      type: 'custom',
+      name: 'TInput',
     },
   },
   TMessage: {
@@ -42,7 +33,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 {
                   type: 'custom',
-                  name: 'TGuard',
+                  name: 'TOutput',
                 },
               ],
             },
@@ -52,12 +43,12 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseValidation: {
+  BaseTransformation: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'BaseValidation',
-      href: '../BaseValidation/',
+      name: 'BaseTransformation',
+      href: '../BaseTransformation/',
       generics: [
         {
           type: 'custom',
@@ -65,13 +56,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'InferGuarded',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TGuard',
-            },
-          ],
+          name: 'TOutput',
         },
         {
           type: 'custom',
@@ -84,7 +69,7 @@ export const properties: Record<string, PropertyProps> = {
             },
             {
               type: 'custom',
-              name: 'TGuard',
+              name: 'TOutput',
             },
           ],
         },
@@ -105,13 +90,20 @@ export const properties: Record<string, PropertyProps> = {
       href: '../guard/',
     },
   },
-  expects: {
-    type: 'null',
-  },
   requirement: {
     type: {
       type: 'custom',
-      name: 'TGuard',
+      name: 'Guard',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
     },
   },
   message: {

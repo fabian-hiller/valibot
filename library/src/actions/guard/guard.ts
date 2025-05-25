@@ -1,32 +1,41 @@
 import type {
   BaseIssue,
-  BaseValidation,
+  BaseTransformation,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
-export type Guard<TInput> = (input: TInput) => input is TInput;
+export type Guard<TInput, TOutput extends TInput> = (
+  input: TInput
+) => input is TOutput;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type InferGuarded<TGuard extends Guard<any>> = TGuard extends (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  input: any
-) => input is infer TGuarded
-  ? TGuarded
-  : never;
+/**
+ * Guard issue interface.
+ */
+export interface GuardIssue<TInput, TOutput extends TInput>
+  extends BaseIssue<TInput> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'transformation';
+  /**
+   * The validation type.
+   */
+  readonly type: 'guard';
+  /**
+   * The validation requirement.
+   */
+  readonly requirement: Guard<TInput, TOutput>;
+}
 
 /**
  * Guard action interface.
  */
 export interface GuardAction<
   TInput,
-  TGuard extends Guard<TInput>,
-  TMessage extends ErrorMessage<GuardIssue<TInput, TGuard>> | undefined,
-> extends BaseValidation<
-    TInput,
-    InferGuarded<TGuard>,
-    GuardIssue<TInput, TGuard>
-  > {
+  TOutput extends TInput,
+  TMessage extends ErrorMessage<GuardIssue<TInput, TOutput>> | undefined,
+> extends BaseTransformation<TInput, TOutput, GuardIssue<TInput, TOutput>> {
   /**
    * The action type.
    */
@@ -36,34 +45,14 @@ export interface GuardAction<
    */
   readonly reference: typeof guard;
   /**
-   * The expected property.
-   */
-  readonly expects: null;
-  /**
    * The guard function.
    */
-  readonly requirement: TGuard;
+  readonly requirement: Guard<TInput, TOutput>;
   /**
    * The error message.
    */
   readonly message: TMessage;
 }
-
-/**
- * Guard issue interface.
- */
-export interface GuardIssue<TInput, TGuard extends Guard<TInput>>
-  extends BaseIssue<TInput> {
-  /**
-   * The validation type.
-   */
-  type: 'guard';
-  /**
-   * The validation requirement.
-   */
-  requirement: TGuard;
-}
-
 /**
  * Creates a guard validation action.
  *
@@ -71,10 +60,9 @@ export interface GuardIssue<TInput, TGuard extends Guard<TInput>>
  *
  * @returns A guard action.
  */
-// overload for a known input, i.e. within a pipe
-export function guard<TInput, const TGuard extends Guard<TInput>>(
-  requirement: TGuard
-): GuardAction<TInput, TGuard, undefined>;
+export function guard<TInput, TOutput extends TInput>(
+  requirement: Guard<TInput, TOutput>
+): GuardAction<TInput, TOutput, undefined>;
 
 /**
  * Creates a guard validation action.
@@ -84,64 +72,29 @@ export function guard<TInput, const TGuard extends Guard<TInput>>(
  *
  * @returns A guard action.
  */
-// overload for a known input, i.e. within a pipe
 export function guard<
   TInput,
-  const TGuard extends Guard<TInput>,
-  const TMessage extends ErrorMessage<GuardIssue<TInput, TGuard>> | undefined,
+  TOutput extends TInput,
+  const TMessage extends ErrorMessage<GuardIssue<TInput, TOutput>> | undefined,
 >(
-  requirement: TGuard,
+  requirement: Guard<TInput, TOutput>,
   message: TMessage
-): GuardAction<TInput, TGuard, TMessage>;
-
-/**
- * Creates a guard validation action.
- *
- * @param requirement The guard function.
- *
- * @returns A guard action.
- */
-// overload for an unknown input, i.e. standalone
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function guard<const TGuard extends Guard<any>>(
-  requirement: TGuard
-): GuardAction<Parameters<TGuard>[0], TGuard, undefined>;
-
-/**
- * Creates a guard validation action.
- *
- * @param requirement The guard function.
- * @param message The error message.
- *
- * @returns A guard action.
- */
-// overload for an unknown input, i.e. standalone
-export function guard<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const TGuard extends Guard<any>,
-  const TMessage extends
-    | ErrorMessage<GuardIssue<Parameters<TGuard>[0], TGuard>>
-    | undefined,
->(
-  requirement: TGuard,
-  message: TMessage
-): GuardAction<Parameters<TGuard>[0], TGuard, TMessage>;
+): GuardAction<TInput, TOutput, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
 export function guard(
-  requirement: Guard<unknown>,
-  message?: ErrorMessage<GuardIssue<unknown, Guard<unknown>>>
+  requirement: Guard<unknown, unknown>,
+  message?: ErrorMessage<GuardIssue<unknown, unknown>>
 ): GuardAction<
   unknown,
-  Guard<unknown>,
-  ErrorMessage<GuardIssue<unknown, Guard<unknown>>> | undefined
+  unknown,
+  ErrorMessage<GuardIssue<unknown, unknown>> | undefined
 > {
   return {
-    kind: 'validation',
+    kind: 'transformation',
     type: 'guard',
     reference: guard,
     async: false,
-    expects: null,
     requirement,
     message,
     '~run'(dataset, config) {

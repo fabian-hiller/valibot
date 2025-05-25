@@ -9,13 +9,12 @@ describe('guard', () => {
     /^\d+px$/u.test(input);
 
   const baseAction: Omit<
-    GuardAction<string, typeof isPixelString, undefined>,
+    GuardAction<string, PixelString, undefined>,
     'message'
   > = {
-    kind: 'validation',
+    kind: 'transformation',
     type: 'guard',
     reference: guard,
-    expects: null,
     requirement: isPixelString,
     async: false,
     '~run': expect.any(Function),
@@ -23,7 +22,7 @@ describe('guard', () => {
 
   describe('should return action object', () => {
     test('with undefined message', () => {
-      const action: GuardAction<string, typeof isPixelString, undefined> = {
+      const action: GuardAction<string, PixelString, undefined> = {
         ...baseAction,
         message: undefined,
       };
@@ -32,7 +31,7 @@ describe('guard', () => {
     });
 
     test('with string message', () => {
-      const action: GuardAction<string, typeof isPixelString, 'message'> = {
+      const action: GuardAction<string, PixelString, 'message'> = {
         ...baseAction,
         message: 'message',
       };
@@ -41,11 +40,10 @@ describe('guard', () => {
 
     test('with function message', () => {
       const message = () => 'message';
-      const action: GuardAction<string, typeof isPixelString, typeof message> =
-        {
-          ...baseAction,
-          message,
-        };
+      const action: GuardAction<string, PixelString, typeof message> = {
+        ...baseAction,
+        message,
+      };
       expect(guard(isPixelString, message)).toStrictEqual(action);
     });
   });
@@ -61,10 +59,10 @@ describe('guard', () => {
   test('should return dataset with issues', () => {
     const action = guard(isPixelString, 'message');
     const baseIssue: Omit<
-      GuardIssue<string, typeof isPixelString>,
+      GuardIssue<string, PixelString>,
       'input' | 'received'
     > = {
-      kind: 'validation',
+      kind: 'transformation',
       type: 'guard',
       expected: null,
       message: 'message',
@@ -86,6 +84,6 @@ describe('guard', () => {
           received: '"123"',
         },
       ],
-    } satisfies FailureDataset<GuardIssue<string, typeof isPixelString>>);
+    } satisfies FailureDataset<GuardIssue<string, PixelString>>);
   });
 });

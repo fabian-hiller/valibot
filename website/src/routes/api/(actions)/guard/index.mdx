@@ -1,6 +1,6 @@
 ---
 title: guard
-description: Creates a guard validation action.
+description: Creates a guard transformation action.
 source: /actions/guard/guard.ts
 contributors:
   - EskiMojo14
@@ -11,16 +11,16 @@ import { properties } from './properties';
 
 # guard
 
-Creates a guard validation action.
+Creates a guard transformation action.
 
 ```ts
-const Action = v.guard<TInput, TGuard, TMessage>(requirement, message);
+const Action = v.guard<TInput, TOutput, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
-- `TGuard` <Property {...properties.TGuard} />
+- `TOutput` <Property {...properties.TOutput} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
@@ -33,6 +33,8 @@ const Action = v.guard<TInput, TGuard, TMessage>(requirement, message);
 With `guard` you can freely validate the input and return `true` if it is valid or `false` otherwise. If the input does not match your `requirement`, you can use `message` to customize the error message.
 
 This is especially useful if you have an existing type predicate (for example, from an external library).
+
+> `guard` is useful for narrowing known types. For validating completely unknown values, consider [`custom`](../custom/) instead.
 
 ## Returns
 
@@ -49,9 +51,7 @@ Schema to validate a pixel string.
 ```ts
 const PixelStringSchema = v.pipe(
   v.string(),
-  v.guard((input): input is `${number}px` =>
-    typeof input === 'string' ? /^\d+px$/.test(input) : false
-  )
+  v.guard((input): input is `${number}px` => /^\d+px$/.test(input))
 );
 ```
 

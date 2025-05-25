@@ -5,20 +5,11 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  TGuard: {
+  TOutput: {
     modifier: 'extends',
     type: {
-      type: 'function',
-      params: [
-        {
-          name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
-        },
-      ],
-      return: 'boolean',
+      type: 'custom',
+      name: 'TInput',
     },
   },
   BaseIssue: {
@@ -38,7 +29,7 @@ export const properties: Record<string, PropertyProps> = {
   kind: {
     type: {
       type: 'string',
-      value: 'validation',
+      value: 'transformation',
     },
   },
   type: {
@@ -53,7 +44,17 @@ export const properties: Record<string, PropertyProps> = {
   requirement: {
     type: {
       type: 'custom',
-      name: 'TGuard',
+      name: 'Guard',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
     },
   },
 };

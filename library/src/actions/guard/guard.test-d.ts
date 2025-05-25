@@ -13,44 +13,39 @@ describe('guard', () => {
   describe('should return action object', () => {
     test('with no message', () => {
       expectTypeOf(guard(isPixelString)).toEqualTypeOf<
-        GuardAction<string, typeof isPixelString, undefined>
+        GuardAction<string, PixelString, undefined>
       >();
     });
     test('with string message', () => {
       expectTypeOf(
-        guard<string, typeof isPixelString, 'message'>(isPixelString, 'message')
-      ).toEqualTypeOf<GuardAction<string, typeof isPixelString, 'message'>>();
+        guard<string, PixelString, 'message'>(isPixelString, 'message')
+      ).toEqualTypeOf<GuardAction<string, PixelString, 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        guard<string, typeof isPixelString, () => string>(
-          isPixelString,
-          () => 'message'
-        )
-      ).toEqualTypeOf<
-        GuardAction<string, typeof isPixelString, () => string>
-      >();
+        guard<string, PixelString, () => string>(isPixelString, () => 'message')
+      ).toEqualTypeOf<GuardAction<string, PixelString, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
     test('of input', () => {
       expectTypeOf<
-        InferInput<GuardAction<string, typeof isPixelString, undefined>>
+        InferInput<GuardAction<string, PixelString, undefined>>
       >().toEqualTypeOf<string>();
     });
 
     test('of output', () => {
       expectTypeOf<
-        InferOutput<GuardAction<string, typeof isPixelString, undefined>>
+        InferOutput<GuardAction<string, PixelString, undefined>>
       >().toEqualTypeOf<PixelString>();
     });
 
     test('of issue', () => {
       expectTypeOf<
-        InferIssue<GuardAction<string, typeof isPixelString, undefined>>
-      >().toEqualTypeOf<GuardIssue<string, typeof isPixelString>>();
+        InferIssue<GuardAction<string, PixelString, undefined>>
+      >().toEqualTypeOf<GuardIssue<string, PixelString>>();
     });
   });
 
