@@ -7,6 +7,7 @@ export * from './nullable';
 export * from './number';
 export * from './object';
 export * from './optional';
+export * from './record';
 export * from './string';
 export * from './literal';
 export type { SchemaOptionsToASTVal } from './types';

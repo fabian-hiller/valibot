@@ -6,6 +6,7 @@ export const ZOD_SCHEMAS = [
   'literal',
   'nativeEnum',
   'nullable',
+  'record',
   'number',
   'object',
   'optional',
