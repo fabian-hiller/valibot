@@ -417,9 +417,6 @@ function transformSchemasAndLinksHelper(
       const prevRootCallExp = rootCallExp;
       rootCallExp = cur;
       const propertyName = cur.value.callee.property.name;
-      if (rootCallExp) {
-        console.log('rootCallExp.value.callee', rootCallExp.value.callee);
-      }
       if (
         isValibotIdentifier &&
         prevRootCallExp === null &&
@@ -432,9 +429,6 @@ function transformSchemasAndLinksHelper(
         }
         isCurValueTypeSchema = isZodValueTypeSchemaName(propertyName);
         useBigInt = propertyName === 'bigint';
-        if (propertyName === 'record') {
-          console.log('cur.value.callee', cur.value.callee);
-        }
         transformedExp = toValibotSchemaExp(
           valibotIdentifier,
           propertyName,
