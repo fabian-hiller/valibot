@@ -14,13 +14,13 @@ import { properties } from './properties';
 Creates a guard transformation action.
 
 ```ts
-const Action = v.guard<TInput, TOutput, TMessage>(requirement, message);
+const Action = v.guard<TInput, TGuard, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
-- `TOutput` <Property {...properties.TOutput} />
+- `TGuard` <Property {...properties.TGuard} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters

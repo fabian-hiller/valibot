@@ -5,11 +5,17 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  TOutput: {
+  TGuard: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'TInput',
+      name: 'Guard',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
   TMessage: {
@@ -33,7 +39,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 {
                   type: 'custom',
-                  name: 'TOutput',
+                  name: 'TGuard',
                 },
               ],
             },
@@ -46,17 +52,7 @@ export const properties: Record<string, PropertyProps> = {
   requirement: {
     type: {
       type: 'custom',
-      name: 'Guard',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        {
-          type: 'custom',
-          name: 'TOutput',
-        },
-      ],
+      name: 'TGuard',
     },
   },
   message: {
@@ -77,7 +73,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'TGuard',
         },
         {
           type: 'custom',

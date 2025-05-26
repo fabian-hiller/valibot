@@ -9,7 +9,7 @@ describe('guard', () => {
     /^\d+px$/u.test(input);
 
   const baseAction: Omit<
-    GuardAction<string, PixelString, undefined>,
+    GuardAction<string, typeof isPixelString, undefined>,
     'message'
   > = {
     kind: 'transformation',
@@ -22,7 +22,7 @@ describe('guard', () => {
 
   describe('should return action object', () => {
     test('with undefined message', () => {
-      const action: GuardAction<string, PixelString, undefined> = {
+      const action: GuardAction<string, typeof isPixelString, undefined> = {
         ...baseAction,
         message: undefined,
       };
@@ -31,7 +31,7 @@ describe('guard', () => {
     });
 
     test('with string message', () => {
-      const action: GuardAction<string, PixelString, 'message'> = {
+      const action: GuardAction<string, typeof isPixelString, 'message'> = {
         ...baseAction,
         message: 'message',
       };
@@ -40,10 +40,11 @@ describe('guard', () => {
 
     test('with function message', () => {
       const message = () => 'message';
-      const action: GuardAction<string, PixelString, typeof message> = {
-        ...baseAction,
-        message,
-      };
+      const action: GuardAction<string, typeof isPixelString, typeof message> =
+        {
+          ...baseAction,
+          message,
+        };
       expect(guard(isPixelString, message)).toStrictEqual(action);
     });
   });
@@ -59,7 +60,7 @@ describe('guard', () => {
   test('should return dataset with issues', () => {
     const action = guard(isPixelString, 'message');
     const baseIssue: Omit<
-      GuardIssue<string, PixelString>,
+      GuardIssue<string, typeof isPixelString>,
       'input' | 'received'
     > = {
       kind: 'transformation',
@@ -84,6 +85,6 @@ describe('guard', () => {
           received: '"123"',
         },
       ],
-    } satisfies FailureDataset<GuardIssue<string, PixelString>>);
+    } satisfies FailureDataset<GuardIssue<string, typeof isPixelString>>);
   });
 });
