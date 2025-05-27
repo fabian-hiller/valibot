@@ -43,6 +43,7 @@ import {
   transformObject,
   transformOptional,
   transformString,
+  transformTuple,
 } from './schemas';
 import {
   transformBase64,
@@ -145,6 +146,8 @@ function toValibotSchemaExp(
       return transformObject(...args);
     case 'optional':
       return transformOptional(...args);
+    case 'tuple':
+      return transformTuple(...args, []);
     default: {
       assertNever(zodSchemaName);
     }
@@ -432,12 +435,54 @@ function transformSchemasAndLinksHelper(
         }
         isCurValueTypeSchema = isZodValueTypeSchemaName(propertyName);
         useBigInt = propertyName === 'bigint';
-        transformedExp = toValibotSchemaExp(
-          valibotIdentifier,
-          propertyName,
-          cur.value.arguments,
-          coerce
-        );
+        if (propertyName === 'tuple') {
+          const parentPath = cur.parentPath;
+          if (isMemberExp(parentPath)) {
+            const grandparentPath = parentPath.parentPath;
+            if (isCallExp(grandparentPath)) {
+              if (
+                grandparentPath.value.callee.type !== 'MemberExpression' ||
+                grandparentPath.value.callee.property.type !== 'Identifier'
+              ) {
+                skipTransform = true;
+                break;
+              }
+              const restCall =
+                parentPath &&
+                parentPath.value.type === 'MemberExpression' &&
+                grandparentPath &&
+                grandparentPath.value.type === 'CallExpression' &&
+                grandparentPath.value.callee.property.name === 'rest'
+                  ? grandparentPath
+                  : null;
+              if (restCall) {
+                if (isCallExp(restCall)) {
+                  transformedExp = transformTuple(
+                    valibotIdentifier,
+                    cur.value.arguments,
+                    restCall.value.arguments
+                  );
+                  restCall.replace(transformedExp);
+                  skipTransform = true;
+                  break;
+                }
+              } else {
+                transformedExp = transformTuple(
+                  valibotIdentifier,
+                  cur.value.arguments,
+                  []
+                );
+              }
+            }
+          }
+        } else {
+          transformedExp = toValibotSchemaExp(
+            valibotIdentifier,
+            propertyName,
+            cur.value.arguments,
+            coerce
+          );
+        }
       } else {
         if (isValibotIdentifier && transformedExp === null) {
           // the schema should be known

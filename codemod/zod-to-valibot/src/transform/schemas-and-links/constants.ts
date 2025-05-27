@@ -11,6 +11,7 @@ export const ZOD_SCHEMAS = [
   'object',
   'optional',
   'string',
+  'tuple',
 ] as const;
 
 export const ZOD_VALUE_TYPE_SCHEMAS: readonly (typeof ZOD_SCHEMAS)[number][] = [
