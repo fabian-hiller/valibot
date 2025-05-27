@@ -64,7 +64,11 @@ export const ZOD_VALIDATORS = [
   'uuid',
 ] as const;
 
-export const ZOD_SCHEMA_PROPERTIES = ['description', 'shape'] as const;
+export const ZOD_SCHEMA_PROPERTIES = [
+  'element',
+  'description',
+  'shape',
+] as const;
 
 export const ZOD_RESULT_PROPERTIES = ['data', 'error'] as const;
 

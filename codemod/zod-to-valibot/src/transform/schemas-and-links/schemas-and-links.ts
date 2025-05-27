@@ -27,7 +27,11 @@ import {
   transformStrip,
   transformUnwrap,
 } from './methods';
-import { transformDescription, transformShape } from './properties';
+import {
+  transformDescription,
+  transformElement,
+  transformShape,
+} from './properties';
 import {
   transformArray,
   transformBigint,
@@ -255,6 +259,8 @@ function toValiPropExp(
       return j.memberExpression(exp, j.identifier('output'));
     case 'description':
       return transformDescription(valibotIdentifier, exp);
+    case 'element':
+      return transformElement(exp);
     case 'error':
       return j.memberExpression(exp, j.identifier('issues'));
     case 'shape':
