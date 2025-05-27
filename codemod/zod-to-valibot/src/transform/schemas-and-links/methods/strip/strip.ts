@@ -2,7 +2,7 @@ import j from 'jscodeshift';
 
 export function transformStrip(
   valibotIdentifier: string,
-  schemaExp: j.CallExpression | j.Identifier
+  schemaExp: j.CallExpression | j.MemberExpression | j.Identifier
 ) {
   return j.callExpression(
     j.memberExpression(j.identifier(valibotIdentifier), j.identifier('object')),

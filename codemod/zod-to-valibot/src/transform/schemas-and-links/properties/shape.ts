@@ -1,5 +1,7 @@
 import j from 'jscodeshift';
 
-export function transformShape(schema: j.CallExpression | j.Identifier) {
-  return j.memberExpression(schema, j.identifier('entries'));
+export function transformShape(
+  exp: j.CallExpression | j.MemberExpression | j.Identifier
+) {
+  return j.memberExpression(exp, j.identifier('entries'));
 }

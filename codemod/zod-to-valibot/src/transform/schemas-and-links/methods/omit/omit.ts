@@ -16,7 +16,7 @@ function toValiOmitArg(omitArg: j.CallExpression['arguments'][number]) {
 
 export function transformOmit(
   valibotIdentifier: string,
-  schemaExp: j.CallExpression | j.Identifier,
+  schemaExp: j.CallExpression | j.MemberExpression | j.Identifier,
   inputArgs: j.CallExpression['arguments']
 ) {
   const args: any[] = [schemaExp];

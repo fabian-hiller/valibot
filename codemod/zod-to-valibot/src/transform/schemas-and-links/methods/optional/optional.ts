@@ -2,7 +2,7 @@ import j from 'jscodeshift';
 
 export function transformOptional(
   valibotIdentifier: string,
-  schemaExp: j.CallExpression | j.Identifier,
+  schemaExp: j.CallExpression | j.MemberExpression | j.Identifier,
   args: j.CallExpression['arguments']
 ) {
   return j.callExpression(
