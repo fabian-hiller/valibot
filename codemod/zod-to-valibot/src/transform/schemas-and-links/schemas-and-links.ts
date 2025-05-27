@@ -448,10 +448,6 @@ function transformSchemasAndLinksHelper(
                 break;
               }
               const restCall =
-                parentPath &&
-                parentPath.value.type === 'MemberExpression' &&
-                grandparentPath &&
-                grandparentPath.value.type === 'CallExpression' &&
                 grandparentPath.value.callee.property.name === 'rest'
                   ? grandparentPath
                   : null;
