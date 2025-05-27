@@ -456,16 +456,14 @@ function transformSchemasAndLinksHelper(
                   ? grandparentPath
                   : null;
               if (restCall) {
-                if (isCallExp(restCall)) {
-                  transformedExp = transformTuple(
-                    valibotIdentifier,
-                    cur.value.arguments,
-                    restCall.value.arguments
-                  );
-                  restCall.replace(transformedExp);
-                  skipTransform = true;
-                  break;
-                }
+                transformedExp = transformTuple(
+                  valibotIdentifier,
+                  cur.value.arguments,
+                  restCall.value.arguments
+                );
+                restCall.replace(transformedExp);
+                skipTransform = true;
+                break;
               } else {
                 transformedExp = transformTuple(
                   valibotIdentifier,
