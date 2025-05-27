@@ -447,17 +447,13 @@ function transformSchemasAndLinksHelper(
                 skipTransform = true;
                 break;
               }
-              const restCall =
-                grandparentPath.value.callee.property.name === 'rest'
-                  ? grandparentPath
-                  : null;
-              if (restCall) {
+              if (grandparentPath.value.callee.property.name === 'rest') {
                 transformedExp = transformTuple(
                   valibotIdentifier,
                   cur.value.arguments,
-                  restCall.value.arguments
+                  grandparentPath.value.arguments
                 );
-                restCall.replace(transformedExp);
+                grandparentPath.replace(transformedExp);
                 skipTransform = true;
                 break;
               } else {
