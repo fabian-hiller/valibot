@@ -10,6 +10,7 @@ export * from './number';
 export * from './object';
 export * from './optional';
 export * from './record';
-export * from './string';
 export * from './literal';
+export * from './string';
+export * from './tuple';
 export type { SchemaOptionsToASTVal } from './types';
