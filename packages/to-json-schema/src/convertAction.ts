@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
-import { handleError } from './utils/index.ts';
+import { addError, handleError } from './utils/index.ts';
 
 /**
  * Action type.
@@ -18,6 +18,11 @@ type Action =
   | v.EmptyAction<
       v.LengthInput,
       v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
+    >
+  | v.EntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.EntriesIssue<v.EntriesInput, number>> | undefined
     >
   | v.HexadecimalAction<
       string,
@@ -45,32 +50,31 @@ type Action =
       number,
       v.ErrorMessage<v.LengthIssue<v.LengthInput, number>> | undefined
     >
+  | v.MaxEntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.MaxEntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.MaxLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MaxLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MaxPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MaxPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MaxValueAction<
       v.ValueInput,
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
+  | v.MetadataAction<unknown, Record<string, unknown>>
+  | v.MinEntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.MinEntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.MinLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MinLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MinPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MinPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MinValueAction<
       v.ValueInput,
@@ -82,7 +86,7 @@ type Action =
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >
-  | v.NanoIDAction<string, v.ErrorMessage<v.NanoIDIssue<string>> | undefined>
+  | v.NanoIdAction<string, v.ErrorMessage<v.NanoIdIssue<string>> | undefined>
   | v.NonEmptyAction<
       v.LengthInput,
       v.ErrorMessage<v.NonEmptyIssue<v.LengthInput>> | undefined
@@ -113,6 +117,10 @@ export function convertAction(
   valibotAction: Action,
   config: ConversionConfig | undefined
 ): JSONSchema7 {
+  // Create errors variable
+  let errors: [string, ...string[]] | undefined;
+
+  // Convert Valibot action to JSON Schema
   switch (valibotAction.type) {
     case 'base64': {
       jsonSchema.contentEncoding = 'base64';
@@ -148,13 +156,19 @@ export function convertAction(
         jsonSchema.maxItems = 0;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors = addError(
+            errors,
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.maxLength = 0;
       }
+      break;
+    }
+
+    case 'entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
+      jsonSchema.maxProperties = valibotAction.requirement;
       break;
     }
 
@@ -195,14 +209,19 @@ export function convertAction(
         jsonSchema.maxItems = valibotAction.requirement;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors = addError(
+            errors,
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.minLength = valibotAction.requirement;
         jsonSchema.maxLength = valibotAction.requirement;
       }
+      break;
+    }
+
+    case 'max_entries': {
+      jsonSchema.maxProperties = valibotAction.requirement;
       break;
     }
 
@@ -211,9 +230,9 @@ export function convertAction(
         jsonSchema.maxItems = valibotAction.requirement;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors = addError(
+            errors,
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.maxLength = valibotAction.requirement;
@@ -221,20 +240,33 @@ export function convertAction(
       break;
     }
 
-    case 'max_props': {
-      jsonSchema.maxProperties = valibotAction.requirement;
-      break;
-    }
-
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
-        handleError(
-          `The "max_value" action is not supported on type "${jsonSchema.type}".`,
-          config
+        errors = addError(
+          errors,
+          `The "max_value" action is not supported on type "${jsonSchema.type}".`
         );
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'metadata': {
+      if (typeof valibotAction.metadata.title === 'string') {
+        jsonSchema.title = valibotAction.metadata.title;
+      }
+      if (typeof valibotAction.metadata.description === 'string') {
+        jsonSchema.description = valibotAction.metadata.description;
+      }
+      if (Array.isArray(valibotAction.metadata.examples)) {
+        jsonSchema.examples = valibotAction.metadata.examples;
+      }
+      break;
+    }
+
+    case 'min_entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 
@@ -243,9 +275,9 @@ export function convertAction(
         jsonSchema.minItems = valibotAction.requirement;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors = addError(
+            errors,
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.minLength = valibotAction.requirement;
@@ -253,16 +285,11 @@ export function convertAction(
       break;
     }
 
-    case 'min_props': {
-      jsonSchema.minProperties = valibotAction.requirement;
-      break;
-    }
-
     case 'min_value': {
       if (jsonSchema.type !== 'number') {
-        handleError(
-          `The "min_value" action is not supported on type "${jsonSchema.type}".`,
-          config
+        errors = addError(
+          errors,
+          `The "min_value" action is not supported on type "${jsonSchema.type}".`
         );
       }
       // @ts-expect-error
@@ -280,9 +307,9 @@ export function convertAction(
         jsonSchema.minItems = 1;
       } else {
         if (jsonSchema.type !== 'string') {
-          handleError(
-            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
-            config
+          errors = addError(
+            errors,
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
           );
         }
         jsonSchema.minLength = 1;
@@ -292,7 +319,10 @@ export function convertAction(
 
     case 'regex': {
       if (valibotAction.requirement.flags) {
-        handleError('RegExp flags are not supported by JSON Schema.', config);
+        errors = addError(
+          errors,
+          'RegExp flags are not supported by JSON Schema.'
+        );
       }
       jsonSchema.pattern = valibotAction.requirement.source;
       break;
@@ -323,12 +353,33 @@ export function convertAction(
     }
 
     default: {
-      handleError(
+      errors = addError(
+        errors,
         // @ts-expect-error
-        `The "${valibotAction.type}" action cannot be converted to JSON Schema.`,
-        config
+        `The "${valibotAction.type}" action cannot be converted to JSON Schema.`
       );
     }
   }
+
+  // Override JSON Schema if specified and necessary
+  if (config?.overrideAction) {
+    const actionOverride = config.overrideAction({
+      valibotAction,
+      jsonSchema,
+      errors,
+    });
+    if (actionOverride) {
+      return { ...actionOverride };
+    }
+  }
+
+  // Handle errors based on configuration
+  if (errors) {
+    for (const message of errors) {
+      handleError(message, config);
+    }
+  }
+
+  // Return converted JSON Schema
   return jsonSchema;
 }

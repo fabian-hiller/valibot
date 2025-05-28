@@ -2,11 +2,19 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v1.1.0 (May 06, 2025)
 
 - Add `message` method to overwrite local error message configuration of a schema (pull request #1103)
-- Add `minProps` and `maxProps` validation action to validate number of object properties (pull request #1100)
+- Add `summarize` method to summarize issues into a pretty-printable multi-line string (pull request #1158)
+- Add `getTitle`, `getDescription` and `getMetadata` methods to extract metadata of a schema (pull request #1154)
+- Add `minEntries` and `maxEntries` validation action to validate number of object entries (pull request #1100)
+- Add `entries` and `notEntries` validation action to validate number of object entries (pull request #1156)
+- Add `parseJson` and `stringifyJson` transformation action to parse and stringify JSON (pull request #1137)
+- Add `flavor` transformation action to flavor the output type of a schema (pull request #950)
+- Add support for bigints to `multipleOf` validation action (pull request #1164)
 - Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
+- Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
+- Fix internal `MarkOptional` type to fix input and output type of objects in edge cases (issue #1176)
 
 ## v1.0.0 (March 18, 2025)
 

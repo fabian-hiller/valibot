@@ -4,8 +4,8 @@ description: Creates a lazy schema.
 source: /schemas/lazy/lazy.ts
 contributors:
   - fabian-hiller
-  - morinokami
   - EltonLobo07
+  - morinokami
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -215,11 +215,13 @@ The following APIs can be combined with `lazy`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
+    'flavor',
     'graphemes',
     'gtValue',
     'hash',
@@ -244,18 +246,18 @@ The following APIs can be combined with `lazy`.
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
-    'maxProps',
     'maxSize',
     'maxValue',
     'maxWords',
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
-    'minProps',
     'minSize',
     'minValue',
     'minWords',
@@ -263,6 +265,7 @@ The following APIs can be combined with `lazy`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
@@ -270,6 +273,7 @@ The following APIs can be combined with `lazy`.
     'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -284,6 +288,7 @@ The following APIs can be combined with `lazy`.
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',

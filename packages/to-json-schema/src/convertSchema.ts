@@ -2,7 +2,7 @@ import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
-import { handleError } from './utils/index.ts';
+import { addError, handleError } from './utils/index.ts';
 
 /**
  * Schema type.
@@ -118,6 +118,7 @@ let refCount = 0;
  * @param valibotSchema The Valibot schema object.
  * @param config The conversion configuration.
  * @param context The conversion context.
+ * @param skipRef Whether to skip using a reference.
  *
  * @returns The converted JSON Schema.
  */
@@ -125,13 +126,27 @@ export function convertSchema(
   jsonSchema: JSONSchema7,
   valibotSchema: SchemaOrPipe,
   config: ConversionConfig | undefined,
-  context: ConversionContext
+  context: ConversionContext,
+  skipRef = false
 ): JSONSchema7 {
-  // If schema is in reference map, use reference and skip conversion
-  const referenceId = context.referenceMap.get(valibotSchema);
-  if (referenceId && referenceId in context.definitions) {
-    jsonSchema.$ref = `#/$defs/${referenceId}`;
-    return jsonSchema;
+  if (!skipRef) {
+    // If schema is in reference map use reference and skip conversion
+    const referenceId = context.referenceMap.get(valibotSchema);
+    if (referenceId) {
+      jsonSchema.$ref = `#/$defs/${referenceId}`;
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
+      return jsonSchema;
+    }
   }
 
   // If it is schema with pipe, convert each item of pipe
@@ -150,27 +165,16 @@ export function convertSchema(
         }
 
         // Otherwiese, convert Valibot schema to JSON Schema
-        const tempJsonSchema = convertSchema(
-          {},
+        jsonSchema = convertSchema(
+          jsonSchema,
           valibotPipeItem,
           config,
-          context
+          context,
+          // Hint: We skip using a reference because subsequent pipe elements
+          // may change the JSON schema, which could result in invalid output
+          // if we were to use a reference.
+          true
         );
-
-        // If temporary JSON Schema object is just a reference, merge its
-        // definition into JSON Schema object
-        if (tempJsonSchema.$ref) {
-          // Hint: If the temporary JSON Schema is only a reference, we must
-          // merge its definition into the JSON Schema object, since subsequent
-          // pipe elements may modify it, which can result in an invalid JSON
-          // Schema output.
-          const referenceId = tempJsonSchema.$ref.split('/')[2];
-          Object.assign(jsonSchema, context.definitions[referenceId]);
-
-          // Otherwise, merge temporary JSON Schema into JSON Schema object
-        } else {
-          Object.assign(jsonSchema, tempJsonSchema);
-        }
 
         // Otherwise, convert Valibot action to JSON Schema
       } else {
@@ -182,6 +186,9 @@ export function convertSchema(
     // Return converted JSON Schema
     return jsonSchema;
   }
+
+  // Create errors variable
+  let errors: [string, ...string[]] | undefined;
 
   // Otherwise, convert individual schema to JSON Schema
   switch (valibotSchema.type) {
@@ -226,8 +233,9 @@ export function convertSchema(
     case 'strict_tuple': {
       jsonSchema.type = 'array';
 
-      // Add JSON Schema of items
+      // Add JSON Schema of items and ensure each item is required
       jsonSchema.items = [];
+      jsonSchema.minItems = valibotSchema.items.length;
       for (const item of valibotSchema.items) {
         jsonSchema.items.push(
           convertSchema({}, item as SchemaOrPipe, config, context)
@@ -242,8 +250,8 @@ export function convertSchema(
           config,
           context
         );
-      } else {
-        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
+      } else if (valibotSchema.type === 'strict_tuple') {
+        jsonSchema.additionalItems = false;
       }
 
       break;
@@ -283,15 +291,15 @@ export function convertSchema(
 
     case 'record': {
       if ('pipe' in valibotSchema.key) {
-        handleError(
-          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.',
-          config
+        errors = addError(
+          errors,
+          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
         );
       }
       if (valibotSchema.key.type !== 'string') {
-        handleError(
-          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`,
-          config
+        errors = addError(
+          errors,
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
         );
       }
       jsonSchema.type = 'object';
@@ -359,9 +367,9 @@ export function convertSchema(
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        handleError(
-          'The value of the "literal" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'The value of the "literal" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -380,9 +388,9 @@ export function convertSchema(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        handleError(
-          'An option of the "picklist" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'An option of the "picklist" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -426,12 +434,26 @@ export function convertSchema(
           {},
           wrappedValibotSchema as SchemaOrPipe,
           config,
-          context
+          context,
+          true
         );
       }
 
       // Add reference to JSON Schema object
       jsonSchema.$ref = `#/$defs/${referenceId}`;
+
+      // Override reference, if necessary
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
 
       break;
     }
@@ -439,11 +461,32 @@ export function convertSchema(
     // Other schemas
 
     default: {
-      handleError(
+      errors = addError(
+        errors,
         // @ts-expect-error
-        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`,
-        config
+        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
       );
+    }
+  }
+
+  // Override JSON Schema if specified and necessary
+  if (config?.overrideSchema) {
+    const schemaOverride = config.overrideSchema({
+      ...context,
+      referenceId: context.referenceMap.get(valibotSchema),
+      valibotSchema,
+      jsonSchema,
+      errors,
+    });
+    if (schemaOverride) {
+      return { ...schemaOverride };
+    }
+  }
+
+  // Handle errors based on configuration
+  if (errors) {
+    for (const message of errors) {
+      handleError(message, config);
     }
   }
 

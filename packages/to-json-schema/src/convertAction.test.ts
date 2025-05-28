@@ -2,6 +2,8 @@ import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
 import { convertAction } from './convertAction.ts';
 
+// TODO: Add tests for `overrideAction` config
+
 console.warn = vi.fn();
 
 describe('convertAction', () => {
@@ -144,6 +146,20 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "empty" action is not supported on type "object".'
     );
+  });
+
+  test('should convert entries action', () => {
+    expect(
+      convertAction(
+        { type: 'object' },
+        v.entries<v.EntriesInput, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'object',
+      minProperties: 3,
+      maxProperties: 3,
+    });
   });
 
   test('should convert hexadecimal action', () => {
@@ -381,11 +397,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert max props action', () => {
+  test('should convert max entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.maxProps<Record<string, unknown>, 3>(3),
+        v.maxEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -441,6 +457,40 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "max_value" action is not supported on type "string".'
     );
+  });
+
+  test('should convert metadata action', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 'title',
+          description: 'description',
+          examples: ['example'],
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({
+      title: 'title',
+      description: 'description',
+      examples: ['example'],
+    });
+  });
+
+  test('should skip invalid metadata properties', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 123,
+          description: null,
+          examples: { foo: 'bar' },
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({});
   });
 
   test('should convert min length action for strings', () => {
@@ -505,11 +555,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert min props action', () => {
+  test('should convert min entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.minProps<Record<string, unknown>, 3>(3),
+        v.minEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
