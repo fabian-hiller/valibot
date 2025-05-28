@@ -18,6 +18,7 @@ defineTests(transform, [
   'default-import-with-alias',
   'default-import-with-specific-alias',
   'describe',
+  'instanceof-schema',
   'literal-schema',
   'named-import',
   'named-import-with-alias',

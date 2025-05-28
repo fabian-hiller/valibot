@@ -38,6 +38,7 @@ import {
   transformBoolean,
   transformDate,
   transformEnum,
+  transformInstanceof,
   transformLiteral,
   transformNativeEnum,
   transformNullable,
@@ -127,6 +128,8 @@ function toValibotSchemaExp(
       return transformString(...argsWithCoerce);
     case 'boolean':
       return transformBoolean(...argsWithCoerce);
+    case 'instanceof':
+      return transformInstanceof(...args);
     case 'nativeEnum':
       return transformNativeEnum(...args);
     case 'nullable':

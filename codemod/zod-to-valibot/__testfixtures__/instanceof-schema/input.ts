@@ -1,3 +1,3 @@
-import * as v from "valibot";
+import { z } from "zod";
 
-const Schema = v.instance(Error);
+const Schema = z.instanceof(Error);

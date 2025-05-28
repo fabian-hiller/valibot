@@ -3,6 +3,7 @@ export * from './bigint/bigint';
 export * from './boolean';
 export * from './date';
 export * from './enum';
+export * from './instanceof';
 export * from './nativeEnum';
 export * from './nullable';
 export * from './number';
