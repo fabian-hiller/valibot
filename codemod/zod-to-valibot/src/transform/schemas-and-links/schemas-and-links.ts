@@ -45,6 +45,7 @@ import {
   transformNumber,
   transformObject,
   transformOptional,
+  transformRecord,
   transformString,
 } from './schemas';
 import {
@@ -148,6 +149,8 @@ function toValibotSchemaExp(
       return transformObject(...args);
     case 'optional':
       return transformOptional(...args);
+    case 'record':
+      return transformRecord(...args);
     default: {
       assertNever(zodSchemaName);
     }
