@@ -1,4 +1,4 @@
-import j, { CallExpression } from 'jscodeshift';
+import j from 'jscodeshift';
 import { assertNever, ElementFrom, getIsTypeFn } from '../../utils';
 import {
   ZOD_METHODS,
@@ -373,7 +373,7 @@ function transformSchemasAndLinksHelper(
     let useBigInt = false;
     let tupleRest: {
       argument: ElementFrom<j.CallExpression['arguments']>;
-      path: j.ASTPath<CallExpression>;
+      path: j.ASTPath<j.CallExpression>;
     } | null = null;
     let cur: UnknownPath = relevantExp;
     while (isMemberExp(cur) || isCallExp(cur)) {
