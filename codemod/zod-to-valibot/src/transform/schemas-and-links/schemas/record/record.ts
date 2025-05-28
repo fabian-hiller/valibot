@@ -11,7 +11,8 @@ export function transformRecord(
   const { baseSchema, description } = getSchemaComps(
     valibotIdentifier,
     'record',
-    args.length === 1
+    args.length === 1 ||
+      (args.length === 2 && args[1].type === 'ObjectExpression')
       ? [
           j.callExpression(
             j.memberExpression(
@@ -23,7 +24,7 @@ export function transformRecord(
           ...args,
         ]
       : args,
-    0
+    3
   );
   return getSchemaWithOptionalDescription(
     valibotIdentifier,
