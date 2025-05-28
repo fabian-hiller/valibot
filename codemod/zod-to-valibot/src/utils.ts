@@ -4,6 +4,7 @@ import path from 'node:path';
 import { expect, test } from 'vitest';
 
 const ALLOWED_EXTENSIONS = ['.ts', '.tsx'];
+export type ElementFrom<T extends unknown[]> = T[number];
 
 export function defineTests(transform: Transform, selectedTests?: string[]) {
   const testFixturesPath = path.join(process.cwd(), '__testfixtures__');

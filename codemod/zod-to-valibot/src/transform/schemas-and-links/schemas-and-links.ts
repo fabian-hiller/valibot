@@ -1,5 +1,5 @@
 import j from 'jscodeshift';
-import { assertNever, getIsTypeFn } from '../../utils';
+import { assertNever, ElementFrom, getIsTypeFn } from '../../utils';
 import {
   ZOD_METHODS,
   ZOD_PROPERTIES,
@@ -47,6 +47,7 @@ import {
   transformOptional,
   transformRecord,
   transformString,
+  transformTuple,
 } from './schemas';
 import {
   transformBase64,
@@ -118,10 +119,12 @@ function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodSchemaName,
   inputArgs: j.CallExpression['arguments'],
-  coerceOption = false
+  coerceOption = false,
+  restTupleArg: ElementFrom<j.CallExpression['arguments']> | null
 ): j.CallExpression {
   const args = [valibotIdentifier, inputArgs] as const;
   const argsWithCoerce = [...args, coerceOption] as const;
+  const argsWithRestTupleArg = [...args, restTupleArg] as const;
   switch (zodSchemaName) {
     case 'array':
       return transformArray(...args);
@@ -151,6 +154,8 @@ function toValibotSchemaExp(
       return transformOptional(...args);
     case 'record':
       return transformRecord(...args);
+    case 'tuple':
+      return transformTuple(...argsWithRestTupleArg);
     default: {
       assertNever(zodSchemaName);
     }
@@ -354,7 +359,7 @@ function transformSchemasAndLinksHelper(
     .paths()
     // to make sure nested schemas are transformed first
     .reverse();
-  main: for (const relevantExp of relevantExps) {
+  for (const relevantExp of relevantExps) {
     let transformedExp:
       | j.CallExpression
       | j.MemberExpression
@@ -373,6 +378,10 @@ function transformSchemasAndLinksHelper(
       | j.ASTPath<j.CallExpression>
       | j.ASTPath<j.MemberExpression>
       | null = null;
+    let tupleRest: {
+      argument: ElementFrom<j.CallExpression['arguments']>;
+      path: j.ASTPath<j.CallExpression>;
+    } | null = null;
     while (isMemberExp(cur) || isCallExp(cur)) {
       rootExp = cur;
       if (isMemberExp(cur)) {
@@ -386,6 +395,31 @@ function transformSchemasAndLinksHelper(
         // `coerce` is a special case
         if (propertyName === 'coerce') {
           coerce = true;
+        } else if (propertyName === 'tuple') {
+          // we need to go 3 levels up the tree
+          // ".tuple" -> ".tuple()" -> "v.tuple()" -> "v.tuple().rest()"
+          const parentPath = cur.parentPath;
+          if (isCallExp(parentPath)) {
+            const grandparentPath = parentPath.parentPath;
+            if (isMemberExp(grandparentPath)) {
+              const restCallPath = grandparentPath.parentPath;
+              if (isCallExp(restCallPath)) {
+                if (
+                  restCallPath.value.callee.type !== 'MemberExpression' ||
+                  restCallPath.value.callee.property.type !== 'Identifier'
+                ) {
+                  transformLinks = false;
+                  break;
+                }
+                if (restCallPath.value.callee.property.name === 'rest') {
+                  tupleRest = {
+                    path: restCallPath,
+                    argument: restCallPath.value.arguments[0],
+                  };
+                }
+              }
+            }
+          }
         } else if (isZodPropertyName(propertyName)) {
           coerce = false;
           transformedExp = toValiPropExp(
@@ -416,12 +450,26 @@ function transformSchemasAndLinksHelper(
       if (isCurSchemaValueType === null && isZodSchemaName(propertyName)) {
         isCurSchemaValueType = isZodValueTypeSchemaName(propertyName);
         useBigInt = propertyName === 'bigint';
-        transformedExp = toValibotSchemaExp(
-          valibotIdentifier,
-          propertyName,
-          cur.value.arguments,
-          coerce
-        );
+        if (propertyName === 'tuple' && tupleRest) {
+          transformedExp = toValibotSchemaExp(
+            valibotIdentifier,
+            propertyName,
+            cur.value.arguments,
+            coerce,
+            tupleRest.argument
+          );
+          tupleRest.path.replace(transformedExp);
+          transformLinks = false;
+          break;
+        } else {
+          transformedExp = toValibotSchemaExp(
+            valibotIdentifier,
+            propertyName,
+            cur.value.arguments,
+            coerce,
+            null
+          );
+        }
       } else if (isZodMethodName(propertyName)) {
         transformedExp = toValibotMethodExp(
           valibotIdentifier,
