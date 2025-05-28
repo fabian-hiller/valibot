@@ -1,5 +1,5 @@
-import j from 'jscodeshift';
-import { assertNever, getIsTypeFn } from '../../utils';
+import j, { CallExpression } from 'jscodeshift';
+import { assertNever, ElementFrom, getIsTypeFn } from '../../utils';
 import {
   ZOD_METHODS,
   ZOD_PROPERTIES,
@@ -117,10 +117,12 @@ function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodSchemaName,
   inputArgs: j.CallExpression['arguments'],
-  coerceOption = false
+  coerceOption = false,
+  tupleRestArgument: ElementFrom<j.CallExpression['arguments']> | null = null
 ): j.CallExpression {
   const args = [valibotIdentifier, inputArgs] as const;
   const argsWithCoerce = [...args, coerceOption] as const;
+  const argsWithTupleRestArg = [...args, tupleRestArgument] as const;
   switch (zodSchemaName) {
     case 'array':
       return transformArray(...args);
@@ -147,7 +149,7 @@ function toValibotSchemaExp(
     case 'optional':
       return transformOptional(...args);
     case 'tuple':
-      return transformTuple(...args, []);
+      return transformTuple(...argsWithTupleRestArg);
     default: {
       assertNever(zodSchemaName);
     }
@@ -369,6 +371,10 @@ function transformSchemasAndLinksHelper(
     let coerce = false;
     let isCurValueTypeSchema = isValueTypeSchema;
     let useBigInt = false;
+    let tupleRest: {
+      argument: ElementFrom<j.CallExpression['arguments']>;
+      path: j.ASTPath<CallExpression>;
+    } | null = null;
     let cur: UnknownPath = relevantExp;
     while (isMemberExp(cur) || isCallExp(cur)) {
       if (isMemberExp(cur)) {
@@ -382,6 +388,31 @@ function transformSchemasAndLinksHelper(
         // `coerce` is a special case
         if (propertyName === 'coerce') {
           coerce = true;
+        } else if (propertyName === 'tuple') {
+          // we need to go 3 levels up the tree
+          // ".tuple" -> ".tuple()" -> "v.tuple()" -> "v.tuple().rest()"
+          const parentPath = cur.parentPath;
+          if (isCallExp(parentPath)) {
+            const grandparentPath = parentPath.parentPath;
+            if (isMemberExp(grandparentPath)) {
+              const restCallPath = grandparentPath.parentPath;
+              if (isCallExp(restCallPath)) {
+                if (
+                  restCallPath.value.callee.type !== 'MemberExpression' ||
+                  restCallPath.value.callee.property.type !== 'Identifier'
+                ) {
+                  skipTransform = true;
+                  break;
+                }
+                if (restCallPath.value.callee.property.name === 'rest') {
+                  tupleRest = {
+                    path: restCallPath,
+                    argument: restCallPath.value.arguments[0],
+                  };
+                }
+              }
+            }
+          }
         } else if (isZodPropertyName(propertyName)) {
           if (coerce || isValibotIdentifier) {
             // 1. `coerce` directly before a property is invalid
@@ -435,42 +466,24 @@ function transformSchemasAndLinksHelper(
         }
         isCurValueTypeSchema = isZodValueTypeSchemaName(propertyName);
         useBigInt = propertyName === 'bigint';
-        if (propertyName === 'tuple') {
-          const parentPath = cur.parentPath;
-          if (isMemberExp(parentPath)) {
-            const grandparentPath = parentPath.parentPath;
-            if (isCallExp(grandparentPath)) {
-              if (
-                grandparentPath.value.callee.type !== 'MemberExpression' ||
-                grandparentPath.value.callee.property.type !== 'Identifier'
-              ) {
-                skipTransform = true;
-                break;
-              }
-              if (grandparentPath.value.callee.property.name === 'rest') {
-                transformedExp = transformTuple(
-                  valibotIdentifier,
-                  cur.value.arguments,
-                  grandparentPath.value.arguments
-                );
-                grandparentPath.replace(transformedExp);
-                skipTransform = true;
-                break;
-              } else {
-                transformedExp = transformTuple(
-                  valibotIdentifier,
-                  cur.value.arguments,
-                  []
-                );
-              }
-            }
-          }
+        if (propertyName === 'tuple' && tupleRest) {
+          transformedExp = toValibotSchemaExp(
+            valibotIdentifier,
+            propertyName,
+            cur.value.arguments,
+            coerce,
+            tupleRest.argument
+          );
+          tupleRest.path.replace(transformedExp);
+          skipTransform = true;
+          break;
         } else {
           transformedExp = toValibotSchemaExp(
             valibotIdentifier,
             propertyName,
             cur.value.arguments,
-            coerce
+            coerce,
+            null
           );
         }
       } else {
