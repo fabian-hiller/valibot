@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change build step to tsdown
+
 ## v1.2.0 (May 17, 2025)
 
 - Add support for title, description and examples in `metadata` action (pull request #1189)
