@@ -20,6 +20,7 @@ defineTests(transform, [
   'describe',
   'instanceof-schema',
   'literal-schema',
+  'map-schema',
   'named-import',
   'named-import-with-alias',
   'named-import-with-specific-alias',

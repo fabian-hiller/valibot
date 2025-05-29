@@ -13,4 +13,5 @@ export * from './record';
 export * from './set';
 export * from './string';
 export * from './literal';
+export * from './map';
 export type { SchemaOptionsToASTVal } from './types';
