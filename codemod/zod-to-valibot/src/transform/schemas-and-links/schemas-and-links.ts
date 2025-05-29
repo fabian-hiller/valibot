@@ -3,6 +3,7 @@ import { assertNever, getIsTypeFn } from '../../utils';
 import {
   ZOD_METHODS,
   ZOD_PROPERTIES,
+  ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
   ZOD_VALIDATORS,
   ZOD_VALUE_TYPE_SCHEMAS,
@@ -46,8 +47,10 @@ import {
   transformObject,
   transformOptional,
   transformRecord,
+  transformSet,
   transformString,
 } from './schemas';
+import { ZodSchemaType } from './types';
 import {
   transformBase64,
   transformCUID2,
@@ -151,6 +154,8 @@ function toValibotSchemaExp(
       return transformOptional(...args);
     case 'record':
       return transformRecord(...args);
+    case 'set':
+      return transformSet(...args);
     default: {
       assertNever(zodSchemaName);
     }
@@ -161,7 +166,7 @@ function toValibotActionExp(
   valibotIdentifier: string,
   zodValidatorName: ZodValidatorName,
   inputArgs: j.CallExpression['arguments'],
-  isValueTypeSchema: boolean,
+  schemaType: ZodSchemaType,
   useBigInt: boolean
 ) {
   const args = [valibotIdentifier, inputArgs] as const;
@@ -203,9 +208,9 @@ function toValibotActionExp(
     case 'length':
       return transformLength(...args);
     case 'max':
-      return transformMax(...args, isValueTypeSchema);
+      return transformMax(...args, schemaType);
     case 'min':
-      return transformMin(...args, isValueTypeSchema);
+      return transformMin(...args, schemaType);
     case 'multipleOf':
       return transformMultipleOf(...args);
     case 'nanoid':
@@ -213,7 +218,7 @@ function toValibotActionExp(
     case 'negative':
       return transformNegative(...args, useBigInt);
     case 'nonempty':
-      return transformNonEmpty(...args);
+      return transformNonEmpty(...args, schemaType === 'size');
     case 'nonnegative':
       return transformNonNegative(...args, useBigInt);
     case 'nonpositive':
@@ -345,7 +350,7 @@ function transformSchemasAndLinksHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
   identifier: string,
-  isSchemaValueType: boolean | null
+  schemaType: ZodSchemaType | null
 ) {
   const relevantExps = root
     .find(j.MemberExpression, {
@@ -363,7 +368,7 @@ function transformSchemasAndLinksHelper(
     let transformLinks = true;
     let coerce = false;
     let useBigInt = false;
-    let isCurSchemaValueType = isSchemaValueType;
+    let curSchemaType = schemaType;
     let cur: UnknownPath = relevantExp;
     let rootExp:
       | j.ASTPath<j.CallExpression>
@@ -413,8 +418,8 @@ function transformSchemasAndLinksHelper(
         break;
       }
       const propertyName = cur.value.callee.property.name;
-      if (isCurSchemaValueType === null && isZodSchemaName(propertyName)) {
-        isCurSchemaValueType = isZodValueTypeSchemaName(propertyName);
+      if (curSchemaType === null && isZodSchemaName(propertyName)) {
+        curSchemaType = ZOD_SCHEMA_TO_TYPE[propertyName];
         useBigInt = propertyName === 'bigint';
         transformedExp = toValibotSchemaExp(
           valibotIdentifier,
@@ -430,7 +435,7 @@ function transformSchemasAndLinksHelper(
           cur.value.arguments
         );
       } else if (isZodValidatorName(propertyName)) {
-        if (isCurSchemaValueType === null) {
+        if (curSchemaType === null) {
           // validators can only be applied to parsed schemas
           transformLinks = false;
           break;
@@ -442,7 +447,7 @@ function transformSchemasAndLinksHelper(
             valibotIdentifier,
             propertyName,
             cur.value.arguments,
-            isCurSchemaValueType,
+            curSchemaType,
             useBigInt
           )
         );
@@ -472,7 +477,7 @@ function transformSchemasAndLinksHelper(
           root,
           valibotIdentifier,
           nxtPath.parentPath.value.id.name,
-          isCurSchemaValueType
+          curSchemaType
         );
       }
     }

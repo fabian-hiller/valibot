@@ -4,16 +4,20 @@ import { getValidatorMsg } from '../helpers';
 
 export function transformNonEmpty(
   valibotIdentifier: string,
-  args: j.CallExpression['arguments']
+  args: j.CallExpression['arguments'],
+  isSizeSchemaType: boolean
 ) {
-  const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(1, args);
+  const { lastArg } = splitLastArg(1, args);
   const msgArg = getValidatorMsg(lastArg);
 
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
-      j.identifier('nonEmpty')
+      j.identifier(isSizeSchemaType ? 'minSize' : 'nonEmpty')
     ),
-    [...argsExceptOptions, ...(msgArg !== null ? [msgArg] : [])]
+    [
+      ...(isSizeSchemaType ? [j.numericLiteral(1)] : []),
+      ...(msgArg !== null ? [msgArg] : []),
+    ]
   );
 }

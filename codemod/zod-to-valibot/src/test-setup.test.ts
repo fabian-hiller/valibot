@@ -42,6 +42,8 @@ defineTests(transform, [
   'record-schema',
   'schema-chain',
   'schema-options',
+  'set-schema',
+  'set-validation-methods',
   'specific-default-import',
   'specific-namespace-import',
   'string-validation-methods',

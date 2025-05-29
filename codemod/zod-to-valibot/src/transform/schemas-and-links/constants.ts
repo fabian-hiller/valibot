@@ -1,3 +1,5 @@
+import { ZodSchemaType } from './types';
+
 export const ZOD_SCHEMAS = [
   'array',
   'bigint',
@@ -12,8 +14,30 @@ export const ZOD_SCHEMAS = [
   'number',
   'object',
   'optional',
+  'set',
   'string',
 ] as const;
+
+export const ZOD_SCHEMA_TO_TYPE: Record<
+  (typeof ZOD_SCHEMAS)[number],
+  ZodSchemaType
+> = {
+  array: 'length',
+  bigint: 'value',
+  boolean: 'value',
+  date: 'value',
+  enum: 'none',
+  instanceof: 'none',
+  literal: 'none',
+  nativeEnum: 'none',
+  nullable: 'none',
+  record: 'none',
+  number: 'value',
+  object: 'none',
+  optional: 'none',
+  set: 'size',
+  string: 'length',
+};
 
 export const ZOD_VALUE_TYPE_SCHEMAS: readonly (typeof ZOD_SCHEMAS)[number][] = [
   'bigint',
