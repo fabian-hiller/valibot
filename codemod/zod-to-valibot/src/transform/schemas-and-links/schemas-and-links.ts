@@ -81,6 +81,7 @@ import {
   transformNonNegative,
   transformNonPositive,
   transformPositive,
+  transformReadonly,
   transformRegex,
   transformSafe,
   transformSize,
@@ -232,6 +233,8 @@ function toValibotActionExp(
       return transformNonPositive(...args, useBigInt);
     case 'positive':
       return transformPositive(...args, useBigInt);
+    case 'readonly':
+      return transformReadonly(valibotIdentifier);
     case 'regex':
       return transformRegex(...args);
     case 'safe':

@@ -77,6 +77,7 @@ export const ZOD_VALIDATORS = [
   'nonnegative',
   'nonpositive',
   'positive',
+  'readonly',
   'regex',
   'safe',
   'size',

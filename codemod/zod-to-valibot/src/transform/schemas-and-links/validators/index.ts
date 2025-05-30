@@ -20,6 +20,7 @@ export * from './nonempty';
 export * from './nonnegative';
 export * from './nonpositive';
 export * from './positive';
+export * from './readonly';
 export * from './regex';
 export * from './safe';
 export * from './size';
