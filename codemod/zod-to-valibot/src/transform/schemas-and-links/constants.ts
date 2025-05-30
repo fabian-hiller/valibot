@@ -107,6 +107,7 @@ export const ZOD_PROPERTIES = [
 
 export const ZOD_METHODS = [
   'array',
+  'default',
   'extract',
   'keyof',
   'omit',

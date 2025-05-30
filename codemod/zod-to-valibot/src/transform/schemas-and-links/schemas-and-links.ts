@@ -10,6 +10,7 @@ import {
 } from './constants';
 import {
   transformArray as transformArrayMethod,
+  transformDefault,
   transformExtract,
   transformKeyof,
   transformNullable as transformNullableMethod,
@@ -294,6 +295,8 @@ function toValibotMethodExp(
   switch (zodMethodName) {
     case 'array':
       return transformArrayMethod(...args);
+    case 'default':
+      return transformDefault(...args);
     case 'extract':
       return transformExtract(valibotIdentifier, inputArgs);
     case 'keyof':
