@@ -4,6 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `ConversionContext`, `OverrideSchemaContext`, `OverrideActionContext` and `OverrideRefContext` to exports
+- Change JSDoc comments to improve documentation
 - Change build step to tsdown
 
 ## v1.2.0 (May 17, 2025)
