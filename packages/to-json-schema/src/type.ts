@@ -6,18 +6,20 @@ import type * as v from 'valibot';
  */
 export interface ConversionContext {
   /**
-   * The JSON Schema definitions.
+   * The JSON Schema definitions that have already been created.
    */
   readonly definitions: Record<string, JSONSchema7>;
   /**
-   * The JSON Schema reference map.
+   * The JSON Schema reference map that is used to look up the reference ID
+   * for a given Valibot schema.
    */
   readonly referenceMap: Map<
     v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
     string
   >;
   /**
-   * The lazy schema getter map.
+   * The lazy schema getter map that is used internally to ensure that
+   * recursive lazy schemas are unwrapped only once.
    */
   readonly getterMap: Map<
     (input: unknown) => v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
@@ -109,6 +111,10 @@ export interface ConversionConfig {
   /**
    * Overrides the JSON Schema conversion for a specific Valibot schema.
    *
+   * Only return a JSON Schema if you want to override the default conversion
+   * behaviour and suppress errors for a specific schema. Returning either
+   * `null` or `undefined` will skip the override.
+   *
    * @param context The conversion context.
    *
    * @returns A JSON Schema, if overridden.
@@ -120,6 +126,10 @@ export interface ConversionConfig {
   ) => JSONSchema7 | null | undefined;
   /**
    * Overrides the JSON Schema reference for a specific Valibot action.
+   *
+   * Only return a JSON Schema if you want to override the default conversion
+   * behaviour and suppress errors for a specific action. Returning either
+   * `null` or `undefined` will skip the override.
    *
    * @param context The conversion context.
    *

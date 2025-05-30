@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
-import { convertSchema } from './convertSchema.ts';
-import type { ConversionConfig, ConversionContext } from './type.ts';
+import { convertSchema } from '../../converters/index.ts';
+import type { ConversionConfig, ConversionContext } from '../../type.ts';
 
 /**
  * Converts Valibot schema definitions to JSON Schema definitions.

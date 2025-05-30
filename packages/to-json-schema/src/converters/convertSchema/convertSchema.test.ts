@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
+import { createContext } from '../../vitest/index.ts';
 import { convertSchema } from './convertSchema.ts';
-import { createContext } from './vitest/index.ts';
 
 // TODO: Add tests for `overrideSchema` and `overrideRef` config
 

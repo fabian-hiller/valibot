@@ -1,8 +1,8 @@
 import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
-import { convertAction } from './convertAction.ts';
-import type { ConversionConfig, ConversionContext } from './type.ts';
-import { addError, handleError } from './utils/index.ts';
+import type { ConversionConfig, ConversionContext } from '../../type.ts';
+import { addError, handleError } from '../../utils/index.ts';
+import { convertAction } from '../convertAction/index.ts';
 
 /**
  * Schema type.
