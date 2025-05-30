@@ -39,6 +39,7 @@ import {
   transformBigint,
   transformBoolean,
   transformDate,
+  transformDiscriminatedUnion,
   transformEnum,
   transformInstanceof,
   transformLiteral,
@@ -134,6 +135,8 @@ function toValibotSchemaExp(
       return transformString(...argsWithCoerce);
     case 'boolean':
       return transformBoolean(...argsWithCoerce);
+    case 'discriminatedUnion':
+      return transformDiscriminatedUnion(...args);
     case 'instanceof':
       return transformInstanceof(...args);
     case 'map':

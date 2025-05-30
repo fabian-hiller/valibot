@@ -2,6 +2,7 @@ export * from './array';
 export * from './bigint/bigint';
 export * from './boolean';
 export * from './date';
+export * from './discriminatedUnion';
 export * from './enum';
 export * from './instanceof';
 export * from './nativeEnum';

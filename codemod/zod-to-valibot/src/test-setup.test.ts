@@ -19,6 +19,7 @@ defineTests(transform, [
   'default-import-with-alias',
   'default-import-with-specific-alias',
   'describe',
+  'discriminated-union-schema',
   'instanceof-schema',
   'literal-schema',
   'map-schema',
