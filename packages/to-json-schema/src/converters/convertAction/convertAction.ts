@@ -117,6 +117,11 @@ export function convertAction(
   valibotAction: Action,
   config: ConversionConfig | undefined
 ): JSONSchema7 {
+  // Ignore action if specified in configuration
+  if (config?.ignoreActions?.includes(valibotAction.type)) {
+    return jsonSchema;
+  }
+
   // Create errors variable
   let errors: [string, ...string[]] | undefined;
 

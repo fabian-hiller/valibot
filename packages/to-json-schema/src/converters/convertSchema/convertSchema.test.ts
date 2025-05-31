@@ -133,21 +133,39 @@ describe('convertSchema', () => {
         v.description('foo')
       );
       const error =
-        'A "pipe" with multiple schemas cannot be converted to JSON Schema.';
+        'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.';
       expect(() =>
         convertSchema({}, schema, undefined, createContext())
       ).toThrowError(error);
       expect(() =>
         convertSchema({}, schema, { errorMode: 'throw' }, createContext())
       ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { typeMode: 'ignore' }, createContext())
+      ).toThrowError(error);
     });
 
     test('should warn error for multiple schemas in pipe', () => {
+      const schema = v.pipe(
+        v.nullable(v.string()),
+        v.string(),
+        v.description('foo')
+      );
+      const error =
+        'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.';
+      expect(
+        convertSchema({}, schema, { errorMode: 'warn' }, createContext())
+      ).toStrictEqual({
+        anyOf: [{ type: 'string' }, { type: 'null' }],
+        type: 'string',
+        description: 'foo',
+      });
+      expect(console.warn).toHaveBeenLastCalledWith(error);
       expect(
         convertSchema(
           {},
-          v.pipe(v.nullable(v.string()), v.string(), v.description('foo')),
-          { errorMode: 'warn' },
+          schema,
+          { errorMode: 'warn', typeMode: 'ignore' },
           createContext()
         )
       ).toStrictEqual({
@@ -155,9 +173,50 @@ describe('convertSchema', () => {
         type: 'string',
         description: 'foo',
       });
-      expect(console.warn).toHaveBeenLastCalledWith(
-        'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
-      );
+      expect(console.warn).toHaveBeenLastCalledWith(error);
+    });
+
+    // Hint: This schema is intentionally complex to test the conversion of nested pipelines
+    const inputOutputSchema = v.pipe(
+      v.pipe(
+        v.pipe(v.string(), v.nonEmpty()),
+        v.decimal(),
+        v.transform(Number),
+        v.pipe(v.number(), v.minValue(0))
+      ),
+      v.maxValue(100)
+    );
+
+    test('should convert only input type of pipeline', () => {
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          inputOutputSchema,
+          { typeMode: 'input' },
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        minLength: 1,
+        pattern: '^[+-]?(?:\\d*\\.)?\\d+$',
+      });
+    });
+
+    test('should convert only output type of pipeline', () => {
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          inputOutputSchema,
+          { typeMode: 'output' },
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'number',
+        minimum: 0,
+        maximum: 100,
+      });
     });
   });
 

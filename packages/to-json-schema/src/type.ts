@@ -97,12 +97,23 @@ export interface OverrideRefContext extends ConversionContext {
  */
 export interface ConversionConfig {
   /**
+   * Whether to convert the input or output type of the Valibot schema to JSON Schema.
+   *
+   * When set to 'input', conversion stops before the first potential type
+   * transformation action or second schema in any pipeline.
+   *
+   * When set to 'output', conversion of any pipelines starts from the last
+   * schema in the pipeline. Therefore, the output type must be specified
+   * explicitly with a schema after the last type transformation action.
+   */
+  readonly typeMode?: 'ignore' | 'input' | 'output';
+  /**
    * The policy for handling incompatible schemas and actions.
    */
   readonly errorMode?: 'throw' | 'warn' | 'ignore';
   /**
    * The schema definitions for constructing recursive schemas. If not
-   * specified, the definitions are generated automatically.
+   * specified, the definitions are generated automatically as needed.
    */
   readonly definitions?: Record<
     string,
@@ -124,6 +135,10 @@ export interface ConversionConfig {
   readonly overrideSchema?: (
     context: OverrideSchemaContext
   ) => JSONSchema7 | null | undefined;
+  /**
+   * The actions that should be ignored during the conversion.
+   */
+  readonly ignoreActions?: string[];
   /**
    * Overrides the JSON Schema reference for a specific Valibot action.
    *

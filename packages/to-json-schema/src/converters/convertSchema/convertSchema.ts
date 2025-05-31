@@ -96,17 +96,28 @@ type Schema =
   | v.LazySchema<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>;
 
 /**
+ * Pipe type.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Pipe = readonly (Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[];
+
+/**
  * Schema or pipe type.
  */
-type SchemaOrPipe =
-  | Schema
-  | v.SchemaWithPipe<
-      readonly [
-        Schema,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...(Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[],
-      ]
-    >;
+type SchemaOrPipe = Schema | v.SchemaWithPipe<readonly [Schema, ...Pipe]>;
+
+/**
+ * Flattens a Valibot pipe by recursively expanding nested pipes.
+ *
+ * @param pipe The pipeline to flatten.
+ *
+ * @returns A flat pipeline.
+ */
+function flattenPipe(pipe: Pipe): Pipe {
+  return pipe.flatMap((item) =>
+    'pipe' in item ? flattenPipe(item.pipe as Pipe) : item
+  );
+}
 
 // Create global reference count
 let refCount = 0;
@@ -151,20 +162,58 @@ export function convertSchema(
 
   // If it is schema with pipe, convert each item of pipe
   if ('pipe' in valibotSchema) {
-    for (let index = 0; index < valibotSchema.pipe.length; index++) {
-      // Get current pipe item
-      const valibotPipeItem = valibotSchema.pipe[index];
+    // Flatten pipe by expanding nested pipes
+    const flatPipe = flattenPipe(valibotSchema.pipe);
 
+    // Create start and stop index variables
+    let startIndex = 0;
+    let stopIndex = flatPipe.length - 1;
+
+    // If type mode is set to input, update stop index
+    if (config?.typeMode === 'input') {
+      const inputStopIndex = flatPipe
+        .slice(1)
+        .findIndex(
+          (item) =>
+            item.kind === 'schema' ||
+            (item.kind === 'transformation' &&
+              (item.type === 'find_item' ||
+                item.type === 'parse_json' ||
+                item.type === 'raw_transform' ||
+                item.type === 'reduce_items' ||
+                item.type === 'stringify_json' ||
+                item.type === 'transform'))
+        );
+      if (inputStopIndex !== -1) {
+        stopIndex = inputStopIndex;
+      }
+
+      // Otherwise, if type mode is set to output, update start index
+    } else if (config?.typeMode === 'output') {
+      const outputStartIndex = flatPipe.findLastIndex(
+        (item) => item.kind === 'schema'
+      );
+      if (outputStartIndex !== -1) {
+        startIndex = outputStartIndex;
+      }
+    }
+
+    // Convert each item of pipe in specified range
+    for (let index = startIndex; index <= stopIndex; index++) {
+      // Get current pipe item
+      const valibotPipeItem = flatPipe[index];
+
+      // Convert Valibot schema or action to JSON Schema
       if (valibotPipeItem.kind === 'schema') {
-        // If pipe has multiple schemas, throw or warn
-        if (index > 0) {
+        // Handle error if pipe contains another schema after start index
+        if (index > startIndex) {
           handleError(
-            'A "pipe" with multiple schemas cannot be converted to JSON Schema.',
+            'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.',
             config
           );
         }
 
-        // Otherwiese, convert Valibot schema to JSON Schema
+        // Convert Valibot schema to JSON Schema
         jsonSchema = convertSchema(
           jsonSchema,
           valibotPipeItem,
@@ -176,7 +225,7 @@ export function convertSchema(
           true
         );
 
-        // Otherwise, convert Valibot action to JSON Schema
+        // Convert Valibot action to JSON Schema
       } else {
         // @ts-expect-error
         jsonSchema = convertAction(jsonSchema, valibotPipeItem, config);

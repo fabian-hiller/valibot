@@ -7,6 +7,19 @@ import { convertAction } from './convertAction.ts';
 console.warn = vi.fn();
 
 describe('convertAction', () => {
+  test('should ignore specified actions', () => {
+    expect(
+      convertAction({}, v.email<string>(), { ignoreActions: ['email'] })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.email<string>(), {
+        ignoreActions: ['email'],
+      })
+    ).toStrictEqual({
+      type: 'string',
+    });
+  });
+
   test('should convert base64 action', () => {
     expect(convertAction({}, v.base64<string>(), undefined)).toStrictEqual({
       contentEncoding: 'base64',

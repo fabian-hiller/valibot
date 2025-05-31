@@ -4,6 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `ignoreActions` configuration to be able to ignore specific actions during conversion
+- Add `typeMode` configuration to be able to control whether to convert input or output type of schema
 - Add `ConversionContext`, `OverrideSchemaContext`, `OverrideActionContext` and `OverrideRefContext` to exports
 - Change JSDoc comments to improve documentation
 - Change build step to tsdown
