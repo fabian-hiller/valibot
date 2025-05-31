@@ -1,7 +1,5 @@
 import type * as v from 'valibot';
 
-// TODO: Add tests for global definitions storage
-
 // Create global definitions store
 let store:
   | Record<string, v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>
