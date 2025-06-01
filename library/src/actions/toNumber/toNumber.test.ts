@@ -1,5 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { toNumber, type ToNumberAction } from './toNumber.ts';
+import {
+  toNumber,
+  type ToNumberAction,
+  type ToNumberIssue,
+} from './toNumber.ts';
 
 describe('toNumber', () => {
   test('should return action object', () => {
@@ -58,12 +62,38 @@ describe('toNumber', () => {
         value: Number.NaN,
       });
     });
+  });
+  describe('should return dataset with issues', () => {
+    const action = toNumber();
+    const baseIssue: Omit<
+      ToNumberIssue<number>,
+      'input' | 'received' | 'message'
+    > = {
+      kind: 'transformation',
+      type: 'to_number',
+      expected: null,
+    };
 
-    test('for symbol', () => {
-      // TODO: do we want to catch and add issue?
-      expect(() =>
-        action['~run']({ typed: true, value: Symbol('foo') }, {})
-      ).toThrow();
+    test('for invalid inputs', () => {
+      const value = Symbol();
+      expect(action['~run']({ typed: true, value }, {})).toStrictEqual({
+        typed: false,
+        value,
+        issues: [
+          {
+            ...baseIssue,
+            input: value,
+            received: 'symbol',
+            message: 'Invalid number: Received symbol',
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
+          },
+        ],
+      });
     });
   });
 });

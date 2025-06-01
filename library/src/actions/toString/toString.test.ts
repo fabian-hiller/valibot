@@ -1,5 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { toString, type ToStringAction } from './toString.ts';
+import {
+  toString,
+  type ToStringAction,
+  type ToStringIssue,
+} from './toString.ts';
 
 describe('toString', () => {
   test('should return action object', () => {
@@ -65,6 +69,45 @@ describe('toString', () => {
       ).toStrictEqual({
         typed: true,
         value: 'Symbol(foo)',
+      });
+    });
+  });
+  describe('should return dataset with issues', () => {
+    const action = toString();
+    const baseIssue: Omit<
+      ToStringIssue<number>,
+      'input' | 'received' | 'message'
+    > = {
+      kind: 'transformation',
+      type: 'to_string',
+      expected: null,
+    };
+
+    test('for invalid inputs', () => {
+      const faultyToString = {
+        toString() {
+          throw new Error('oops');
+        },
+      };
+      expect(
+        action['~run']({ typed: true, value: faultyToString }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: faultyToString,
+        issues: [
+          {
+            ...baseIssue,
+            input: faultyToString,
+            received: 'Object',
+            message: 'Invalid string: Received Object',
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
+          },
+        ],
       });
     });
   });

@@ -1,10 +1,31 @@
-import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseTransformation,
+  OutputDataset,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+export interface ToDateIssue<TInput extends string | number | Date>
+  extends BaseIssue<TInput> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'transformation';
+  /**
+   * The issue type.
+   */
+  readonly type: 'to_date';
+  /**
+   * The expected property.
+   */
+  readonly expected: null;
+}
 
 /**
  * To date action interface.
  */
 export interface ToDateAction<TInput extends string | number | Date>
-  extends BaseTransformation<TInput, Date, never> {
+  extends BaseTransformation<TInput, Date, ToDateIssue<TInput>> {
   /**
    * The action type.
    */
@@ -29,10 +50,16 @@ export function toDate<
     type: 'to_date',
     reference: toDate,
     async: false,
-    '~run'(dataset) {
-      // @ts-expect-error
-      dataset.value = new Date(dataset.value);
-      return dataset as SuccessDataset<Date>;
+    '~run'(dataset, config) {
+      try {
+        // @ts-expect-error
+        dataset.value = new Date(dataset.value);
+      } catch {
+        _addIssue(this, 'date', dataset, config);
+        // @ts-expect-error
+        dataset.typed = false;
+      }
+      return dataset as OutputDataset<Date, ToDateIssue<TInput>>;
     },
   };
 }

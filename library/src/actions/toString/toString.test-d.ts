@@ -1,6 +1,10 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { toString, type ToStringAction } from './toString.ts';
+import {
+  toString,
+  type ToStringAction,
+  type ToStringIssue,
+} from './toString.ts';
 
 describe('toString', () => {
   test('should return action object', () => {
@@ -19,7 +23,7 @@ describe('toString', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<never>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<ToStringIssue<'foo'>>();
     });
   });
 });
