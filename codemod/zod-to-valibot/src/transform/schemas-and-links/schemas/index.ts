@@ -5,6 +5,7 @@ export * from './date';
 export * from './discriminatedUnion';
 export * from './enum';
 export * from './instanceof';
+export * from './intersection';
 export * from './nativeEnum';
 export * from './nullable';
 export * from './number';

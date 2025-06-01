@@ -9,9 +9,4 @@ const Employee = v.object({
 });
 
 const Schema1 = v.intersect([Person, Employee]);
-
-const Student = v.object({
-  favSubject: v.string(),
-});
-
-const Schema2 = v.intersect([Person, Employee, Student]);
+const Schema2 = v.intersect([Person, Employee], "some message");

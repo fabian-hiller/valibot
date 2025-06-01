@@ -21,6 +21,7 @@ defineTests(transform, [
   'describe',
   'discriminated-union-schema',
   'instanceof-schema',
+  'intersection-schema',
   'literal-schema',
   'map-schema',
   'named-import',

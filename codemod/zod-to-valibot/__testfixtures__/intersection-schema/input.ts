@@ -9,9 +9,4 @@ const Employee = z.object({
 });
 
 const Schema1 = z.intersection(Person, Employee);
-
-const Student = z.object({
-  favSubject: z.string(),
-});
-
-const Schema2 = Person.and(Employee).and(Student);
+const Schema2 = z.intersection(Person, Employee, {message: "some message"});

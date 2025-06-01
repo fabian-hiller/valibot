@@ -2,7 +2,7 @@ import j from 'jscodeshift';
 import { splitLastArg } from '../helpers';
 import type { SchemaOptionsToASTVal } from './types';
 
-function getTransformedMsgs(schemaOptions: SchemaOptionsToASTVal) {
+export function getTransformedMsgs(schemaOptions: SchemaOptionsToASTVal) {
   return schemaOptions.message
     ? [schemaOptions.message]
     : schemaOptions.required_error
@@ -63,7 +63,7 @@ function getOption(
     : optionVal;
 }
 
-function getOptions(
+export function getOptions(
   optionsArgs: j.CallExpression['arguments'][number]
 ): Partial<
   Record<

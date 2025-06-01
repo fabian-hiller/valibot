@@ -42,6 +42,7 @@ import {
   transformDiscriminatedUnion,
   transformEnum,
   transformInstanceof,
+  transformIntersection,
   transformLiteral,
   transformMap,
   transformNativeEnum,
@@ -140,6 +141,8 @@ function toValibotSchemaExp(
       return transformDiscriminatedUnion(...args);
     case 'instanceof':
       return transformInstanceof(...args);
+    case 'intersection':
+      return transformIntersection(...args);
     case 'map':
       return transformMap(...args);
     case 'nativeEnum':
