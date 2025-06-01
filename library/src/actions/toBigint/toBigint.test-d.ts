@@ -1,6 +1,10 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { toBigint, type ToBigintAction } from './toBigint.ts';
+import {
+  toBigint,
+  type ToBigintAction,
+  type ToBigintIssue,
+} from './toBigint.ts';
 
 describe('toBigint', () => {
   test('should return action object', () => {
@@ -19,7 +23,7 @@ describe('toBigint', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<never>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<ToBigintIssue<'123'>>();
     });
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { toDate, type ToDateAction } from './toDate.ts';
+import { toDate, type ToDateAction, type ToDateIssue } from './toDate.ts';
 
 describe('toDate', () => {
   test('should return action object', () => {
@@ -38,6 +38,40 @@ describe('toDate', () => {
       expect(action['~run']({ typed: true, value: date }, {})).toStrictEqual({
         typed: true,
         value: date,
+      });
+    });
+  });
+  describe('should return dataset with issues', () => {
+    const action = toDate();
+    const baseIssue: Omit<
+      ToDateIssue<number>,
+      'input' | 'received' | 'message'
+    > = {
+      kind: 'transformation',
+      type: 'to_date',
+      expected: null,
+    };
+
+    test('for invalid inputs', () => {
+      const value = Symbol();
+      // @ts-expect-error
+      expect(action['~run']({ typed: true, value }, {})).toStrictEqual({
+        typed: false,
+        value,
+        issues: [
+          {
+            ...baseIssue,
+            input: value,
+            received: 'symbol',
+            message: 'Invalid date: Received symbol',
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
+          },
+        ],
       });
     });
   });

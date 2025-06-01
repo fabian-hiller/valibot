@@ -1,11 +1,34 @@
-import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseTransformation,
+  OutputDataset,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * To bigint issue interface.
+ */
+export interface ToBigintIssue<TInput> extends BaseIssue<TInput> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'transformation';
+  /**
+   * The issue type.
+   */
+  readonly type: 'to_bigint';
+  /**
+   * The expected property.
+   */
+  readonly expected: null;
+}
 
 /**
  * To bigint action interface.
  */
 export interface ToBigintAction<
   TInput extends bigint | boolean | number | string,
-> extends BaseTransformation<TInput, bigint, never> {
+> extends BaseTransformation<TInput, bigint, ToBigintIssue<TInput>> {
   /**
    * The action type.
    */
@@ -30,10 +53,16 @@ export function toBigint<
     type: 'to_bigint',
     reference: toBigint,
     async: false,
-    '~run'(dataset) {
-      // @ts-expect-error
-      dataset.value = BigInt(dataset.value);
-      return dataset as SuccessDataset<bigint>;
+    '~run'(dataset, config) {
+      try {
+        // @ts-expect-error
+        dataset.value = BigInt(dataset.value);
+      } catch {
+        _addIssue(this, 'bigint', dataset, config);
+        // @ts-expect-error
+        dataset.typed = false;
+      }
+      return dataset as OutputDataset<bigint, ToBigintIssue<TInput>>;
     },
   };
 }

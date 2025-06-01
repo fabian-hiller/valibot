@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { toDate, type ToDateAction } from './toDate.ts';
+import { toDate, type ToDateAction, type ToDateIssue } from './toDate.ts';
 
 describe('toDate', () => {
   test('should return action object', () => {
@@ -19,7 +19,7 @@ describe('toDate', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<never>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<ToDateIssue<'123'>>();
     });
   });
 });

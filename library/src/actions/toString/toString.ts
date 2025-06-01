@@ -1,10 +1,29 @@
-import type { BaseTransformation, SuccessDataset } from '../../types';
+import type { BaseIssue, BaseTransformation, OutputDataset } from '../../types';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * To string issue interface.
+ */
+export interface ToStringIssue<TInput> extends BaseIssue<TInput> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'transformation';
+  /**
+   * The issue type.
+   */
+  readonly type: 'to_string';
+  /**
+   * The expected property.
+   */
+  readonly expected: null;
+}
 
 /**
  * To string action interface.
  */
 export interface ToStringAction<TInput>
-  extends BaseTransformation<TInput, string, never> {
+  extends BaseTransformation<TInput, string, ToStringIssue<TInput>> {
   /**
    * The action type.
    */
@@ -27,10 +46,16 @@ export function toString<TInput>(): ToStringAction<TInput> {
     type: 'to_string',
     reference: toString,
     async: false,
-    '~run'(dataset) {
-      // @ts-expect-error
-      dataset.value = String(dataset.value);
-      return dataset as SuccessDataset<string>;
+    '~run'(dataset, config) {
+      try {
+        // @ts-expect-error
+        dataset.value = String(dataset.value);
+      } catch {
+        _addIssue(this, 'string', dataset, config);
+        // @ts-expect-error
+        dataset.typed = false;
+      }
+      return dataset as OutputDataset<string, ToStringIssue<TInput>>;
     },
   };
 }

@@ -1,5 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { toBigint, type ToBigintAction } from './toBigint.ts';
+import {
+  toBigint,
+  type ToBigintAction,
+  type ToBigintIssue,
+} from './toBigint.ts';
 
 describe('toBigint', () => {
   test('should return action object', () => {
@@ -40,6 +44,40 @@ describe('toBigint', () => {
       expect(action['~run']({ typed: true, value: true }, {})).toStrictEqual({
         typed: true,
         value: 1n,
+      });
+    });
+  });
+  describe('should return dataset with issues', () => {
+    const action = toBigint();
+    const baseIssue: Omit<
+      ToBigintIssue<number>,
+      'input' | 'received' | 'message'
+    > = {
+      kind: 'transformation',
+      type: 'to_bigint',
+      expected: null,
+    };
+
+    test('for invalid inputs', () => {
+      const value = Symbol();
+      // @ts-expect-error
+      expect(action['~run']({ typed: true, value }, {})).toStrictEqual({
+        typed: false,
+        value,
+        issues: [
+          {
+            ...baseIssue,
+            input: value,
+            received: 'symbol',
+            message: 'Invalid bigint: Received symbol',
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
+          },
+        ],
       });
     });
   });
