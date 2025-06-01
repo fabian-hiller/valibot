@@ -16,4 +16,5 @@ export * from './set';
 export * from './string';
 export * from './literal';
 export * from './map';
+export * from './union';
 export type { SchemaOptionsToASTVal } from './types';

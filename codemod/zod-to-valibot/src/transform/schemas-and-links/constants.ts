@@ -19,6 +19,7 @@ export const ZOD_SCHEMAS = [
   'optional',
   'set',
   'string',
+  'union',
 ] as const;
 
 export const ZOD_SCHEMA_TO_TYPE: Record<
@@ -43,6 +44,7 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   optional: 'none',
   set: 'size',
   string: 'length',
+  union: 'none',
 };
 
 export const ZOD_VALUE_TYPE_SCHEMAS: readonly (typeof ZOD_SCHEMAS)[number][] = [

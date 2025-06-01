@@ -52,6 +52,7 @@ defineTests(transform, [
   'specific-default-import',
   'specific-namespace-import',
   'string-validation-methods',
+  'union-schema',
   'validation-error-msg',
   'zod-enum',
 ]);

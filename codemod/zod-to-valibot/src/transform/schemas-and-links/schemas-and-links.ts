@@ -53,6 +53,7 @@ import {
   transformRecord,
   transformSet,
   transformString,
+  transformUnion,
 } from './schemas';
 import { ZodSchemaType } from './types';
 import {
@@ -167,6 +168,8 @@ function toValibotSchemaExp(
       return transformRecord(...args);
     case 'set':
       return transformSet(...args);
+    case 'union':
+      return transformUnion(...args);
     default: {
       assertNever(zodSchemaName);
     }
