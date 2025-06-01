@@ -496,7 +496,7 @@ export function convertSchema(
         const refOverride = config.overrideRef({
           ...context,
           referenceId,
-          valibotSchema,
+          valibotSchema: wrappedValibotSchema,
           jsonSchema,
         });
         if (refOverride) {

@@ -2,8 +2,6 @@ import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
 import { convertAction } from './convertAction.ts';
 
-// TODO: Add tests for `overrideAction` config
-
 console.warn = vi.fn();
 
 describe('convertAction', () => {
@@ -873,5 +871,49 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "transform" action cannot be converted to JSON Schema.'
     );
+  });
+
+  test('should override JSON Schema output of action', () => {
+    expect(
+      convertAction({}, v.decimal<string>(), {
+        overrideAction({ valibotAction }) {
+          if (valibotAction.type === 'decimal') {
+            return { format: 'decimal' };
+          }
+        },
+      })
+    ).toStrictEqual({
+      format: 'decimal',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.decimal<string>(), {
+        overrideAction({ valibotAction, jsonSchema }) {
+          if (valibotAction.type === 'decimal') {
+            return { ...jsonSchema, format: 'decimal' };
+          }
+        },
+      })
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DECIMAL_REGEX.source,
+      format: 'decimal',
+    });
+  });
+
+  test('should override action to suppress error', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error
+        v.transform(parseInt),
+        {
+          overrideAction({ valibotAction, jsonSchema }) {
+            if (valibotAction.type === 'transform') {
+              return jsonSchema;
+            }
+          },
+        }
+      )
+    ).toStrictEqual({});
   });
 });

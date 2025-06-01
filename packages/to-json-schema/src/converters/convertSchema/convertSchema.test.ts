@@ -3,8 +3,6 @@ import { describe, expect, test, vi } from 'vitest';
 import { createContext } from '../../vitest/index.ts';
 import { convertSchema } from './convertSchema.ts';
 
-// TODO: Add tests for `overrideSchema` and `overrideRef` config
-
 console.warn = vi.fn();
 
 describe('convertSchema', () => {
@@ -87,6 +85,36 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: { $ref: '#/$defs/string' },
+      });
+    });
+
+    test('should override reference ID if specified', () => {
+      const foo = v.string();
+      const bar = v.number();
+      const schema = v.object({ foo, bar });
+      expect(
+        convertSchema(
+          {},
+          schema,
+          {
+            overrideRef({ referenceId }) {
+              if (referenceId === 'bar') {
+                return '#/$custom/reference';
+              }
+            },
+          },
+          createContext({
+            definitions: { foo: { type: 'string' }, bar: { type: 'number' } },
+            referenceMap: new Map().set(foo, 'foo').set(bar, 'bar'),
+          })
+        )
+      ).toStrictEqual({
+        type: 'object',
+        properties: {
+          foo: { $ref: '#/$defs/foo' },
+          bar: { $ref: '#/$custom/reference' },
+        },
+        required: ['foo', 'bar'],
       });
     });
   });
@@ -485,6 +513,20 @@ describe('convertSchema', () => {
       expect(() =>
         convertSchema({}, schema, { errorMode: 'throw' }, createContext())
       ).toThrowError(error);
+    });
+
+    test('should warn error for record schema with non-string schema key', () => {
+      // @ts-expect-error
+      const schema = v.record(v.pipe(v.number(), v.minValue(10)), v.number());
+      expect(
+        convertSchema({}, schema, { errorMode: 'warn' }, createContext())
+      ).toStrictEqual({
+        type: 'object',
+        additionalProperties: { type: 'number' },
+      });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "record" schema with the "number" schema for the key cannot be converted to JSON Schema.'
+      );
     });
   });
 
@@ -982,6 +1024,24 @@ describe('convertSchema', () => {
         getterMap: new Map().set(lazyGetter, expect.any(Object)),
       });
     });
+
+    test('should convert simple lazy schema without custom reference ID', () => {
+      const wrappedSchema = v.string();
+      expect(
+        convertSchema(
+          {},
+          v.lazy(() => wrappedSchema),
+          {
+            overrideRef({ valibotSchema }) {
+              if (valibotSchema === wrappedSchema) {
+                return '#/$custom/reference';
+              }
+            },
+          },
+          createContext()
+        )
+      ).toStrictEqual({ $ref: '#/$custom/reference' });
+    });
   });
 
   describe('other schemas', () => {
@@ -1016,6 +1076,36 @@ describe('convertSchema', () => {
       expect(console.warn).toHaveBeenLastCalledWith(
         'The "file" schema cannot be converted to JSON Schema.'
       );
+    });
+  });
+
+  test('should override JSON Schema and suppress error', () => {
+    expect(() =>
+      convertSchema(
+        {},
+        // @ts-expect-error
+        v.date(),
+        { overrideSchema: () => null },
+        createContext()
+      )
+    ).toThrowError('The "date" schema cannot be converted to JSON Schema.');
+    expect(
+      convertSchema(
+        {},
+        // @ts-expect-error
+        v.date(),
+        {
+          overrideSchema({ valibotSchema }) {
+            if (valibotSchema.type === 'date') {
+              return { type: 'string', format: 'date-time' };
+            }
+          },
+        },
+        createContext()
+      )
+    ).toStrictEqual({
+      type: 'string',
+      format: 'date-time',
     });
   });
 });
