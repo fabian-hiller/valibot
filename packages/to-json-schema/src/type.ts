@@ -105,6 +105,8 @@ export interface ConversionConfig {
    * When set to 'output', conversion of any pipelines starts from the last
    * schema in the pipeline. Therefore, the output type must be specified
    * explicitly with a schema after the last type transformation action.
+   *
+   * @beta
    */
   readonly typeMode?: 'ignore' | 'input' | 'output';
   /**
@@ -137,6 +139,8 @@ export interface ConversionConfig {
   ) => JSONSchema7 | null | undefined;
   /**
    * The actions that should be ignored during the conversion.
+   *
+   * @beta
    */
   readonly ignoreActions?: string[];
   /**
