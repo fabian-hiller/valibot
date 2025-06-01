@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v1.3.0 (June 01, 2025)
 
 - Add `ignoreActions` configuration to be able to ignore specific actions during conversion
 - Add `typeMode` configuration to be able to control whether to convert input or output type of schema
