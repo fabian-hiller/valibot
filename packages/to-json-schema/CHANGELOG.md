@@ -8,7 +8,7 @@ All notable changes to the library will be documented in this file.
 - Add `typeMode` configuration to be able to control whether to convert input or output type of schema
 - Add `ConversionContext`, `OverrideSchemaContext`, `OverrideActionContext` and `OverrideRefContext` to exports
 - Change JSDoc comments to improve documentation
-- Change build step to tsdown
+- Change build step to tsdown and Rolldown
 
 ## v1.2.0 (May 17, 2025)
 
