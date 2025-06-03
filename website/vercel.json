@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../library && npm run build && cd ../website && npm run sitemap && npm run build",
+  "buildCommand": "cd ../library && npm run build && cd ../packages/to-json-schema && npm run build && cd ../../website && npm run sitemap && npm run build",
   "headers": [
     {
       "source": "/(.*)?service-worker.js",
