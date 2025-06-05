@@ -32,6 +32,7 @@ defineTests(transform, [
   'nullable-schema',
   'nullish-schema',
   'number-validation-methods',
+  'object-catchall',
   'object-keyof',
   'object-omit',
   'object-partial',

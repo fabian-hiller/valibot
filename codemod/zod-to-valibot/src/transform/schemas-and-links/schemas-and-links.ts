@@ -8,8 +8,10 @@ import {
   ZOD_VALIDATORS,
   ZOD_VALUE_TYPE_SCHEMAS,
 } from './constants';
+import { addToPipe } from './helpers';
 import {
   transformArray as transformArrayMethod,
+  transformCatchall,
   transformDefault,
   transformExtract,
   transformKeyof,
@@ -111,11 +113,6 @@ function isCallExp(path: UnknownPath): path is j.ASTPath<j.CallExpression> {
 function isMemberExp(path: UnknownPath): path is j.ASTPath<j.MemberExpression> {
   return path.value.type === 'MemberExpression';
 }
-
-const isPipeSchemaExp = (callExp: j.CallExpression) =>
-  callExp.callee.type === 'MemberExpression' &&
-  callExp.callee.property.type === 'Identifier' &&
-  callExp.callee.property.name === 'pipe';
 
 const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
@@ -307,6 +304,8 @@ function toValibotMethodExp(
   switch (zodMethodName) {
     case 'array':
       return transformArrayMethod(...args);
+    case 'catchall':
+      return transformCatchall(valibotIdentifier, schemaExp, inputArgs);
     case 'default':
       return transformDefault(...args);
     case 'extract':
@@ -347,21 +346,6 @@ function toValibotMethodExp(
     default:
       assertNever(zodMethodName);
   }
-}
-
-function addToPipe(
-  valibotIdentifier: string,
-  addTo: j.CallExpression | j.MemberExpression | j.Identifier,
-  add: j.CallExpression
-): j.CallExpression {
-  if (addTo.type === 'CallExpression' && isPipeSchemaExp(addTo)) {
-    addTo.arguments.push(add);
-    return addTo;
-  }
-  return j.callExpression(
-    j.memberExpression(j.identifier(valibotIdentifier), j.identifier('pipe')),
-    [addTo, add]
-  );
 }
 
 function transformSchemasAndLinksHelper(
