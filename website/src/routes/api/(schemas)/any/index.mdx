@@ -4,9 +4,9 @@ description: Creates an any schema.
 source: /schemas/any/any.ts
 contributors:
   - fabian-hiller
-  - morinokami
-  - jasperteo
   - EltonLobo07
+  - jasperteo
+  - morinokami
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -73,6 +73,7 @@ The following APIs can be combined with `any`.
     'getFallback',
     'getFallbacks',
     'is',
+    'message',
     'parse',
     'parser',
     'pipe',
@@ -101,11 +102,13 @@ The following APIs can be combined with `any`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
+    'flavor',
     'graphemes',
     'gtValue',
     'hash',
@@ -130,6 +133,7 @@ The following APIs can be combined with `any`.
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -138,6 +142,7 @@ The following APIs can be combined with `any`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -147,6 +152,7 @@ The following APIs can be combined with `any`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
@@ -154,6 +160,7 @@ The following APIs can be combined with `any`.
     'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -168,6 +175,7 @@ The following APIs can be combined with `any`.
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',

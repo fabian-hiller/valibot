@@ -6,12 +6,12 @@ description: >-
   type.
 contributors:
   - fabian-hiller
+  - EltonLobo07
   - BastiDood
   - morinokami
   - jasperteo
   - daxeh
   - ariskemper
-  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -62,6 +62,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'finite',
@@ -87,6 +88,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'mac48',
     'mac64',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -94,6 +96,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'maxWords',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -103,6 +106,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
@@ -110,6 +114,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'regex',
@@ -165,6 +170,7 @@ Pipeline transformation actions allow to change the value and data type of the i
     'brand',
     'filterItems',
     'findItem',
+    'flavor',
     'mapItems',
     'rawTransform',
     'readonly',

@@ -1,11 +1,11 @@
 ---
 title: pipeAsync
-description: >-
-  Adds a pipeline to a schema, that can validate and transform its input.
+description: Adds a pipeline to a schema, that can validate and transform its input.
 source: /methods/pipe/pipeAsync.ts
 contributors:
   - fabian-hiller
   - EltonLobo07
+  - muningis
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -158,6 +158,7 @@ The following APIs can be combined with `pipeAsync`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -190,11 +191,13 @@ The following APIs can be combined with `pipeAsync`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
+    'flavor',
     'graphemes',
     'gtValue',
     'hash',
@@ -219,6 +222,7 @@ The following APIs can be combined with `pipeAsync`.
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -227,6 +231,7 @@ The following APIs can be combined with `pipeAsync`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -236,6 +241,7 @@ The following APIs can be combined with `pipeAsync`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
@@ -243,6 +249,7 @@ The following APIs can be combined with `pipeAsync`.
     'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -257,6 +264,7 @@ The following APIs can be combined with `pipeAsync`.
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',
