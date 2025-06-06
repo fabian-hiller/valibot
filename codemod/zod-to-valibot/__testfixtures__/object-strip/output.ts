@@ -1,5 +1,29 @@
 import * as v from "valibot";
 
-const Schema1 = v.object({name: v.string(), age: v.number()});
-const Schema2 = v.strictObject({name: v.string(), age: v.number()});
-const Schema3 = v.object(Schema2.entries);
+// passthrough
+const Schema1 = v.object({key: v.string()});
+const Schema2 = v.object({key: v.string()}, "some message");
+const Schema3 = v.pipe(
+  v.object({key: v.string()}),
+  v.description("some description"),
+  v.passthrough(),
+  v.strip()
+);
+const Schema4 = v.looseObject({key: v.string()});
+const Schema5 = v.pipe(Schema4, v.strip());
+const Schema6 = v.object({key: v.string()});
+const Schema7 = v.pipe(Schema6, v.passthrough(), v.strip());
+
+// strict
+const Schema8 = v.object({key: v.string()});
+const Schema9 = v.object({key: v.string()}, "some message");
+const Schema10 = v.pipe(
+  v.object({key: v.string()}),
+  v.description("some description"),
+  v.strict(),
+  v.strip()
+);
+const Schema11 = v.strictObject({key: v.string()});
+const Schema12 = v.pipe(Schema11, v.strip());
+const Schema13 = v.object({key: v.string()});
+const Schema14 = v.pipe(Schema13, v.strict(), v.strip());
