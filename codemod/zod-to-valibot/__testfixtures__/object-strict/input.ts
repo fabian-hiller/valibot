@@ -1,5 +1,7 @@
 import { z } from "zod";
 
-const Schema1 = z.object({name: z.string(), age: z.number()}).strict();
-const Schema2 = z.object({name: z.string(), age: z.number()});
-const Schema3 = Schema2.strict();
+const Schema1 = z.object({key: z.string()}).strict();
+const Schema2 = z.object({key: z.string()}, {message: "some message"}).strict();
+const Schema3 = z.object({key: z.string()}, {description: "some description"}).strict();
+const Schema4 = z.object({key: z.string()});
+const Schema5 = Schema4.strict();
