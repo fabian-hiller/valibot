@@ -8,6 +8,7 @@
 - [Use cases](/guides/use-cases/)
 - [Comparison](/guides/comparison/)
 - [Ecosystem](/guides/ecosystem/)
+- [LLMs.txt](/guides/llms-txt/)
 
 ## Main concepts
 
