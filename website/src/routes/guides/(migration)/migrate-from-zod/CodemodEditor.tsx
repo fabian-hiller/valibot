@@ -10,7 +10,7 @@ import { CodeEditor, IconButton } from '~/components';
 import { useResetSignal } from '~/hooks';
 import { CheckIcon, CopyIcon, PlayIcon } from '~/icons';
 import { trackEvent } from '~/utils';
-import editorCode from './editorCode.ts?raw';
+import zodCode from './zod/code.ts?raw';
 import zod3Types from './zod/v3/index.d.ts?raw';
 import zod3PackageJson from './zod/v3/package.json?raw';
 import zod4Types from './zod/v4/index.d.ts?raw';
@@ -67,7 +67,7 @@ export const CodemodEditor = component$(() => {
     <div class="relative flex aspect-video">
       <CodeEditor
         class="border-y-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800"
-        value={{ value: editorCode }}
+        value={{ value: zodCode }}
         model={model}
       />
       <div class="absolute right-10 top-10 z-10 flex space-x-6">
