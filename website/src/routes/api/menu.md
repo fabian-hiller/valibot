@@ -455,8 +455,6 @@
 - [IssuePathItem](/api/IssuePathItem/)
 - [LazySchema](/api/LazySchema/)
 - [LazySchemaAsync](/api/LazySchemaAsync/)
-- [JsonAction](/api/JsonAction/)
-- [JsonIssue](/api/JsonIssue/)
 - [LengthAction](/api/LengthAction/)
 - [LengthInput](/api/LengthInput/)
 - [LengthIssue](/api/LengthIssue/)
