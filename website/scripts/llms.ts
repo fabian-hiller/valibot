@@ -24,8 +24,8 @@ function convertMenuToLlms(markdown: string): string {
     markdown
       // Change levels of headings to one level down
       .replaceAll(/^#/gm, '##')
-      // Replace relative paths with URLs to MDX files
-      .replaceAll(/\(\/(.+)\/\)$/gm, '(https://valibot.dev/$1.mdx)')
+      // Replace relative paths with URLs to MD files
+      .replaceAll(/\(\/(.+)\/\)$/gm, '(https://valibot.dev/$1.md)')
   );
 }
 
@@ -118,7 +118,7 @@ const contentAreas = [
   },
 ] as const;
 
-// Copy MDX files to public dir and add content to llms files
+// Copy content of MDX files to public dir and add it to llms files
 for (const contentArea of contentAreas) {
   // Ensure directory of content area exists
   if (!fs.existsSync(contentArea.publicDir)) {
@@ -134,7 +134,7 @@ for (const contentArea of contentAreas) {
     llms.full += `\n${heading} (${contentArea.name})\n`;
     llms[contentArea.id] += `\n${heading}\n`;
 
-    // Copy MDX files to public dir and add content to llms files
+    // Copy content of MDX files to public dir and add content to llms files
     for (const mdxFile of areaGroup.files) {
       // Read MDX file and extract frontmatter
       const frontmatter = graymatter.read(mdxFile.path);
@@ -146,7 +146,7 @@ for (const contentArea of contentAreas) {
 
       // Copy MDX content into public directory
       fs.writeFileSync(
-        path.join(contentArea.publicDir, `${mdxFile.name}.mdx`),
+        path.join(contentArea.publicDir, `${mdxFile.name}.md`),
         mdxContent
       );
 
