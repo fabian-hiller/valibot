@@ -1,0 +1,39 @@
+import type { PropertyProps } from '~/components';
+
+const properties: Record<string, PropertyProps> = {
+  TInput: {
+    modifier: 'extends',
+    type: 'any',
+  },
+  BaseIssue: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
+    },
+  },
+  kind: {
+    type: {
+      type: 'string',
+      value: 'transformation',
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'to_number',
+    },
+  },
+  expected: {
+    type: 'null',
+  },
+};
+
+export default properties;
