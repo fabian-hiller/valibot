@@ -230,7 +230,12 @@ export default component$(() => {
       window:onResize$={resetSideBarWidth}
     >
       <div ref={editorElement} class="flex flex-1 overflow-visible lg:relative">
-        <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
+        <CodeEditor
+          class="lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:dark:border-slate-800"
+          value={initialCode}
+          model={model}
+          onSave$={saveCode}
+        />
         <EditorButtons
           class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:z-10 lg:!flex"
           model={model}

@@ -22,5 +22,6 @@
     }
   },
   "files": ["./.eslintrc.cjs"],
-  "include": ["scripts", "src", "./*.d.ts", "./*.config.ts"]
+  "include": ["scripts", "src", "./*.d.ts", "./*.config.ts"],
+  "exclude": ["src/routes/guides/(migration)/migrate-from-zod/zod"]
 }
