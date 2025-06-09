@@ -33,7 +33,7 @@ export function getTransformedMsgs(schemaOptions: SchemaOptionsToASTVal) {
         : [];
 }
 
-function getOption(
+export function getOption(
   optionsArgs: j.CallExpression['arguments'][number],
   optionName: string
 ) {

@@ -13,6 +13,7 @@ defineTests(transform, [
   'coerce-date-schema',
   'coerce-number-schema',
   'coerce-string-schema',
+  'custom-schema',
   'date-validation-methods',
   'default',
   'default-import',

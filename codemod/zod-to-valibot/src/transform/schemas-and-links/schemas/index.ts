@@ -1,6 +1,7 @@
 export * from './array';
 export * from './bigint/bigint';
 export * from './boolean';
+export * from './custom';
 export * from './date';
 export * from './discriminatedUnion';
 export * from './enum';

@@ -40,6 +40,7 @@ import {
   transformArray,
   transformBigint,
   transformBoolean,
+  transformCustom,
   transformDate,
   transformDiscriminatedUnion,
   transformEnum,
@@ -124,6 +125,8 @@ function toValibotSchemaExp(
   valibotIdentifier: string,
   zodSchemaName: ZodSchemaName,
   inputArgs: j.CallExpression['arguments'],
+  // no type definition found
+  typeParameters: any,
   coerceOption = false
 ): j.CallExpression {
   const args = [valibotIdentifier, inputArgs] as const;
@@ -135,6 +138,8 @@ function toValibotSchemaExp(
       return transformString(...argsWithCoerce);
     case 'boolean':
       return transformBoolean(...argsWithCoerce);
+    case 'custom':
+      return transformCustom(...args, typeParameters);
     case 'discriminatedUnion':
       return transformDiscriminatedUnion(...args);
     case 'instanceof':
@@ -427,6 +432,9 @@ function transformSchemasAndLinksHelper(
           valibotIdentifier,
           propertyName,
           cur.value.arguments,
+          // parser and types are not in sync
+          // @ts-expect-error
+          cur.value.typeParameters,
           coerce
         );
       } else if (isZodMethodName(propertyName)) {
