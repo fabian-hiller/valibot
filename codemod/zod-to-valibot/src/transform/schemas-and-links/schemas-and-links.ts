@@ -6,7 +6,6 @@ import {
   ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
   ZOD_VALIDATORS,
-  ZOD_VALUE_TYPE_SCHEMAS,
 } from './constants';
 import { addToPipe } from './helpers';
 import {
@@ -119,7 +118,6 @@ const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
 const isZodMethodName = getIsTypeFn(ZOD_METHODS);
 const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
-const isZodValueTypeSchemaName = getIsTypeFn(ZOD_VALUE_TYPE_SCHEMAS);
 
 function toValibotSchemaExp(
   valibotIdentifier: string,
