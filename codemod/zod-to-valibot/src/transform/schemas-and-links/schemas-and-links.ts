@@ -5,6 +5,7 @@ import {
   ZOD_PROPERTIES,
   ZOD_SCHEMA_TO_TYPE,
   ZOD_SCHEMAS,
+  ZOD_TYPES,
   ZOD_VALIDATORS,
 } from './constants';
 import { addToPipe } from './helpers';
@@ -105,6 +106,7 @@ type ZodSchemaName = (typeof ZOD_SCHEMAS)[number];
 type ZodValidatorName = (typeof ZOD_VALIDATORS)[number];
 type ZodMethodName = (typeof ZOD_METHODS)[number];
 type ZodPropertyName = (typeof ZOD_PROPERTIES)[number];
+type ZodTypeName = (typeof ZOD_TYPES)[number];
 
 function isCallExp(path: UnknownPath): path is j.ASTPath<j.CallExpression> {
   return path.value.type === 'CallExpression';
@@ -118,6 +120,7 @@ const isZodSchemaName = getIsTypeFn(ZOD_SCHEMAS);
 const isZodValidatorName = getIsTypeFn(ZOD_VALIDATORS);
 const isZodMethodName = getIsTypeFn(ZOD_METHODS);
 const isZodPropertyName = getIsTypeFn(ZOD_PROPERTIES);
+const isZodTypeName = getIsTypeFn(ZOD_TYPES);
 
 function toValibotSchemaExp(
   valibotIdentifier: string,
@@ -351,20 +354,70 @@ function toValibotMethodExp(
   }
 }
 
+function getValiType(
+  valibotIdentifier: string,
+  typeName: string,
+  typeParameters: j.TSTypeParameterInstantiation | null | undefined
+) {
+  return j.tsTypeReference(
+    j.tsQualifiedName(j.identifier(valibotIdentifier), j.identifier(typeName)),
+    typeParameters
+  );
+}
+
+function toValiTypeExp(
+  valibotIdentifier: string,
+  typeParameters: j.TSTypeParameterInstantiation | null | undefined,
+  zodTypeName: ZodTypeName
+) {
+  switch (zodTypeName) {
+    case 'infer':
+    case 'output':
+      return getValiType(valibotIdentifier, 'InferOutput', typeParameters);
+    case 'input':
+      return getValiType(valibotIdentifier, 'InferInput', typeParameters);
+    default:
+      assertNever(zodTypeName);
+  }
+}
+
 function transformSchemasAndLinksHelper(
   root: j.Collection<unknown>,
   valibotIdentifier: string,
   identifier: string,
   schemaType: ZodSchemaType | null
 ) {
-  const relevantExps = root
-    .find(j.MemberExpression, {
-      object: { name: identifier },
-    })
-    .paths()
+  const relevantExps = [
+    ...root
+      .find(j.MemberExpression, {
+        object: { name: identifier },
+      })
+      .paths(),
+    ...root.find(j.TSTypeReference).paths(),
+  ]
     // to make sure nested schemas are transformed first
     .reverse();
   main: for (const relevantExp of relevantExps) {
+    if (
+      relevantExp.value.type === 'TSTypeReference' &&
+      relevantExp.value.typeName.type === 'TSQualifiedName' &&
+      relevantExp.value.typeName.left.type === 'Identifier' &&
+      relevantExp.value.typeName.left.name === valibotIdentifier
+    ) {
+      if (
+        relevantExp.value.typeName.right.type === 'Identifier' &&
+        isZodTypeName(relevantExp.value.typeName.right.name)
+      ) {
+        relevantExp.replace(
+          toValiTypeExp(
+            valibotIdentifier,
+            relevantExp.value.typeParameters,
+            relevantExp.value.typeName.right.name
+          )
+        );
+      }
+      continue;
+    }
     let transformedExp:
       | j.CallExpression
       | j.MemberExpression

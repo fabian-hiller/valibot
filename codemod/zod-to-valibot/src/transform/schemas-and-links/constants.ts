@@ -137,3 +137,5 @@ export const ZOD_METHODS = [
   'spa',
   'unwrap',
 ] as const;
+
+export const ZOD_TYPES = ['infer', 'input', 'output'] as const;

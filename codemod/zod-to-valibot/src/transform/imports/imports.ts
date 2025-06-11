@@ -52,6 +52,31 @@ export function transformImports(
       .replaceWith((p) =>
         j.memberExpression(j.identifier(valibotIdentifier), p.node.property)
       );
+    root
+      .find(j.TSTypeReference, {
+        typeName: {
+          type: 'TSQualifiedName',
+          left: { type: 'Identifier', name: zodIdentifier },
+        },
+      })
+      .filter(
+        (p) =>
+          p.value.typeName.type === 'TSQualifiedName' &&
+          p.value.typeName.right.type === 'Identifier'
+      )
+      .replaceWith((p) =>
+        j.tsTypeReference(
+          j.tsQualifiedName(
+            j.identifier(valibotIdentifier),
+            // todo: find a better way to get the identifier
+            p.value.typeName.type === 'TSQualifiedName' &&
+              p.value.typeName.right.type === 'Identifier'
+              ? p.value.typeName.right
+              : j.identifier('bug')
+          ),
+          p.value.typeParameters
+        )
+      );
   }
   return {
     conclusion: 'successful',
