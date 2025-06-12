@@ -54,6 +54,7 @@ defineTests(transform, [
   'specific-default-import',
   'specific-namespace-import',
   'string-validation-methods',
+  'tuple-schema',
   'type-inference',
   'union-schema',
   'validation-error-msg',
