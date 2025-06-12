@@ -1,20 +1,15 @@
 import j from 'jscodeshift';
-import { ElementFrom } from '../../../../utils';
-import {
-  getSchemaComps,
-  getSchemaWithOptionalDescription,
-} from '../../schemas/helpers';
+import { getSchemaComps, getSchemaWithOptionalDescription } from '../helpers';
 
 export function transformTuple(
   valibotIdentifier: string,
-  args: j.CallExpression['arguments'],
-  restArg: ElementFrom<j.CallExpression['arguments']> | null
+  args: j.CallExpression['arguments']
 ) {
   const { baseSchema, description } = getSchemaComps(
     valibotIdentifier,
-    restArg ? 'tupleWithRest' : 'tuple',
-    restArg ? [...args, restArg] : args,
-    0
+    'tuple',
+    args,
+    2
   );
   return getSchemaWithOptionalDescription(
     valibotIdentifier,

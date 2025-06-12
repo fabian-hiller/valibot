@@ -132,6 +132,7 @@ export const ZOD_METHODS = [
   'passthrough',
   'pick',
   'required',
+  'rest',
   'safeParse',
   'safeParseAsync',
   'strict',

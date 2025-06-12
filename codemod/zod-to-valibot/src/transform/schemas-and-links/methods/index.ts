@@ -13,6 +13,7 @@ export * from './partial';
 export * from './passthrough';
 export * from './pick';
 export * from './required';
+export * from './rest';
 export * from './safeParse';
 export * from './safeParseAsync';
 export * from './strict';

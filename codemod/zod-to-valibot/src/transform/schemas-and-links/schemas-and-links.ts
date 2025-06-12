@@ -25,6 +25,7 @@ import {
   transformPassthrough,
   transformPick,
   transformRequired,
+  transformRest,
   transformSafeParse,
   transformSafeParseAsync,
   transformStrict,
@@ -129,12 +130,10 @@ function toValibotSchemaExp(
   inputArgs: j.CallExpression['arguments'],
   // no type definition found
   typeParameters: any,
-  coerceOption = false,
-  restTupleArg: ElementFrom<j.CallExpression['arguments']> | null
+  coerceOption = false
 ): j.CallExpression {
   const args = [valibotIdentifier, inputArgs] as const;
   const argsWithCoerce = [...args, coerceOption] as const;
-  const argsWithRestTupleArg = [...args, restTupleArg] as const;
   switch (zodSchemaName) {
     case 'array':
       return transformArray(...args);
@@ -177,7 +176,7 @@ function toValibotSchemaExp(
     case 'union':
       return transformUnion(...args);
     case 'tuple':
-      return transformTuple(...argsWithRestTupleArg);
+      return transformTuple(...args);
     default: {
       assertNever(zodSchemaName);
     }
@@ -341,6 +340,8 @@ function toValibotMethodExp(
       return transformPick(...args);
     case 'required':
       return transformRequired(...args);
+    case 'rest':
+      return transformRest(...args);
     case 'safeParse':
       return transformSafeParse(...args);
     case 'safeParseAsync':
@@ -441,10 +442,6 @@ function transformSchemasAndLinksHelper(
       | j.ASTPath<j.CallExpression>
       | j.ASTPath<j.MemberExpression>
       | null = null;
-    let tupleRest: {
-      argument: ElementFrom<j.CallExpression['arguments']>;
-      path: j.ASTPath<j.CallExpression>;
-    } | null = null;
     while (isMemberExp(cur) || isCallExp(cur)) {
       rootExp = cur;
       if (isMemberExp(cur)) {
@@ -458,31 +455,6 @@ function transformSchemasAndLinksHelper(
         // `coerce` is a special case
         if (propertyName === 'coerce') {
           coerce = true;
-        } else if (propertyName === 'tuple') {
-          // we need to go 3 levels up the tree
-          // ".tuple" -> ".tuple()" -> "v.tuple()" -> "v.tuple().rest()"
-          const parentPath = cur.parentPath;
-          if (isCallExp(parentPath)) {
-            const grandparentPath = parentPath.parentPath;
-            if (isMemberExp(grandparentPath)) {
-              const restCallPath = grandparentPath.parentPath;
-              if (isCallExp(restCallPath)) {
-                if (
-                  restCallPath.value.callee.type !== 'MemberExpression' ||
-                  restCallPath.value.callee.property.type !== 'Identifier'
-                ) {
-                  transformLinks = false;
-                  break;
-                }
-                if (restCallPath.value.callee.property.name === 'rest') {
-                  tupleRest = {
-                    path: restCallPath,
-                    argument: restCallPath.value.arguments[0],
-                  };
-                }
-              }
-            }
-          }
         } else if (isZodPropertyName(propertyName)) {
           coerce = false;
           transformedExp = toValiPropExp(
@@ -513,32 +485,15 @@ function transformSchemasAndLinksHelper(
       if (curSchemaType === null && isZodSchemaName(propertyName)) {
         curSchemaType = ZOD_SCHEMA_TO_TYPE[propertyName];
         useBigInt = propertyName === 'bigint';
-        if (propertyName === 'tuple' && tupleRest) {
-          transformedExp = toValibotSchemaExp(
-            valibotIdentifier,
-            propertyName,
-            cur.value.arguments,
-            // parser and types are not in sync
-            // @ts-expect-error
-            cur.value.typeParameters,
-            coerce,
-            tupleRest.argument
-          );
-          tupleRest.path.replace(transformedExp);
-          transformLinks = false;
-          break;
-        } else {
-          transformedExp = toValibotSchemaExp(
-            valibotIdentifier,
-            propertyName,
-            cur.value.arguments,
-            // parser and types are not in sync
-            // @ts-expect-error
-            cur.value.typeParameters,
-            coerce,
-            null
-          );
-        }
+        transformedExp = toValibotSchemaExp(
+          valibotIdentifier,
+          propertyName,
+          cur.value.arguments,
+          // parser and types are not in sync
+          // @ts-expect-error
+          cur.value.typeParameters,
+          coerce
+        );
       } else if (isZodMethodName(propertyName)) {
         transformedExp = toValibotMethodExp(
           valibotIdentifier,
