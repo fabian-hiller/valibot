@@ -20,6 +20,7 @@ export const ZOD_SCHEMAS = [
   'optional',
   'set',
   'string',
+  'symbol',
   'tuple',
   'union',
 ] as const;
@@ -47,6 +48,7 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   optional: 'none',
   set: 'size',
   string: 'length',
+  symbol: 'none',
   tuple: 'none',
   union: 'none',
 };

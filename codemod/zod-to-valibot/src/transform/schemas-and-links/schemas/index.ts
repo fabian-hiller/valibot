@@ -15,6 +15,7 @@ export * from './optional';
 export * from './record';
 export * from './set';
 export * from './string';
+export * from './symbol';
 export * from './tuple';
 export * from './literal';
 export * from './map';

@@ -57,6 +57,7 @@ import {
   transformRecord,
   transformSet,
   transformString,
+  transformSymbol,
   transformTuple,
   transformUnion,
 } from './schemas';
@@ -173,6 +174,8 @@ function toValibotSchemaExp(
       return transformRecord(...args);
     case 'set':
       return transformSet(...args);
+    case 'symbol':
+      return transformSymbol(...args);
     case 'union':
       return transformUnion(...args);
     case 'tuple':
