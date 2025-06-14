@@ -25,6 +25,7 @@ export const ZOD_SCHEMAS = [
   'tuple',
   'undefined',
   'union',
+  'void',
 ] as const;
 
 export const ZOD_SCHEMA_TO_TYPE: Record<
@@ -55,6 +56,7 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   tuple: 'none',
   undefined: 'none',
   union: 'none',
+  void: 'none',
 };
 
 export const ZOD_VALUE_TYPE_SCHEMAS: readonly (typeof ZOD_SCHEMAS)[number][] = [

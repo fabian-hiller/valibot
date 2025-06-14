@@ -61,5 +61,6 @@ defineTests(transform, [
   'undefined-schema',
   'union-schema',
   'validation-error-msg',
+  'void-schema',
   'zod-enum',
 ]);

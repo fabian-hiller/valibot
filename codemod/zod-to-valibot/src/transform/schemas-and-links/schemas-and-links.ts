@@ -62,6 +62,7 @@ import {
   transformTuple,
   transformUndefined,
   transformUnion,
+  transformVoid,
 } from './schemas';
 import { ZodSchemaType } from './types';
 import {
@@ -186,6 +187,8 @@ function toValibotSchemaExp(
       return transformUnion(...args);
     case 'tuple':
       return transformTuple(...args);
+    case 'void':
+      return transformVoid(...args);
     default: {
       assertNever(zodSchemaName);
     }

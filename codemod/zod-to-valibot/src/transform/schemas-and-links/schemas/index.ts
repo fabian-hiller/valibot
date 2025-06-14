@@ -22,4 +22,5 @@ export * from './literal';
 export * from './map';
 export * from './undefined';
 export * from './union';
+export * from './void';
 export type { SchemaOptionsToASTVal } from './types';
