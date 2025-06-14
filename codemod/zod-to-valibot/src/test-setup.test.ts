@@ -61,6 +61,7 @@ defineTests(transform, [
   'type-inference',
   'undefined-schema',
   'union-schema',
+  'unknown-schema',
   'validation-error-msg',
   'void-schema',
   'zod-enum',
