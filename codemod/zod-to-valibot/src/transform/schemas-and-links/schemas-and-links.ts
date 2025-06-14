@@ -59,6 +59,7 @@ import {
   transformString,
   transformSymbol,
   transformTuple,
+  transformUndefined,
   transformUnion,
 } from './schemas';
 import { ZodSchemaType } from './types';
@@ -176,6 +177,8 @@ function toValibotSchemaExp(
       return transformSet(...args);
     case 'symbol':
       return transformSymbol(...args);
+    case 'undefined':
+      return transformUndefined(...args);
     case 'union':
       return transformUnion(...args);
     case 'tuple':

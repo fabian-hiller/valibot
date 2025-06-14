@@ -57,6 +57,7 @@ defineTests(transform, [
   'symbol-schema',
   'tuple-schema',
   'type-inference',
+  'undefined-schema',
   'union-schema',
   'validation-error-msg',
   'zod-enum',
