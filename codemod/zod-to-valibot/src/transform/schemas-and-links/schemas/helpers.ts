@@ -86,7 +86,8 @@ export function getSchemaComps(
   schemaName: string,
   args: j.CallExpression['arguments'],
   maxArgs: number,
-  coerce = false
+  coerce = false,
+  addMsgArg = true
 ) {
   const { firstArgs: argsExceptOptions, lastArg } = splitLastArg(maxArgs, args);
   const options = lastArg !== null ? getOptions(lastArg) : {};
@@ -96,7 +97,7 @@ export function getSchemaComps(
         j.identifier(valibotIdentifier),
         j.identifier(schemaName)
       ),
-      [...argsExceptOptions, ...getTransformedMsgs(options)]
+      [...argsExceptOptions, ...(addMsgArg ? getTransformedMsgs(options) : [])]
     ),
     coerce: coerce || options.coerce,
     description: options.description,

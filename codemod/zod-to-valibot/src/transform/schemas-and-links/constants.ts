@@ -1,6 +1,7 @@
 import { ZodSchemaType } from './types';
 
 export const ZOD_SCHEMAS = [
+  'any',
   'array',
   'bigint',
   'boolean',
@@ -32,6 +33,7 @@ export const ZOD_SCHEMA_TO_TYPE: Record<
   (typeof ZOD_SCHEMAS)[number],
   ZodSchemaType
 > = {
+  any: 'none',
   array: 'length',
   bigint: 'value',
   boolean: 'value',

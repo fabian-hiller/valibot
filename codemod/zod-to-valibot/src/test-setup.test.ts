@@ -3,6 +3,7 @@ import { defineTests } from './utils';
 
 // maintain the sorted order
 defineTests(transform, [
+  'any-schema',
   'array-element',
   'array-nonempty',
   'array-schema',

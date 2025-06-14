@@ -38,6 +38,7 @@ import {
   transformShape,
 } from './properties';
 import {
+  transformAny,
   transformArray,
   transformBigint,
   transformBoolean,
@@ -139,6 +140,8 @@ function toValibotSchemaExp(
   const args = [valibotIdentifier, inputArgs] as const;
   const argsWithCoerce = [...args, coerceOption] as const;
   switch (zodSchemaName) {
+    case 'any':
+      return transformAny(...args);
     case 'array':
       return transformArray(...args);
     case 'string':
