@@ -30,6 +30,7 @@ defineTests(transform, [
   'named-import-with-specific-alias',
   'namespace-import',
   'native-enum',
+  'null-schema',
   'nullable-schema',
   'nullish-schema',
   'number-validation-methods',
