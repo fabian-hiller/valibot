@@ -9,6 +9,7 @@ export * from './enum';
 export * from './instanceof';
 export * from './intersection';
 export * from './nativeEnum';
+export * from './never';
 export * from './null';
 export * from './nullable';
 export * from './number';

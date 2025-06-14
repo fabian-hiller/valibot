@@ -51,6 +51,7 @@ import {
   transformLiteral,
   transformMap,
   transformNativeEnum,
+  transformNever,
   transformNull,
   transformNullable,
   transformNumber,
@@ -161,6 +162,8 @@ function toValibotSchemaExp(
       return transformMap(...args);
     case 'nativeEnum':
       return transformNativeEnum(...args);
+    case 'never':
+      return transformNever(...args);
     case 'null':
       return transformNull(...args);
     case 'nullable':
