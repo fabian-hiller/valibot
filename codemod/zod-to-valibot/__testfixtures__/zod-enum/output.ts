@@ -19,4 +19,4 @@ const boolOptions = BoolEnum.options;
 const FishEnum = v.picklist(["Salmon", "Tuna", "Trout"]);
 const SalmonAndTrout = v.picklist(["Salmon", "Trout"]);
 // `exclude` is not supported by Valibot
-const SalmonOnly = FishEnum.exclude(["Tuna", "Trout"]);
+const SalmonOnly = v.exclude(FishEnum, ["Tuna", "Trout"]);
