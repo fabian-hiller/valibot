@@ -133,29 +133,16 @@ jobs:
         run: pnpm lint
         working-directory: website
 
-  zod_to_valibot_codemod_vitest:
+  zod_to_valibot_vitest:
     name: Run Vitest in codemod/zod-to-valibot
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'zod-to-valibot-codemod'
     permissions:
       contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          registry-url: 'https://registry.npmjs.org'
-          cache: pnpm
-      - name: Install dependencies
-        shell: bash
-        run: pnpm install --filter zod-to-valibot
+      - name: Setup environment
+        uses: ./.github/actions/environment
       - name: Vitest tests
         run: pnpm test
         working-directory: codemod/zod-to-valibot
