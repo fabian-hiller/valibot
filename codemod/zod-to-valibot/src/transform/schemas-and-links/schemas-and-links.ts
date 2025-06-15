@@ -50,6 +50,7 @@ import {
   transformIntersection,
   transformLiteral,
   transformMap,
+  transformNan,
   transformNativeEnum,
   transformNever,
   transformNull,
@@ -160,6 +161,8 @@ function toValibotSchemaExp(
       return transformIntersection(...args);
     case 'map':
       return transformMap(...args);
+    case 'nan':
+      return transformNan(...args);
     case 'nativeEnum':
       return transformNativeEnum(...args);
     case 'never':

@@ -8,6 +8,7 @@ export * from './discriminatedUnion';
 export * from './enum';
 export * from './instanceof';
 export * from './intersection';
+export * from './nan';
 export * from './nativeEnum';
 export * from './never';
 export * from './null';
