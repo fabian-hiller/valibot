@@ -12,5 +12,6 @@ const NegativeSchema = z.number().negative();
 const NonPositiveSchema = z.number().nonpositive();
 const NonNegativeSchema = z.number().nonnegative();
 const MultipleOfSchema = z.number().multipleOf(3);
+const StepSchema = z.number().step(3);
 const FiniteSchema = z.number().finite();
 const SafeSchema = z.number().safe();

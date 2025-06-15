@@ -12,5 +12,6 @@ const NegativeSchema = v.pipe(v.number(), v.ltValue(0));
 const NonPositiveSchema = v.pipe(v.number(), v.maxValue(0));
 const NonNegativeSchema = v.pipe(v.number(), v.minValue(0));
 const MultipleOfSchema = v.pipe(v.number(), v.multipleOf(3));
+const StepSchema = v.pipe(v.number(), v.multipleOf(3));
 const FiniteSchema = v.pipe(v.number(), v.finite());
 const SafeSchema = v.pipe(v.number(), v.safeInteger());

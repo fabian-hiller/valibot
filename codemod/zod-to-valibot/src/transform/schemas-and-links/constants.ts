@@ -92,6 +92,7 @@ export const ZOD_VALIDATORS = [
   'jwt',
   'max',
   'min',
+  'step',
   'multipleOf',
   'nanoid',
   'negative',

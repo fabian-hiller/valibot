@@ -253,6 +253,7 @@ function toValibotActionExp(
       return transformMax(...args, schemaType);
     case 'min':
       return transformMin(...args, schemaType);
+    case 'step':
     case 'multipleOf':
       return transformMultipleOf(...args);
     case 'nanoid':
