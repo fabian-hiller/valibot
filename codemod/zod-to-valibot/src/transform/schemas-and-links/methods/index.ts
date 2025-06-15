@@ -2,6 +2,7 @@ export * from './array';
 export * from './catchall';
 export * from './default';
 export * from './exclude';
+export * from './extend';
 export * from './extract';
 export * from './keyof';
 export * from './nullable';

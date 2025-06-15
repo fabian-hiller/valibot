@@ -14,6 +14,7 @@ import {
   transformCatchall,
   transformDefault,
   transformExclude,
+  transformExtend,
   transformExtract,
   transformKeyof,
   transformNullable as transformNullableMethod,
@@ -346,6 +347,8 @@ function toValibotMethodExp(
       return transformDefault(...args);
     case 'exclude':
       return transformExclude(...args);
+    case 'extend':
+      return transformExtend(...args);
     case 'extract':
       return transformExtract(valibotIdentifier, inputArgs);
     case 'keyof':

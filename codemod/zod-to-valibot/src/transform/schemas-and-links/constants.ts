@@ -138,6 +138,7 @@ export const ZOD_METHODS = [
   'catchall',
   'default',
   'exclude',
+  'extend',
   'extract',
   'keyof',
   'omit',

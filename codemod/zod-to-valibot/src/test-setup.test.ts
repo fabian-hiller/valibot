@@ -38,6 +38,7 @@ defineTests(transform, [
   'nullish-schema',
   'number-validation-methods',
   'object-catchall',
+  'object-extend',
   'object-keyof',
   'object-omit',
   'object-partial',
