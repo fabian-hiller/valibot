@@ -19,10 +19,10 @@ import {
  * sponsors of the project.
  */
 export const Credits = component$(() => {
-  const head = useDocumentHead<{ contributors: string[] }>();
+  const head = useDocumentHead<{ contributors?: string[] }>();
   return (
     <footer class="mx-8 mt-12 border-t-2 pt-2 md:mt-16 md:pt-4 lg:mx-10 lg:mt-20 lg:pt-6 dark:border-slate-800">
-      {head.frontmatter.contributors.length > 0 && (
+      {!!head.frontmatter.contributors?.length && (
         <>
           <h3 class="mt-10 text-lg font-medium text-slate-900 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl dark:text-slate-200">
             Contributors

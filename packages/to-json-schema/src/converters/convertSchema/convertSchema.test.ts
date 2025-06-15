@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { describe, expect, test, vi } from 'vitest';
+import { createContext } from '../../vitest/index.ts';
 import { convertSchema } from './convertSchema.ts';
-import { createContext } from './vitest/index.ts';
 
 console.warn = vi.fn();
 
@@ -87,6 +87,36 @@ describe('convertSchema', () => {
         items: { $ref: '#/$defs/string' },
       });
     });
+
+    test('should override reference ID if specified', () => {
+      const foo = v.string();
+      const bar = v.number();
+      const schema = v.object({ foo, bar });
+      expect(
+        convertSchema(
+          {},
+          schema,
+          {
+            overrideRef({ referenceId }) {
+              if (referenceId === 'bar') {
+                return '#/$custom/reference';
+              }
+            },
+          },
+          createContext({
+            definitions: { foo: { type: 'string' }, bar: { type: 'number' } },
+            referenceMap: new Map().set(foo, 'foo').set(bar, 'bar'),
+          })
+        )
+      ).toStrictEqual({
+        type: 'object',
+        properties: {
+          foo: { $ref: '#/$defs/foo' },
+          bar: { $ref: '#/$custom/reference' },
+        },
+        required: ['foo', 'bar'],
+      });
+    });
   });
 
   describe('schema with pipe', () => {
@@ -131,21 +161,39 @@ describe('convertSchema', () => {
         v.description('foo')
       );
       const error =
-        'A "pipe" with multiple schemas cannot be converted to JSON Schema.';
+        'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.';
       expect(() =>
         convertSchema({}, schema, undefined, createContext())
       ).toThrowError(error);
       expect(() =>
         convertSchema({}, schema, { errorMode: 'throw' }, createContext())
       ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { typeMode: 'ignore' }, createContext())
+      ).toThrowError(error);
     });
 
     test('should warn error for multiple schemas in pipe', () => {
+      const schema = v.pipe(
+        v.nullable(v.string()),
+        v.string(),
+        v.description('foo')
+      );
+      const error =
+        'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.';
+      expect(
+        convertSchema({}, schema, { errorMode: 'warn' }, createContext())
+      ).toStrictEqual({
+        anyOf: [{ type: 'string' }, { type: 'null' }],
+        type: 'string',
+        description: 'foo',
+      });
+      expect(console.warn).toHaveBeenLastCalledWith(error);
       expect(
         convertSchema(
           {},
-          v.pipe(v.nullable(v.string()), v.string(), v.description('foo')),
-          { errorMode: 'warn' },
+          schema,
+          { errorMode: 'warn', typeMode: 'ignore' },
           createContext()
         )
       ).toStrictEqual({
@@ -153,9 +201,50 @@ describe('convertSchema', () => {
         type: 'string',
         description: 'foo',
       });
-      expect(console.warn).toHaveBeenLastCalledWith(
-        'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
-      );
+      expect(console.warn).toHaveBeenLastCalledWith(error);
+    });
+
+    // Hint: This schema is intentionally complex to test the conversion of nested pipelines
+    const inputOutputSchema = v.pipe(
+      v.pipe(
+        v.pipe(v.string(), v.nonEmpty()),
+        v.decimal(),
+        v.transform(Number),
+        v.pipe(v.number(), v.minValue(0))
+      ),
+      v.maxValue(100)
+    );
+
+    test('should convert only input type of pipeline', () => {
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          inputOutputSchema,
+          { typeMode: 'input' },
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        minLength: 1,
+        pattern: '^[+-]?(?:\\d*\\.)?\\d+$',
+      });
+    });
+
+    test('should convert only output type of pipeline', () => {
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          inputOutputSchema,
+          { typeMode: 'output' },
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'number',
+        minimum: 0,
+        maximum: 100,
+      });
     });
   });
 
@@ -424,6 +513,20 @@ describe('convertSchema', () => {
       expect(() =>
         convertSchema({}, schema, { errorMode: 'throw' }, createContext())
       ).toThrowError(error);
+    });
+
+    test('should warn error for record schema with non-string schema key', () => {
+      // @ts-expect-error
+      const schema = v.record(v.pipe(v.number(), v.minValue(10)), v.number());
+      expect(
+        convertSchema({}, schema, { errorMode: 'warn' }, createContext())
+      ).toStrictEqual({
+        type: 'object',
+        additionalProperties: { type: 'number' },
+      });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "record" schema with the "number" schema for the key cannot be converted to JSON Schema.'
+      );
     });
   });
 
@@ -921,6 +1024,24 @@ describe('convertSchema', () => {
         getterMap: new Map().set(lazyGetter, expect.any(Object)),
       });
     });
+
+    test('should convert simple lazy schema without custom reference ID', () => {
+      const wrappedSchema = v.string();
+      expect(
+        convertSchema(
+          {},
+          v.lazy(() => wrappedSchema),
+          {
+            overrideRef({ valibotSchema }) {
+              if (valibotSchema === wrappedSchema) {
+                return '#/$custom/reference';
+              }
+            },
+          },
+          createContext()
+        )
+      ).toStrictEqual({ $ref: '#/$custom/reference' });
+    });
   });
 
   describe('other schemas', () => {
@@ -955,6 +1076,36 @@ describe('convertSchema', () => {
       expect(console.warn).toHaveBeenLastCalledWith(
         'The "file" schema cannot be converted to JSON Schema.'
       );
+    });
+  });
+
+  test('should override JSON Schema and suppress error', () => {
+    expect(() =>
+      convertSchema(
+        {},
+        // @ts-expect-error
+        v.date(),
+        { overrideSchema: () => null },
+        createContext()
+      )
+    ).toThrowError('The "date" schema cannot be converted to JSON Schema.');
+    expect(
+      convertSchema(
+        {},
+        // @ts-expect-error
+        v.date(),
+        {
+          overrideSchema({ valibotSchema }) {
+            if (valibotSchema.type === 'date') {
+              return { type: 'string', format: 'date-time' };
+            }
+          },
+        },
+        createContext()
+      )
+    ).toStrictEqual({
+      type: 'string',
+      format: 'date-time',
     });
   });
 });

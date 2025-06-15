@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 export default defineConfig([
   {
@@ -16,7 +16,7 @@ export default defineConfig([
     minify: true,
     dts: false,
     outDir: './dist',
-    outExtension: ({ format }) => ({
+    outExtensions: ({ format }) => ({
       js: format === 'cjs' ? '.min.cjs' : '.min.js',
     }),
   },

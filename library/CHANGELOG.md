@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change build step to tsdown
+
 ## v1.1.0 (May 06, 2025)
 
 - Add `message` method to overwrite local error message configuration of a schema (pull request #1103)

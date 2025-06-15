@@ -1,7 +1,8 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
-import { convertSchema } from './convertSchema.ts';
-import type { ConversionConfig, ConversionContext } from './type.ts';
+import { convertSchema } from '../../converters/index.ts';
+import { getGlobalDefs } from '../../storages/index.ts';
+import type { ConversionConfig, ConversionContext } from '../../type.ts';
 
 /**
  * Converts a Valibot schema to the JSON Schema format.
@@ -22,16 +23,19 @@ export function toJsonSchema(
     getterMap: new Map(),
   };
 
+  // Get definitions from config or global storage
+  const definitions = config?.definitions ?? getGlobalDefs();
+
   // Add provided definitions to context, if necessary
-  if (config?.definitions) {
-    for (const key in config.definitions) {
-      context.referenceMap.set(config.definitions[key], key);
+  if (definitions) {
+    for (const key in definitions) {
+      context.referenceMap.set(definitions[key], key);
     }
-    for (const key in config.definitions) {
+    for (const key in definitions) {
       context.definitions[key] = convertSchema(
         {},
         // @ts-expect-error
-        config.definitions[key],
+        definitions[key],
         config,
         context,
         true
