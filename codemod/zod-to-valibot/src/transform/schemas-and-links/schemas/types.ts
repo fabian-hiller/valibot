@@ -1,3 +1,4 @@
+// FIXME: Import seems to be broken
 import type { getSchemaOptionVal } from '../schemas-and-properties';
 
 type SchemaOptionASTVal = ReturnType<typeof getSchemaOptionVal>;
