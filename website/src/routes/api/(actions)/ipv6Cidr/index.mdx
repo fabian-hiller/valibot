@@ -1,0 +1,67 @@
+---
+title: ipv6Cidr
+description: Creates an IPv6 address in CIDR notation validation action.
+source: /actions/ipv6Cidr/ipv6Cidr.ts
+contributors:
+  - fabian-hiller
+  - L-Mario564
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# ipv6Cidr
+
+Creates an [IPv6](https://en.wikipedia.org/wiki/IPv6) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) address validation action.
+
+```ts
+const Action = v.ipv6Cidr<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `ipv6Cidr` you can validate the formatting of a string. If the input is not an IPv6 address in CIDR notation, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `ipv6Cidr` can be used.
+
+### IPv6 in CIDR notation schema
+
+Schema to validate an IPv6 address in CIDR notation.
+
+```ts
+const Ipv6CidrSchema = v.pipe(
+  v.string(),
+  v.ipv6Cidr('The IP address is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `ipv6Cidr`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
