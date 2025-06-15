@@ -12,6 +12,7 @@ import { addToPipe } from './helpers';
 import {
   transformArray as transformArrayMethod,
   transformCatchall,
+  transformDeepPartial,
   transformDefault,
   transformExclude,
   transformExtend,
@@ -346,6 +347,8 @@ function toValibotMethodExp(
       return transformCatchall(valibotIdentifier, schemaExp, inputArgs);
     case 'default':
       return transformDefault(...args);
+    case 'deepPartial':
+      return transformDeepPartial(...args);
     case 'exclude':
       return transformExclude(...args);
     case 'extend':
