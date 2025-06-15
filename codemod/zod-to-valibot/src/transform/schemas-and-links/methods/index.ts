@@ -5,6 +5,7 @@ export * from './exclude';
 export * from './extend';
 export * from './extract';
 export * from './keyof';
+export * from './merge';
 export * from './nullable';
 export * from './nullish';
 export * from './omit';

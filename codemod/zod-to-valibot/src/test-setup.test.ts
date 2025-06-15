@@ -40,6 +40,7 @@ defineTests(transform, [
   'object-catchall',
   'object-extend',
   'object-keyof',
+  'object-merge',
   'object-omit',
   'object-partial',
   'object-passthrough',

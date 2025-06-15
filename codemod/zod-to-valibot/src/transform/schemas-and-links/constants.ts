@@ -143,6 +143,7 @@ export const ZOD_METHODS = [
   'keyof',
   'omit',
   'optional',
+  'merge',
   'nullable',
   'nullish',
   'parse',

@@ -17,6 +17,7 @@ import {
   transformExtend,
   transformExtract,
   transformKeyof,
+  transformMerge,
   transformNullable as transformNullableMethod,
   transformNullish,
   transformOmit,
@@ -357,6 +358,8 @@ function toValibotMethodExp(
       return transformOmit(...args);
     case 'optional':
       return transformOptionalMethod(...args);
+    case 'merge':
+      return transformMerge(...args);
     case 'nullable':
       return transformNullableMethod(...args);
     case 'parse':
