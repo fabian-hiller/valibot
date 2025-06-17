@@ -31,7 +31,7 @@ export function transformImports(
   // Obtain the identifier
   const importSpecifier = importSpecifiers[0];
   const zodIdentifier = importSpecifier.local?.name;
-  if (zodIdentifier === undefined) {
+  if (typeof zodIdentifier !== 'string') {
     return {
       conclusion: 'unsuccessful',
     };
