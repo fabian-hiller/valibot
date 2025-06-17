@@ -1,6 +1,6 @@
-import type { getSchemaOptionVal } from '../schemas-and-properties';
+import type { getOption } from './helpers';
 
-type SchemaOptionASTVal = ReturnType<typeof getSchemaOptionVal>;
+type SchemaOptionASTVal = ReturnType<typeof getOption>;
 
 export type SchemaOptionsToASTVal = Partial<
   Record<
