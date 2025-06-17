@@ -5,6 +5,19 @@ import { convertAction } from './convertAction.ts';
 console.warn = vi.fn();
 
 describe('convertAction', () => {
+  test('should ignore specified actions', () => {
+    expect(
+      convertAction({}, v.email<string>(), { ignoreActions: ['email'] })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.email<string>(), {
+        ignoreActions: ['email'],
+      })
+    ).toStrictEqual({
+      type: 'string',
+    });
+  });
+
   test('should convert base64 action', () => {
     expect(convertAction({}, v.base64<string>(), undefined)).toStrictEqual({
       contentEncoding: 'base64',
@@ -457,6 +470,40 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert metadata action', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 'title',
+          description: 'description',
+          examples: ['example'],
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({
+      title: 'title',
+      description: 'description',
+      examples: ['example'],
+    });
+  });
+
+  test('should skip invalid metadata properties', () => {
+    expect(
+      convertAction(
+        {},
+        v.metadata({
+          title: 123,
+          description: null,
+          examples: { foo: 'bar' },
+          other: 'other',
+        }),
+        undefined
+      )
+    ).toStrictEqual({});
+  });
+
   test('should convert min length action for strings', () => {
     expect(
       convertAction(
@@ -824,5 +871,49 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "transform" action cannot be converted to JSON Schema.'
     );
+  });
+
+  test('should override JSON Schema output of action', () => {
+    expect(
+      convertAction({}, v.decimal<string>(), {
+        overrideAction({ valibotAction }) {
+          if (valibotAction.type === 'decimal') {
+            return { format: 'decimal' };
+          }
+        },
+      })
+    ).toStrictEqual({
+      format: 'decimal',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.decimal<string>(), {
+        overrideAction({ valibotAction, jsonSchema }) {
+          if (valibotAction.type === 'decimal') {
+            return { ...jsonSchema, format: 'decimal' };
+          }
+        },
+      })
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DECIMAL_REGEX.source,
+      format: 'decimal',
+    });
+  });
+
+  test('should override action to suppress error', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error
+        v.transform(parseInt),
+        {
+          overrideAction({ valibotAction, jsonSchema }) {
+            if (valibotAction.type === 'transform') {
+              return jsonSchema;
+            }
+          },
+        }
+      )
+    ).toStrictEqual({});
   });
 });

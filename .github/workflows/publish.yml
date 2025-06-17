@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/pnpm
+        uses: ./.github/actions/environment
       - name: Build library
         run: pnpm build
         working-directory: library
@@ -57,7 +57,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/pnpm
+        uses: ./.github/actions/environment
       - name: Build i18n
         run: pnpm build.npm
         working-directory: packages/i18n
@@ -79,7 +79,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/pnpm
+        uses: ./.github/actions/environment
       - name: Build i18n
         run: pnpm build.jsr
         working-directory: packages/i18n
@@ -98,7 +98,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/pnpm
+        uses: ./.github/actions/environment
       - name: Build to-json-schema
         run: pnpm build
         working-directory: packages/to-json-schema
@@ -120,7 +120,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup environment
-        uses: ./.github/actions/pnpm
+        uses: ./.github/actions/environment
       - name: Publish to-json-schema
         run: npx jsr publish
         working-directory: packages/to-json-schema

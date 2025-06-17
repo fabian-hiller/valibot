@@ -24,7 +24,9 @@ import prettierPluginTypeScript from 'prettier/plugins/typescript';
 import { formatWithCursor } from 'prettier/standalone';
 import { useTheme } from '~/routes/plugin@theme';
 import valibotTypes from '../../../library/dist/index.d.ts?raw';
-import packageJson from '../../../library/package.json?raw';
+import valibotPackageJson from '../../../library/package.json?raw';
+import valibotToJsonSchemaTypes from '../../../packages/to-json-schema/dist/index.d.ts?raw';
+import valibotToJsonSchemaPackageJson from '../../../packages/to-json-schema/package.json?raw';
 import typescriptTm from '../json/TypeScript.tmLanguage.json';
 
 type CodeEditorProps = {
@@ -400,12 +402,22 @@ async function setupMonaco() {
 
   // Add Valibot to context of editor
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    packageJson,
+    valibotPackageJson,
     'file:///node_modules/valibot/package.json'
   );
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     valibotTypes,
     'file:///node_modules/valibot/dist/index.d.ts'
+  );
+
+  // Add to-json-schema to context of editor
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    valibotToJsonSchemaPackageJson,
+    'file:///node_modules/@valibot/to-json-schema/package.json'
+  );
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    valibotToJsonSchemaTypes,
+    'file:///node_modules/@valibot/to-json-schema/dist/index.d.ts'
   );
 
   // Set TypeScript compiler options

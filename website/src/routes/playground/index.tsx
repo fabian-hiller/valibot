@@ -28,6 +28,7 @@ import { useResetSignal } from '~/hooks';
 import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
 import { trackEvent } from '~/utils';
 import valibotCode from '../../../../library/dist/index.min.js?url';
+import valibotToJsonSchemaCode from '../../../../packages/to-json-schema/dist/index.min.js?url';
 import editorCode from './editorCode.ts?raw';
 import iframeCode from './iframeCode.js?raw';
 
@@ -301,7 +302,12 @@ export default component$(() => {
           <html>
             <head>
               <script type="importmap">
-                { "imports": { "valibot": "${valibotCode}" } }
+                {
+                  "imports": {
+                    "valibot": "${valibotCode}",
+                    "@valibot/to-json-schema": "${valibotToJsonSchemaCode}"
+                  }
+                }
               </script>
               <script>
                 ${iframeCode}

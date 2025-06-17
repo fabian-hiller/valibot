@@ -1,8 +1,8 @@
 import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
-import { convertAction } from './convertAction.ts';
-import type { ConversionConfig, ConversionContext } from './type.ts';
-import { handleError } from './utils/index.ts';
+import type { ConversionConfig, ConversionContext } from '../../type.ts';
+import { addError, handleError } from '../../utils/index.ts';
+import { convertAction } from '../convertAction/index.ts';
 
 /**
  * Schema type.
@@ -96,17 +96,28 @@ type Schema =
   | v.LazySchema<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>;
 
 /**
+ * Pipe type.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Pipe = readonly (Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[];
+
+/**
  * Schema or pipe type.
  */
-type SchemaOrPipe =
-  | Schema
-  | v.SchemaWithPipe<
-      readonly [
-        Schema,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...(Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[],
-      ]
-    >;
+type SchemaOrPipe = Schema | v.SchemaWithPipe<readonly [Schema, ...Pipe]>;
+
+/**
+ * Flattens a Valibot pipe by recursively expanding nested pipes.
+ *
+ * @param pipe The pipeline to flatten.
+ *
+ * @returns A flat pipeline.
+ */
+function flattenPipe(pipe: Pipe): Pipe {
+  return pipe.flatMap((item) =>
+    'pipe' in item ? flattenPipe(item.pipe as Pipe) : item
+  );
+}
 
 // Create global reference count
 let refCount = 0;
@@ -134,26 +145,75 @@ export function convertSchema(
     const referenceId = context.referenceMap.get(valibotSchema);
     if (referenceId) {
       jsonSchema.$ref = `#/$defs/${referenceId}`;
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
       return jsonSchema;
     }
   }
 
   // If it is schema with pipe, convert each item of pipe
   if ('pipe' in valibotSchema) {
-    for (let index = 0; index < valibotSchema.pipe.length; index++) {
-      // Get current pipe item
-      const valibotPipeItem = valibotSchema.pipe[index];
+    // Flatten pipe by expanding nested pipes
+    const flatPipe = flattenPipe(valibotSchema.pipe);
 
+    // Create start and stop index variables
+    let startIndex = 0;
+    let stopIndex = flatPipe.length - 1;
+
+    // If type mode is set to input, update stop index
+    if (config?.typeMode === 'input') {
+      const inputStopIndex = flatPipe
+        .slice(1)
+        .findIndex(
+          (item) =>
+            item.kind === 'schema' ||
+            (item.kind === 'transformation' &&
+              (item.type === 'find_item' ||
+                item.type === 'parse_json' ||
+                item.type === 'raw_transform' ||
+                item.type === 'reduce_items' ||
+                item.type === 'stringify_json' ||
+                item.type === 'transform'))
+        );
+      if (inputStopIndex !== -1) {
+        stopIndex = inputStopIndex;
+      }
+
+      // Otherwise, if type mode is set to output, update start index
+    } else if (config?.typeMode === 'output') {
+      const outputStartIndex = flatPipe.findLastIndex(
+        (item) => item.kind === 'schema'
+      );
+      if (outputStartIndex !== -1) {
+        startIndex = outputStartIndex;
+      }
+    }
+
+    // Convert each item of pipe in specified range
+    for (let index = startIndex; index <= stopIndex; index++) {
+      // Get current pipe item
+      const valibotPipeItem = flatPipe[index];
+
+      // Convert Valibot schema or action to JSON Schema
       if (valibotPipeItem.kind === 'schema') {
-        // If pipe has multiple schemas, throw or warn
-        if (index > 0) {
+        // Handle error if pipe contains another schema after start index
+        if (index > startIndex) {
           handleError(
-            'A "pipe" with multiple schemas cannot be converted to JSON Schema.',
+            'Set the "typeMode" config to "input" or "output" to convert pipelines with multiple schemas.',
             config
           );
         }
 
-        // Otherwiese, convert Valibot schema to JSON Schema
+        // Convert Valibot schema to JSON Schema
         jsonSchema = convertSchema(
           jsonSchema,
           valibotPipeItem,
@@ -165,7 +225,7 @@ export function convertSchema(
           true
         );
 
-        // Otherwise, convert Valibot action to JSON Schema
+        // Convert Valibot action to JSON Schema
       } else {
         // @ts-expect-error
         jsonSchema = convertAction(jsonSchema, valibotPipeItem, config);
@@ -175,6 +235,9 @@ export function convertSchema(
     // Return converted JSON Schema
     return jsonSchema;
   }
+
+  // Create errors variable
+  let errors: [string, ...string[]] | undefined;
 
   // Otherwise, convert individual schema to JSON Schema
   switch (valibotSchema.type) {
@@ -277,15 +340,15 @@ export function convertSchema(
 
     case 'record': {
       if ('pipe' in valibotSchema.key) {
-        handleError(
-          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.',
-          config
+        errors = addError(
+          errors,
+          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
         );
       }
       if (valibotSchema.key.type !== 'string') {
-        handleError(
-          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`,
-          config
+        errors = addError(
+          errors,
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
         );
       }
       jsonSchema.type = 'object';
@@ -353,9 +416,9 @@ export function convertSchema(
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        handleError(
-          'The value of the "literal" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'The value of the "literal" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -374,9 +437,9 @@ export function convertSchema(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        handleError(
-          'An option of the "picklist" schema is not JSON compatible.',
-          config
+        errors = addError(
+          errors,
+          'An option of the "picklist" schema is not JSON compatible.'
         );
       }
       // @ts-expect-error
@@ -428,17 +491,51 @@ export function convertSchema(
       // Add reference to JSON Schema object
       jsonSchema.$ref = `#/$defs/${referenceId}`;
 
+      // Override reference, if necessary
+      if (config?.overrideRef) {
+        const refOverride = config.overrideRef({
+          ...context,
+          referenceId,
+          valibotSchema: wrappedValibotSchema,
+          jsonSchema,
+        });
+        if (refOverride) {
+          jsonSchema.$ref = refOverride;
+        }
+      }
+
       break;
     }
 
     // Other schemas
 
     default: {
-      handleError(
+      errors = addError(
+        errors,
         // @ts-expect-error
-        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`,
-        config
+        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
       );
+    }
+  }
+
+  // Override JSON Schema if specified and necessary
+  if (config?.overrideSchema) {
+    const schemaOverride = config.overrideSchema({
+      ...context,
+      referenceId: context.referenceMap.get(valibotSchema),
+      valibotSchema,
+      jsonSchema,
+      errors,
+    });
+    if (schemaOverride) {
+      return { ...schemaOverride };
+    }
+  }
+
+  // Handle errors based on configuration
+  if (errors) {
+    for (const message of errors) {
+      handleError(message, config);
     }
   }
 

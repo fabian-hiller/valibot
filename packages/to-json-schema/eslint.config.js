@@ -51,6 +51,12 @@ export default tseslint.config(
           },
         },
       ],
+      'jsdoc/check-tag-names': [
+        'error',
+        {
+          definedTags: ['alpha', 'beta'],
+        },
+      ],
 
       // Disable rules ----------------------------------------------------------
 
