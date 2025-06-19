@@ -47,7 +47,7 @@ The following examples show how `nanoid` can be used.
 Schema to validate a Nano ID.
 
 ```ts
-const NanoIDSchema = v.pipe(
+const NanoIdSchema = v.pipe(
   v.string(),
   v.nanoid('The Nano ID is badly formatted.'),
   v.length(21, 'The Nano ID must be 21 characters long.')

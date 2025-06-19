@@ -21,6 +21,7 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 | `array`          | ✅     |                                                                     |
 | `boolean`        | ✅     |                                                                     |
 | `enum`           | ✅     |                                                                     |
+| `exactOptional`  | ✅     |                                                                     |
 | `intersect`      | ✅     |                                                                     |
 | `lazy`           | ⚠️     | The `.getter`function is always executed with `undefined` as input  |
 | `literal`        | ⚠️     | Only JSON compatible values are supported                           |
@@ -41,27 +42,49 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 | `tupleWithRest`  | ✅     |                                                                     |
 | `tuple`          | ✅     |                                                                     |
 | `union`          | ✅     |                                                                     |
+| `undefinedable`  | ✅     |                                                                     |
 | `unknown`        | ✅     |                                                                     |
 | `variant`        | ⚠️     | The discriminator key will be ignored                               |
 
-| Actions        | Status | Note                                                  |
-| -------------- | ------ | ----------------------------------------------------- |
-| `description`  | ✅     |                                                       |
-| `email`        | ✅     |                                                       |
-| `integer`      | ✅     |                                                       |
-| `ipv4`         | ✅     |                                                       |
-| `ipv6`         | ✅     |                                                       |
-| `isoDate`      | ✅     |                                                       |
-| `isoTimestamp` | ✅     |                                                       |
-| `length`       | ⚠️     | Only in combination with `string` and `array` schema  |
-| `maxLength`    | ⚠️     | Only in combination with `string` and `array` schema  |
-| `maxValue`     | ⚠️     | Only in combination with `number` schema              |
-| `minLength`    | ⚠️     | Only in combination with `string` and `array` schemas |
-| `minValue`     | ⚠️     | Only in combination with `number` schema              |
-| `multipleOf`   | ✅     |                                                       |
-| `regex`        | ⚠️     | RexExp flags are not supported in JSON schema         |
-| `uuid`         | ✅     |                                                       |
-| `value`        | ✅     |                                                       |
+| Actions        | Status | Note                                                        |
+| -------------- | ------ | ----------------------------------------------------------- |
+| `base64`       | ✅     |                                                             |
+| `bic`          | ✅     |                                                             |
+| `description`  | ✅     |                                                             |
+| `cuid2`        | ✅     |                                                             |
+| `email`        | ✅     |                                                             |
+| `emoji`        | ✅     |                                                             |
+| `empty`        | ✅     |                                                             |
+| `entries`      | ✅     |                                                             |
+| `decimal`      | ✅     |                                                             |
+| `digits`       | ✅     |                                                             |
+| `hexadecimal`  | ✅     |                                                             |
+| `hexColor`     | ✅     |                                                             |
+| `integer`      | ✅     |                                                             |
+| `ipv4`         | ✅     |                                                             |
+| `ipv6`         | ✅     |                                                             |
+| `isoDate`      | ✅     |                                                             |
+| `isoDateTime`  | ✅     |                                                             |
+| `isoTime`      | ✅     |                                                             |
+| `isoTimestamp` | ✅     |                                                             |
+| `length`       | ⚠️     | Only in combination with `string` and `array` schema        |
+| `metadata`     | ⚠️     | Only for valid `title`, `description` and `examples` values |
+| `maxEntries`   | ✅     |                                                             |
+| `maxLength`    | ⚠️     | Only in combination with `string` and `array` schema        |
+| `maxValue`     | ⚠️     | Only in combination with `number` schema                    |
+| `minEntries`   | ✅     |                                                             |
+| `minLength`    | ⚠️     | Only in combination with `string` and `array` schemas       |
+| `minValue`     | ⚠️     | Only in combination with `number` schema                    |
+| `multipleOf`   | ✅     |                                                             |
+| `nanoid`       | ✅     |                                                             |
+| `nonEmpty`     | ✅     |                                                             |
+| `octal`        | ✅     |                                                             |
+| `regex`        | ⚠️     | RexExp flags are not supported in JSON schema               |
+| `title`        | ✅     |                                                             |
+| `ulid`         | ✅     |                                                             |
+| `url`          | ✅     |                                                             |
+| `uuid`         | ✅     |                                                             |
+| `value`        | ✅     |                                                             |
 
 ## Configurations
 

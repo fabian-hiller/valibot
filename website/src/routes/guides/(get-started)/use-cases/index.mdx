@@ -31,3 +31,11 @@ The browser state, which is stored using cookies, search parameters or the local
 ## Config files
 
 Library authors can also make use of Valibot, for example, to match configuration files with a schema and, in the event of an error, provide clear indications of the cause and how to fix the problem. The same applies to environment variables to quickly detect configuration errors.
+
+## Schema builder
+
+Our schemas are plain JavaScript objects with a well-defined and fully type-safe structure. This makes Valibot a great choice for defining data structures that can be further processed by third-party code. For example, it is possible to build an ORM with custom metadata actions on top of Valibot to generate database schemas. Another example is our official `toJsonSchema` function, which uses Valibot's object API to output a JSON Schema that can be used for documentation purposes or to generate structured output with LLMs.
+
+## Data migration
+
+Valibot can also be used to migrate data from one form to another in a type-safe way. The advantage of a schema library like Valibot is that transformations can be defined for individual properties instead of for the entire dataset. This can make data migrations more readable and maintainable. In addition, the schema can be used to validate the data before the migration, which increases the reliability of the migration process.

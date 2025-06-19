@@ -11,3 +11,4 @@ server
 *.spec.tsx
 *.spec.ts
 .netlify
+.vercel

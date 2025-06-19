@@ -1,13 +1,13 @@
 ---
 title: pipe
-description: >-
-  Adds a pipeline to a schema, that can validate and transform its input.
+description: Adds a pipeline to a schema, that can validate and transform its input.
 source: /methods/pipe/pipe.ts
 contributors:
   - fabian-hiller
-  - morinokami
-  - jasperteo
   - EltonLobo07
+  - muningis
+  - jasperteo
+  - morinokami
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -140,6 +140,7 @@ The following APIs can be combined with `pipe`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -172,11 +173,13 @@ The following APIs can be combined with `pipe`.
     'emoji',
     'empty',
     'endsWith',
+    'entries',
     'everyItem',
     'excludes',
     'filterItems',
     'findItem',
     'finite',
+    'flavor',
     'graphemes',
     'gtValue',
     'hash',
@@ -201,6 +204,7 @@ The following APIs can be combined with `pipe`.
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -209,6 +213,7 @@ The following APIs can be combined with `pipe`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',
@@ -218,6 +223,7 @@ The following APIs can be combined with `pipe`.
     'nanoid',
     'nonEmpty',
     'notBytes',
+    'notEntries',
     'notGraphemes',
     'notLength',
     'notSize',
@@ -225,6 +231,7 @@ The following APIs can be combined with `pipe`.
     'notValues',
     'notWords',
     'octal',
+    'parseJson',
     'partialCheck',
     'rawCheck',
     'rawTransform',
@@ -239,6 +246,7 @@ The following APIs can be combined with `pipe`.
     'someItem',
     'sortItem',
     'startsWith',
+    'stringifyJson',
     'title',
     'toLowerCase',
     'toMaxValue',

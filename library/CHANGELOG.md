@@ -2,7 +2,25 @@
 
 All notable changes to the library will be documented in this file.
 
-## v1.0.0 (Month DD, YYYY)
+## vX.X.X (Month DD, YYYY)
+
+- Change build step to tsdown
+
+## v1.1.0 (May 06, 2025)
+
+- Add `message` method to overwrite local error message configuration of a schema (pull request #1103)
+- Add `summarize` method to summarize issues into a pretty-printable multi-line string (pull request #1158)
+- Add `getTitle`, `getDescription` and `getMetadata` methods to extract metadata of a schema (pull request #1154)
+- Add `minEntries` and `maxEntries` validation action to validate number of object entries (pull request #1100)
+- Add `entries` and `notEntries` validation action to validate number of object entries (pull request #1156)
+- Add `parseJson` and `stringifyJson` transformation action to parse and stringify JSON (pull request #1137)
+- Add `flavor` transformation action to flavor the output type of a schema (pull request #950)
+- Add support for bigints to `multipleOf` validation action (pull request #1164)
+- Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
+- Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
+- Fix internal `MarkOptional` type to fix input and output type of objects in edge cases (issue #1176)
+
+## v1.0.0 (March 18, 2025)
 
 - Add `assert` method to assert values (issue #862)
 - Add `checkItemsAsync` action (pull request #856)
@@ -30,6 +48,10 @@ All notable changes to the library will be documented in this file.
 - Change implementation of `variant` and `variantAsync` to support optional discriminators using `exactOptional`, `exactOptionalAsync`, `optional`, `optionalAsync`, `nullish` or `nullishAsync`
 - Change `_addIssue` to not ignore empty strings as error message (pull request #1065)
 - Change `ISO_DATE_TIME_REGEX` and `ISO_TIMESTAMP_REGEX` to support space as separator (pull request #1064)
+- Change pipe tuple of `pipe` and `pipeAsync` to be readonly by default
+- Change `forward`, `forwardCheck`, `partialCheck` and `partialCheckAsync` to improve TypeScript performance (issue #987)
+- Change `DECIMAL_REGEX` to support floats that start with a dot (pull request #1086)
+- Change exports to export only public types to reduce noise
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)

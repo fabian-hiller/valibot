@@ -25,13 +25,13 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "sitemap": "tsm ./scripts/sitemap.ts",
+    "llms": "tsm ./scripts/llms.ts",
     "sources": "tsm ./scripts/sources.ts",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
   "devDependencies": {
     "@mapbox/rehype-prism": "^0.9.0",
-    "@netlify/edge-functions": "^2.11.1",
     "@types/eslint": "^8.56.12",
     "@types/mapbox__rehype-prism": "^0.8.3",
     "@types/node": "^22.13.5",
@@ -43,7 +43,6 @@
     "eslint": "^8.57.1",
     "eslint-plugin-qwik": "~1.9.1",
     "gray-matter": "^4.0.3",
-    "netlify-cli": "^17.38.1",
     "postcss": "^8.5.3",
     "prettier": "^3.5.2",
     "rehype-external-links": "^3.0.0",

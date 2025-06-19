@@ -3,8 +3,8 @@ title: partialCheckAsync
 description: Creates a partial check validation action.
 source: /actions/partialCheck/partialCheckAsync.ts
 contributors:
-  - EltonLobo07
   - fabian-hiller
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -16,8 +16,8 @@ import { properties } from './properties';
 Creates a partial check validation action.
 
 ```ts
-const Action = v.partialCheckAsync<TInput, TPathList, TSelection, TMessage>(
-  pathList,
+const Action = v.partialCheckAsync<TInput, TPaths, TSelection, TMessage>(
+  paths,
   requirement,
   message
 );
@@ -26,13 +26,13 @@ const Action = v.partialCheckAsync<TInput, TPathList, TSelection, TMessage>(
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
-- `TPathList` <Property {...properties.TPathList} />
+- `TPaths` <Property {...properties.TPaths} />
 - `TSelection` <Property {...properties.TSelection} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
-- `pathList` <Property {...properties.pathList} />
+- `paths` <Property {...properties.paths} />
 - `requirement` <Property {...properties.requirement} />
 - `message` <Property {...properties.message} />
 
