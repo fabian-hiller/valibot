@@ -132,3 +132,17 @@ jobs:
       - name: ESLint check
         run: pnpm lint
         working-directory: website
+
+  zod_to_valibot_vitest:
+    name: Run Vitest in codemod/zod-to-valibot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/environment
+      - name: Vitest tests
+        run: pnpm test
+        working-directory: codemod/zod-to-valibot
