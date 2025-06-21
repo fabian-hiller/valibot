@@ -8,7 +8,6 @@ import {
   DigitalOceanLogo,
   HdmLogo,
   MotionLogo,
-  NetlifyLogo,
   PaceLogo,
   StainlessLogo,
   VercelLogo,
@@ -65,13 +64,12 @@ export const Credits = component$(() => {
           { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
           { Logo: BoltLogo, href: 'https://bolt.new/' },
           { Logo: MotionLogo, href: 'https://www.usemotion.com/' },
-          { Logo: BuilderLogo, href: 'https://www.builder.io' },
           { Logo: VercelLogo, href: 'https://vercel.com' },
           { Logo: DailyDevLogo, href: 'https://daily.dev/' },
           { Logo: StainlessLogo, href: 'https://www.stainless.com/' },
           { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
-          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
+          { Logo: BuilderLogo, href: 'https://www.builder.io' },
         ].map(({ Logo, href }) => (
           <li key={href}>
             <a href={href} target="_blank" rel="noreferrer">
@@ -91,18 +89,15 @@ export const Credits = component$(() => {
         {[
           'antfu',
           'Thanaen',
-          'osdiab',
           'ruiaraujo012',
           'hyunbinseo',
           'F0rce',
           'UniquePixels',
-          'jdgamble555',
           'nickytonline',
           'KubaJastrz',
           'andrewmd5',
           'caegdeveloper',
           'dslatkin',
-          'BrianCurliss',
         ].map((sponsor) => (
           <li key={sponsor}>
             <a
