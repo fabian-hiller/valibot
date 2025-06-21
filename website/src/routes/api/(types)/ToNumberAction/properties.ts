@@ -1,0 +1,40 @@
+import type { PropertyProps } from '~/components';
+
+const properties: Record<string, PropertyProps> = {
+  TInput: {
+    modifier: 'extends',
+    type: 'any',
+  },
+  BaseTransformation: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseTransformation',
+      href: '../BaseTransformation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        'number',
+        'never',
+      ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'to_number',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'toNumber',
+      href: '../toNumber/',
+    },
+  },
+};
+
+export default properties;
