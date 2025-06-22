@@ -69,6 +69,7 @@ export * from './nanoid/index.ts';
 export * from './nonEmpty/index.ts';
 export * from './normalize/index.ts';
 export * from './notBytes/index.ts';
+export * from './notCodePoints/index.ts';
 export * from './notEntries/index.ts';
 export * from './notGraphemes/index.ts';
 export * from './notLength/index.ts';
