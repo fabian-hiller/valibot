@@ -21,17 +21,11 @@ Migrating from [Zod](https://zod.dev/) to Valibot is very easy in most cases sin
 
 To make the migration as smoth as possible, we have created an official codemod that automatically migrates your Zod schemas to Valibot. Just copy your schemas into this editor and click play.
 
+> The codemod is still in beta and may not cover all edge cases. If you encounter any problems or unexpected behaviour, please create an [issue](https://github.com/fabian-hiller/valibot/issues/new). Alternatively, you can try to fix any issues yourself and create a [pull request](https://github.com/fabian-hiller/valibot/pulls). You can find the source code [here](https://github.com/fabian-hiller/valibot/tree/main/codemod/zod-to-valibot).
+
 <CodemodEditor />
 
-To execute the codemod locally, simply run the following command from within your project's repository.
-
-> We recommend using a version control system like [Git](https://git-scm.com/) so that you can revert changes if the codemod screws something up.
-
-```bash
-npx codemod valibot/zod-to-valibot
-```
-
-If you encounter any problems or unexpected behaviour, please create an [issue](https://github.com/fabian-hiller/valibot/issues/new). Alternatively, you can try to fix any issues yourself and create a [pull request](https://github.com/fabian-hiller/valibot/pulls). You can find the source code [here](https://github.com/fabian-hiller/valibot/tree/main/codemod/zod-to-valibot).
+You will soon be able to also run the codemod locally in your terminal to migrate your entire codebase at once. Stay tuned!
 
 ## Replace imports
 

@@ -3,6 +3,7 @@ import { qwikVite } from '@builder.io/qwik/optimizer';
 import rehypePrism from '@mapbox/rehype-prism';
 import rehypeExternalLinks from 'rehype-external-links';
 import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => {
@@ -25,6 +26,7 @@ export default defineConfig(() => {
       }),
       qwikVite(),
       tsconfigPaths(),
+      nodePolyfills(),
     ],
     preview: {
       headers: {

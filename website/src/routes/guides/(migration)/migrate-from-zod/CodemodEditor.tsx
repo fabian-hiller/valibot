@@ -5,7 +5,9 @@ import {
   useSignal,
   useVisibleTask$,
 } from '@builder.io/qwik';
+import jscodeshift from 'jscodeshift';
 import * as monaco from 'monaco-editor';
+import transform from 'zod-to-valibot';
 import { CodeEditor, IconButton } from '~/components';
 import { useResetSignal } from '~/hooks';
 import { CheckIcon, CopyIcon, PlayIcon } from '~/icons';
@@ -43,9 +45,21 @@ export const CodemodEditor = component$(() => {
   /**
    * Executes the codemod to converts the current code.
    */
-  const executeCodemod = $(() => {
-    // TODO: Execute codemod with current code
-    const result = model.value!.getValue() + '\n// Test\n';
+  const executeCodemod = $(async () => {
+    // Get current code from editor model
+    const currentCode = model.value!.getValue();
+
+    // Execute codemod with current code
+    const transformedCode = await transform(
+      { path: 'index.ts', source: currentCode },
+      {
+        j: jscodeshift.withParser('ts'),
+        jscodeshift,
+        stats: () => {},
+        report: () => {},
+      },
+      {}
+    );
 
     // Replace current code with result of codemod
     model.value!.pushEditOperations(
@@ -53,7 +67,7 @@ export const CodemodEditor = component$(() => {
       [
         {
           range: model.value!.getFullModelRange(),
-          text: result,
+          text: transformedCode ?? currentCode,
         },
       ],
       () => null
