@@ -1,5 +1,5 @@
 import j from 'jscodeshift';
-import { assertNever, ElementFrom, getIsTypeFn } from '../../utils';
+import { assertNever, getIsTypeFn } from '../../utils';
 import {
   ZOD_METHODS,
   ZOD_PROPERTIES,
