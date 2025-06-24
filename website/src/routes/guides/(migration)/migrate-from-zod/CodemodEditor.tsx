@@ -78,7 +78,7 @@ export const CodemodEditor = component$(() => {
   });
 
   return (
-    <div class="relative flex aspect-video">
+    <div class="relative flex aspect-square sm:aspect-video">
       <CodeEditor
         class="border-y-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800"
         value={{ value: zodCode }}
