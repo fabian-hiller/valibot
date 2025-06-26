@@ -12,6 +12,7 @@ import {
   useVisibleTask$,
 } from '@builder.io/qwik';
 import { isBrowser } from '@builder.io/qwik/build';
+import clsx from 'clsx';
 import * as monaco from 'monaco-editor';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -30,16 +31,17 @@ import valibotToJsonSchemaPackageJson from '../../../packages/to-json-schema/pac
 import typescriptTm from '../json/TypeScript.tmLanguage.json';
 
 type CodeEditorProps = {
+  class: string;
   value: Signal<string>;
   model: Signal<NoSerialize<monaco.editor.ITextModel>>;
-  onSave$: QRL<() => void>;
+  onSave$?: QRL<() => void>;
 };
 
 /**
  * Monaco code editor with TypeScript support and syntax highlighting.
  */
 export const CodeEditor = component$<CodeEditorProps>(
-  ({ value, model, onSave$ }) => {
+  ({ value, model, onSave$, ...props }) => {
     // Use theme
     const theme = useTheme();
 
@@ -159,7 +161,7 @@ export const CodeEditor = component$<CodeEditorProps>(
         }
 
         // Execute save event
-        onSave$();
+        onSave$?.();
       }
     });
 
@@ -174,7 +176,7 @@ export const CodeEditor = component$<CodeEditorProps>(
 
     return (
       <div
-        class="w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:dark:border-slate-800"
+        class={clsx('w-full', props.class)}
         ref={element}
         window:onResize$={updateDeviceOptions}
         onKeyDown$={[preventDefault, handleKeyDown]}

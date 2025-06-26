@@ -11,9 +11,10 @@ export function transformImports(
   root: Collection<unknown>
 ): TransformImportsReturn {
   // Find all Zod import statements
-  const zodImports = root.find(j.ImportDeclaration, {
-    source: { value: 'zod' },
-  });
+  const zodImports = root.find(
+    j.ImportDeclaration,
+    (name) => name.source.value === 'zod' || name.source.value === 'zod/v4'
+  );
   // Check the number of statements is exactly one
   const importNodes = zodImports.nodes();
   if (importNodes.length !== 1) {

@@ -15,13 +15,14 @@
     "valibot",
     "schema"
   ],
-  "type": "commonjs",
-  "main": "./dist/transform/index.js",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsdown",
     "codemod": "jscodeshift",
     "test": "vitest"
   },
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/jscodeshift": "17.3.0",
     "@types/node": "^22.13.13",
+    "tsdown": "^0.12.4",
     "typescript": "^5.8.2",
     "vitest": "^3.0.9"
   }
