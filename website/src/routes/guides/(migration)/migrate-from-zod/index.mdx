@@ -130,7 +130,7 @@ For individual error messages, you can pass a string or an object to Zod. It als
 
 ```ts
 // Change this
-const SchemaSchema = z
+const StringSchema = z
   .string({ invalid_type_error: 'Not a string' })
   .min(5, { message: 'Too short' });
 
