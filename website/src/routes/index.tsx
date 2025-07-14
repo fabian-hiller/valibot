@@ -47,7 +47,7 @@ export default component$(() => {
     <main class="flex flex-1 flex-col items-center space-y-24 py-24 md:space-y-36 md:py-36 xl:space-y-52 xl:py-52">
       {/* Pitch */}
       <section class="px-4 text-center">
-        <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] md:leading-normal lg:text-[40px] lg:leading-normal xl:text-5xl xl:leading-normal dark:text-slate-200">
+        <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] lg:text-[40px] xl:text-5xl dark:text-slate-200">
           <span class="block">
             Validate{' '}
             <span class="cursor-default blur-[1px] duration-[2s] hover:blur-none xl:blur-[2px]">
@@ -59,7 +59,7 @@ export default component$(() => {
           </span>{' '}
           with confidence
         </h1>
-        <p class="mt-6 leading-loose md:mt-10 md:text-[17px] md:leading-loose lg:mt-14 lg:text-lg lg:leading-loose xl:text-[22px] xl:leading-loose">
+        <p class="mt-6 leading-loose md:mt-10 md:text-[17px] lg:mt-14 lg:text-lg xl:text-[22px] xl:leading-loose">
           <span class="sm:block">
             Valibot is the open source schema library for TypeScript with bundle
           </span>{' '}
@@ -282,7 +282,7 @@ export default component$(() => {
                   class="overflow-hidden"
                   expanded={isOpen}
                 >
-                  <p class="pt-6 leading-loose md:pt-7 md:text-lg md:leading-loose lg:pt-8 lg:text-xl lg:leading-loose">
+                  <p class="pt-6 leading-loose md:pt-7 md:text-lg lg:pt-8 lg:text-xl lg:leading-loose">
                     <Text />
                   </p>
                 </Expandable>

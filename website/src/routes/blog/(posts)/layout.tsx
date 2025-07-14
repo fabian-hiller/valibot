@@ -14,7 +14,7 @@ export default component$(() => {
       <article class="max-w-(--breakpoint-xl) flex w-full flex-col space-y-12 md:space-y-20 lg:space-y-24">
         <div class="max-w-(--breakpoint-md) mx-8 flex flex-col space-y-5 md:items-center md:space-y-7 md:self-center lg:mx-10 lg:space-y-9">
           {/* Title */}
-          <h1 class="text-2xl font-medium leading-normal text-slate-900 md:text-center md:text-3xl md:leading-normal lg:text-4xl lg:leading-normal dark:text-slate-200">
+          <h1 class="text-2xl font-medium leading-normal text-slate-900 md:text-center md:text-3xl lg:text-4xl dark:text-slate-200">
             {head.title}
           </h1>
 
