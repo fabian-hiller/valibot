@@ -1,7 +1,24 @@
 /* Tailwind CSS */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-lexend: 'Lexend', ui-sans-serif, system-ui, sans-serif;
+  --font-lexend-exa: 'Lexend Exa', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom utils */
+@utility focus-ring {
+  @apply focus-visible:outline-2 focus-visible:outline-sky-600/50 focus-visible:ring-4 focus-visible:ring-sky-600/10 focus-visible:ring-offset-[3px] focus-visible:ring-offset-white dark:focus-visible:outline-sky-400/50 dark:focus-visible:ring-sky-400/10 dark:focus-visible:ring-offset-gray-900;
+}
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 /* Base layer */
 @layer base {
@@ -24,11 +41,11 @@
   /* Scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.slate.300') theme('colors.transparent');
+    scrollbar-color: var('--colors-slate-300') var('--colors-transparent');
   }
   .dark,
   .dark * {
-    scrollbar-color: theme('colors.slate.700') theme('colors.transparent');
+    scrollbar-color: var('--colors-slate-700') var('--colors-transparent');
   }
 
   /* Monaco editor */
@@ -127,7 +144,7 @@
     @apply w-full md:text-lg lg:text-xl;
   }
   .mdx tbody tr {
-    @apply border-t-[1px] border-t-slate-200 lg:border-t-2 dark:border-t-slate-800;
+    @apply border-t border-t-slate-200 lg:border-t-2 dark:border-t-slate-800;
   }
   .mdx th {
     @apply text-left font-medium text-slate-700 dark:text-slate-300;
@@ -170,23 +187,5 @@
   }
   .mdx > * + h2 {
     @apply mt-12 md:mt-14 lg:mt-16;
-  }
-}
-
-/* Component layer */
-@layer components {
-  .focus-ring {
-    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-600/50 focus-visible:ring-4 focus-visible:ring-sky-600/10 focus-visible:ring-offset-[3px] focus-visible:ring-offset-white dark:focus-visible:outline-sky-400/50 dark:focus-visible:ring-sky-400/10 dark:focus-visible:ring-offset-gray-900;
-  }
-}
-
-/* Util layer */
-@layer utilities {
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 }

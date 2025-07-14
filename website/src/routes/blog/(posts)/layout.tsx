@@ -11,8 +11,8 @@ export default component$(() => {
   return (
     <main class="flex flex-1 flex-col items-center py-12 md:py-20 lg:py-32">
       {/* Article */}
-      <article class="flex w-full max-w-screen-xl flex-col space-y-12 md:space-y-20 lg:space-y-24">
-        <div class="mx-8 flex max-w-screen-md flex-col space-y-5 md:items-center md:space-y-7 md:self-center lg:mx-10 lg:space-y-9">
+      <article class="max-w-(--breakpoint-xl) flex w-full flex-col space-y-12 md:space-y-20 lg:space-y-24">
+        <div class="max-w-(--breakpoint-md) mx-8 flex flex-col space-y-5 md:items-center md:space-y-7 md:self-center lg:mx-10 lg:space-y-9">
           {/* Title */}
           <h1 class="text-2xl font-medium leading-normal text-slate-900 md:text-center md:text-3xl md:leading-normal lg:text-4xl lg:leading-normal dark:text-slate-200">
             {head.title}
@@ -30,7 +30,7 @@ export default component$(() => {
         <PostCover variant="post" label={head.frontmatter.cover} />
 
         {/* Content */}
-        <div class="mdx flex w-full max-w-screen-lg flex-col lg:self-center">
+        <div class="mdx max-w-(--breakpoint-lg) flex w-full flex-col lg:self-center">
           <Slot />
 
           {/* Edit page buttton */}
@@ -48,7 +48,7 @@ export default component$(() => {
       </article>
 
       {/* Credits */}
-      <div class="w-full max-w-screen-lg">
+      <div class="max-w-(--breakpoint-lg) w-full">
         <Credits />
       </div>
     </main>

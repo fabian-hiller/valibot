@@ -50,7 +50,7 @@ export const usePosts = routeLoader$(async () =>
 export default component$(() => {
   const posts = usePosts();
   return (
-    <main class="flex w-full max-w-screen-lg flex-1 flex-col self-center py-12 md:py-20 lg:py-32">
+    <main class="max-w-(--breakpoint-lg) flex w-full flex-1 flex-col self-center py-12 md:py-20 lg:py-32">
       <div class="mdx">
         <h1>Blog</h1>
         <p>

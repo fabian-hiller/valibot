@@ -237,7 +237,7 @@ export default component$(() => {
           onSave$={saveCode}
         />
         <EditorButtons
-          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:z-10 lg:!flex"
+          class="hidden! lg:absolute! lg:flex! lg:right-10 lg:top-10 lg:z-10"
           model={model}
           executeCode$={executeCode}
         />
@@ -262,7 +262,7 @@ export default component$(() => {
           executeCode$={executeCode}
         />
         <IconButton
-          class="!absolute right-8 top-8 z-10 lg:right-10 lg:top-10"
+          class="absolute! right-8 top-8 z-10 lg:right-10 lg:top-10"
           type="button"
           variant="secondary"
           label="Clear logs"

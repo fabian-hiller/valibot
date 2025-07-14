@@ -81,7 +81,9 @@ export const DocsLayout = component$(() => {
     <div
       class={clsx(
         'flex w-full flex-1 flex-col-reverse self-center lg:flex-row',
-        showChapters.value ? 'max-w-screen-2xl' : 'max-w-screen-xl'
+        showChapters.value
+          ? 'max-w-(--breakpoint-2xl)'
+          : 'max-w-(--breakpoint-xl)'
       )}
     >
       {/* Side bar navigation */}

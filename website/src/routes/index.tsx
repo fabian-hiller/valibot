@@ -270,7 +270,7 @@ export default component$(() => {
                     </span>
                     <PlusIcon
                       class={clsx(
-                        'mt-1.5 h-4 flex-shrink-0 transition-transform lg:h-5',
+                        'mt-1.5 h-4 shrink-0 transition-transform lg:h-5',
                         isOpen && 'rotate-45'
                       )}
                       stroke-width={6}
