@@ -88,7 +88,7 @@ export const DocsLayout = component$(() => {
     >
       {/* Side bar navigation */}
       <SideBar class="lg:max-h-[calc(100vh-70px)]" toggle={sideBarToggle}>
-        <div q:slot="buttons" class="mr-4 flex space-x-6 lg:hidden">
+        <div q:slot="buttons" class="mr-4 flex gap-6 lg:hidden">
           <NavButtons
             pageIndex={navIndex.value}
             sourcePath={documentHead.frontmatter.source}
@@ -113,7 +113,7 @@ export const DocsLayout = component$(() => {
         {/* Navigation buttons */}
         <nav
           class={clsx(
-            'hidden px-8 lg:absolute lg:flex lg:space-x-6 lg:px-10',
+            'hidden px-8 lg:absolute lg:flex lg:gap-6 lg:px-10',
             showChapters.value ? 'lg:right-9' : 'lg:right-0'
           )}
         >

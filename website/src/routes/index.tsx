@@ -44,7 +44,7 @@ export default component$(() => {
   );
 
   return (
-    <main class="flex flex-1 flex-col items-center space-y-24 py-24 md:space-y-36 md:py-36 xl:space-y-52 xl:py-52">
+    <main class="flex flex-1 flex-col items-center gap-24 py-24 md:gap-36 md:py-36 xl:gap-52 xl:py-52">
       {/* Pitch */}
       <section class="px-4 text-center">
         <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] lg:text-[40px] xl:text-5xl dark:text-slate-200">
@@ -155,12 +155,12 @@ export default component$(() => {
           ].map(({ emoji, heading, text }) => (
             <li
               key={emoji}
-              class="flex flex-col items-center space-y-6 text-center md:space-y-7 lg:max-w-[45%] lg:flex-row lg:items-start lg:space-x-8 lg:space-y-0 lg:text-left"
+              class="flex flex-col items-center gap-6 text-center md:gap-7 lg:max-w-[45%] lg:flex-row lg:items-start lg:gap-8 lg:text-left"
             >
               <div class="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-2xl bg-sky-600/10 text-2xl dark:bg-sky-400/5">
                 {emoji}
               </div>
-              <div class="max-w-[370px] space-y-4 md:space-y-5">
+              <div class="flex max-w-[370px] flex-col gap-4 md:gap-5">
                 <h3 class="text-lg font-medium text-slate-900 md:text-xl dark:text-slate-200">
                   {heading}
                 </h3>
@@ -172,11 +172,11 @@ export default component$(() => {
       </section>
 
       {/* FAQ */}
-      <section class="space-y-14 md:max-w-4xl md:space-y-20 lg:space-y-32">
+      <section class="flex flex-col gap-14 md:max-w-4xl md:gap-20 lg:gap-32">
         <h2 class="px-4 text-center text-xl font-medium text-slate-900 md:text-2xl lg:text-3xl xl:text-4xl dark:text-slate-200">
           Frequently asked questions
         </h2>
-        <ul class="space-y-12 md:space-y-14 lg:space-y-16">
+        <ul class="flex flex-col gap-12 md:gap-14 lg:gap-16">
           {[
             {
               heading: 'Where can I enter my credit card?',
@@ -255,7 +255,7 @@ export default component$(() => {
                   <input type="hidden" name="index" value={index} />
                   <button
                     class={clsx(
-                      'focus-ring flex w-full justify-between space-x-4 rounded-md transition-colors focus-visible:outline-offset-[6px] focus-visible:ring-offset-8',
+                      'focus-ring flex w-full justify-between gap-4 rounded-md transition-colors focus-visible:outline-offset-[6px] focus-visible:ring-offset-8',
                       isOpen
                         ? 'text-sky-600 dark:text-sky-400'
                         : 'text-slate-800 hover:text-slate-700 dark:text-slate-300 hover:dark:text-slate-400'

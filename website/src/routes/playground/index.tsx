@@ -224,7 +224,7 @@ export default component$(() => {
 
   return (
     <main
-      class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-5 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-7 2xl:self-center"
+      class="flex w-full flex-1 flex-col lg:flex-row lg:gap-5 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:gap-7 2xl:self-center"
       window:onMessage$={captureLogs}
       window:onKeyDown$={[preventDefault, handleKeyDown]}
       window:onResize$={resetSideBarWidth}
@@ -381,7 +381,7 @@ const EditorButtons = component$<EditorButtonsProps>(
     });
 
     return (
-      <div class={clsx('flex space-x-6', props.class)}>
+      <div class={clsx('flex gap-6', props.class)}>
         <IconButton
           type="button"
           variant="secondary"

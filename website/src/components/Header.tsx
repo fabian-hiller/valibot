@@ -116,7 +116,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         </div>
 
         {/* Icon buttons (mobile) */}
-        <div class="flex items-center space-x-4 lg:hidden">
+        <div class="flex items-center gap-4 lg:hidden">
           <DiscordIconLink />
           <GitHubIconLink />
           <ThemeToggle />
@@ -127,7 +127,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         {/* Main menu */}
         <nav
           class={clsx(
-            'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:space-x-6 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 xl:space-x-12 lg:dark:bg-transparent',
+            'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:gap-5 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 xl:gap-6 lg:dark:bg-transparent',
             !isOpen.value && 'invisible scale-y-0 lg:visible lg:scale-y-100',
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             (isOpen.value && 'bg-white dark:bg-gray-900') ||
@@ -159,7 +159,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         </nav>
 
         {/* Icon buttons (desktop) */}
-        <div class="hidden lg:flex lg:w-64 lg:items-center lg:justify-end lg:space-x-6">
+        <div class="hidden lg:flex lg:w-64 lg:items-center lg:justify-end lg:gap-6">
           <SearchToggle open={searchOpen} />
           <ThemeToggle />
           <div

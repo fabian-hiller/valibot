@@ -453,7 +453,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                 recent.value!.length ? (
                   <>
                     <div class="text-sm md:text-base">Recent</div>
-                    <ul class="mt-6 space-y-2.5">
+                    <ul class="mt-6 flex flex-col gap-2.5">
                       {recent.value.map((item, index) => (
                         <li key={item.path + item.text}>
                           <SearchItem
