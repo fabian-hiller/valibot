@@ -27,7 +27,7 @@ export default defineConfig(() => {
       }),
       qwikVite(),
       tsconfigPaths(),
-      nodePolyfills({ include: ['assert'] }),
+      nodePolyfills(),
       tailwindcss(),
     ],
     preview: {
