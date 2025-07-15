@@ -81,8 +81,8 @@ export default component$(() => {
         </ButtonGroup>
         <div class="absolute left-0 top-0 -z-10 flex w-full justify-center overflow-x-clip">
           <div class="relative w-full xl:w-0">
-            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.yellow.500/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px] dark:bg-[radial-gradient(theme(colors.yellow.300/.08),transparent_70%)]" />
-            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)]" />
+            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(--color-yellow-500/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px] dark:bg-[radial-gradient(theme(--color-yellow-300/.08),transparent_70%)]" />
+            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(--color-sky-600/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px] dark:bg-[radial-gradient(theme(--color-sky-400/.08),transparent_70%)]" />
           </div>
         </div>
       </section>

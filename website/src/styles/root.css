@@ -41,11 +41,11 @@
   /* Scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.slate.300') transparent;
+    scrollbar-color: var(--color-slate-300) transparent;
   }
   .dark,
   .dark * {
-    scrollbar-color: theme('colors.slate.700') transparent;
+    scrollbar-color: var(--color-slate-700) transparent;
   }
 
   /* Monaco editor */
