@@ -1,6 +1,7 @@
 import type {
   BaseIssue,
   BaseTransformation,
+  MaybeReadonly,
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
@@ -9,8 +10,8 @@ import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
  * String to boolean options.
  */
 export interface StringboolOptions {
-  truthy?: string[];
-  falsy?: string[];
+  truthy?: MaybeReadonly<string[]>;
+  falsy?: MaybeReadonly<string[]>;
   /**
    * Options: `"sensitive"`, `"insensitive"`
    *
@@ -49,7 +50,7 @@ export interface StringboolIssue<TInput> extends BaseIssue<TInput> {
 export interface StringboolAction<
   TInput,
   TOptions extends StringboolOptions = StringboolOptions,
-> extends BaseTransformation<TInput, boolean, never> {
+> extends BaseTransformation<TInput, boolean, StringboolIssue<TInput>> {
   /**
    * The action type.
    */
@@ -76,9 +77,10 @@ export interface StringboolAction<
  * @returns A string to boolean action.
  */
 // @__NO_SIDE_EFFECTS__
-export function stringbool<TInput>(
-  options?: StringboolOptions
-): StringboolAction<TInput, StringboolOptions> {
+export function stringbool<
+  TInput,
+  TOptions extends StringboolOptions = StringboolOptions,
+>(options?: TOptions): StringboolAction<TInput, TOptions> {
   let truthyValues = options?.truthy ?? defaultOptions.truthy;
   let falsyValues = options?.falsy ?? defaultOptions.falsy;
   const caseOption = options?.case ?? defaultOptions.case;
@@ -100,7 +102,7 @@ export function stringbool<TInput>(
     truthy: truthyValues,
     falsy: falsyValues,
     case: caseOption,
-  };
+  } as TOptions;
 
   return {
     kind: 'transformation',
