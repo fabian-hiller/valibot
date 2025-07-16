@@ -6,14 +6,28 @@ import {
 } from './toBigint.ts';
 
 describe('toBigint', () => {
-  test('should return action object', () => {
-    expect(toBigint()).toStrictEqual({
-      kind: 'transformation',
-      type: 'to_bigint',
-      reference: toBigint,
-      async: false,
-      '~run': expect.any(Function),
-    } satisfies ToBigintAction<bigint>);
+  describe('should return action object', () => {
+    test('without message', () => {
+      expect(toBigint()).toStrictEqual({
+        kind: 'transformation',
+        type: 'to_bigint',
+        reference: toBigint,
+        async: false,
+        message: undefined,
+        '~run': expect.any(Function),
+      } satisfies ToBigintAction<bigint, undefined>);
+    });
+
+    test('with message', () => {
+      expect(toBigint('message')).toStrictEqual({
+        kind: 'transformation',
+        type: 'to_bigint',
+        reference: toBigint,
+        async: false,
+        message: 'message',
+        '~run': expect.any(Function),
+      } satisfies ToBigintAction<bigint, string>);
+    });
   });
 
   describe('should transform to bigint', () => {

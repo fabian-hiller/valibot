@@ -7,12 +7,22 @@ import {
 } from './toBigint.ts';
 
 describe('toBigint', () => {
-  test('should return action object', () => {
-    expectTypeOf(toBigint<'123'>()).toEqualTypeOf<ToBigintAction<'123'>>();
+  describe('should return action object', () => {
+    test('without message', () => {
+      expectTypeOf(toBigint<bigint>()).toEqualTypeOf<
+        ToBigintAction<bigint, undefined>
+      >();
+    });
+
+    test('with message', () => {
+      expectTypeOf(toBigint<bigint, 'message'>('message')).toEqualTypeOf<
+        ToBigintAction<bigint, 'message'>
+      >();
+    });
   });
 
   describe('should infer correct types', () => {
-    type Action = ToBigintAction<'123'>;
+    type Action = ToBigintAction<'123', undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<'123'>();
