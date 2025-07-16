@@ -1,6 +1,6 @@
 import type { PropertyProps } from '~/components';
 
-const properties: Record<string, PropertyProps> = {
+export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
@@ -76,5 +76,3 @@ const properties: Record<string, PropertyProps> = {
     },
   },
 };
-
-export default properties;
