@@ -66,6 +66,7 @@ export function defineTests(transform: Transform, selectedTests?: string[]) {
         { j, jscodeshift: j, stats: () => {}, report: () => {} },
         {}
       );
+      fs.writeFileSync(path.join(testPath, '_actual.ts'), output?.trim() ?? '');
       expect(output?.trim()).toBe(expectedOutput.trim());
     });
   }
