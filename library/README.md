@@ -65,7 +65,7 @@ In addition, it allows you to easily extend my functionality with external code 
 
 Thanks to our partners who support my development! [Join them](https://github.com/sponsors/fabian-hiller) and contribute to the sustainability of open source software!
 
-![Partners of Valibot](https://github.com/fabian-hiller/valibot/blob/main/partners.jpg?raw=true)
+![Partners of Valibot](https://github.com/fabian-hiller/valibot/blob/main/partners.webp?raw=true)
 
 ## Credits
 
