@@ -7,6 +7,6 @@ export function transformOr(
 ) {
   return j.callExpression(
     j.memberExpression(j.identifier(valibotIdentifier), j.identifier('union')),
-    [schemaExp, ...inputArgs]
+    [j.arrayExpression([schemaExp, ...inputArgs])]
   );
 }
