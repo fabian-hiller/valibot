@@ -21,15 +21,11 @@ export function transformStrict(
       schemaExp.arguments
     );
   }
-  return addToPipe(
-    valibotIdentifier,
-    schemaExp,
-    j.callExpression(
-      j.memberExpression(
-        j.identifier(valibotIdentifier),
-        j.identifier('strict')
-      ),
-      []
-    )
+  return j.callExpression(
+    j.memberExpression(
+      j.identifier(valibotIdentifier),
+      j.identifier('strictObject')
+    ),
+    [j.memberExpression(schemaExp, j.identifier('entries'))]
   );
 }

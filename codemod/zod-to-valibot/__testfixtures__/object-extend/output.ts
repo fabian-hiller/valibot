@@ -16,19 +16,15 @@ const Schema8 = v.pipe(v.extend(Schema2, {bar: v.string()}), v.passthrough());
 const Schema9 = v.extend(v.strictObject({foo: v.string()}), {bar: v.number()});
 const Schema10 = v.strictObject({foo: v.number()});
 const Schema11 = v.extend(Schema10, {bar: v.string()});
-const Schema12 = v.pipe(v.extend(v.object({foo: v.string()}), {bar: v.number()}), v.strict());
-const Schema13 = v.pipe(v.extend(Schema2, {bar: v.string()}), v.strict());
+const Schema12 = v.strictObject(v.extend(v.object({foo: v.string()}), {bar: v.number()}).entries);
+const Schema13 = v.strictObject(v.extend(Schema2, {bar: v.string()}).entries);
 
 // strip
 const Schema14 = v.extend(v.object({foo: v.string()}), {bar: v.number()});
 const Schema15 = v.object({foo: v.number()});
 const Schema16 = v.extend(Schema15, {bar: v.string()});
-const Schema17 = v.pipe(
-  v.extend(v.object({foo: v.string()}), {bar: v.number()}),
-  v.strict(),
-  v.strip()
-);
-const Schema18 = v.pipe(v.extend(Schema2, {bar: v.string()}), v.strict(), v.strip());
+const Schema17 = v.object(v.extend(v.object({foo: v.string()}), {bar: v.number()}).entries);
+const Schema18 = v.object(v.extend(Schema2, {bar: v.string()}).entries);
 
 // catchall
 const Schema19 = v.extend(v.objectWithRest({foo: v.string()}, v.null()), {bar: v.number()});
