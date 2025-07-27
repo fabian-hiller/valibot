@@ -23,6 +23,7 @@ import {
   transformNullish,
   transformOmit,
   transformOptional as transformOptionalMethod,
+  transformOr,
   transformParse,
   transformParseAsync,
   transformPartial,
@@ -359,6 +360,8 @@ function toValibotMethodExp(
       return transformKeyof(...args);
     case 'omit':
       return transformOmit(...args);
+    case 'or':
+      return transformOr(...args);
     case 'optional':
       return transformOptionalMethod(...args);
     case 'merge':
