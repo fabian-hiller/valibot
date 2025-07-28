@@ -5,6 +5,38 @@ export function transformStrict(
   valibotIdentifier: string,
   schemaExp: j.CallExpression | j.MemberExpression | j.Identifier
 ) {
+  // If the schema is already a strictObject, return it as-is (no-op)
+  if (
+    schemaExp.type === 'CallExpression' &&
+    schemaExp.callee.type === 'MemberExpression' &&
+    schemaExp.callee.object.type === 'Identifier' &&
+    schemaExp.callee.object.name === valibotIdentifier &&
+    schemaExp.callee.property.type === 'Identifier' &&
+    schemaExp.callee.property.name === 'strictObject'
+  ) {
+    return schemaExp;
+  }
+  
+  // If the schema is a pipe with strictObject, return it as-is (no-op)
+  if (
+    schemaExp.type === 'CallExpression' &&
+    schemaExp.callee.type === 'MemberExpression' &&
+    schemaExp.callee.object.type === 'Identifier' &&
+    schemaExp.callee.object.name === valibotIdentifier &&
+    schemaExp.callee.property.type === 'Identifier' &&
+    schemaExp.callee.property.name === 'pipe' &&
+    schemaExp.arguments.length > 0 &&
+    schemaExp.arguments[0].type === 'CallExpression' &&
+    schemaExp.arguments[0].callee.type === 'MemberExpression' &&
+    schemaExp.arguments[0].callee.object.type === 'Identifier' &&
+    schemaExp.arguments[0].callee.object.name === valibotIdentifier &&
+    schemaExp.arguments[0].callee.property.type === 'Identifier' &&
+    schemaExp.arguments[0].callee.property.name === 'strictObject'
+  ) {
+    return schemaExp;
+  }
+  
+  // Transform regular object to strictObject
   if (
     schemaExp.type === 'CallExpression' &&
     schemaExp.callee.type === 'MemberExpression' &&
@@ -21,6 +53,8 @@ export function transformStrict(
       schemaExp.arguments
     );
   }
+  
+  // Handle other cases (like previously defined schemas)
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
