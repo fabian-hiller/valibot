@@ -54,12 +54,24 @@ export function transformPassthrough(
     );
   }
 
+  const entries = j.memberExpression(schemaExp, j.identifier('entries'));
+
+  if (schemaExp.type === 'Identifier') {
+    entries.comments = [
+      j.block(
+        `@valibot-migrate we can't detect if ${schemaExp.name} has a \`pipe\` operator, if it does you might need to migrate this by hand otherwise it will loose it's pipeline`,
+        true,
+        false
+      ),
+    ];
+  }
+
   // Handle other cases (like previously defined schemas)
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
       j.identifier('looseObject')
     ),
-    [j.memberExpression(schemaExp, j.identifier('entries'))]
+    [entries]
   );
 }

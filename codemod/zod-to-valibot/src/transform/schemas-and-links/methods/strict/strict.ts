@@ -16,7 +16,7 @@ export function transformStrict(
   ) {
     return schemaExp;
   }
-  
+
   // If the schema is a pipe with strictObject, return it as-is (no-op)
   if (
     schemaExp.type === 'CallExpression' &&
@@ -35,7 +35,7 @@ export function transformStrict(
   ) {
     return schemaExp;
   }
-  
+
   // Transform regular object to strictObject
   if (
     schemaExp.type === 'CallExpression' &&
@@ -53,13 +53,25 @@ export function transformStrict(
       schemaExp.arguments
     );
   }
-  
+
+  const entries = j.memberExpression(schemaExp, j.identifier('entries'));
+
+  if (schemaExp.type === 'Identifier') {
+    entries.comments = [
+      j.block(
+        `@valibot-migrate we can't detect if ${schemaExp.name} has a \`pipe\` operator, if it does you might need to migrate this by hand otherwise it will loose it's pipeline`,
+        true,
+        false
+      ),
+    ];
+  }
+
   // Handle other cases (like previously defined schemas)
   return j.callExpression(
     j.memberExpression(
       j.identifier(valibotIdentifier),
       j.identifier('strictObject')
     ),
-    [j.memberExpression(schemaExp, j.identifier('entries'))]
+    [entries]
   );
 }
