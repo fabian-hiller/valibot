@@ -14,7 +14,7 @@ This package is particularly popular for:
 - **API Documentation**: Generate OpenAPI specifications from your Valibot schemas
 - **Code Generation**: Create client SDKs and types from your validation schemas
 - **LLM Integration**: Generate structured outputs for Large Language Models
-- **Schema Sharing**: Share validation logic between backend and frontend
+- **Schema Sharing**: Share validation logic between different programming languages
 
 > Some Valibot features can't be mapped to JSON schema. For example, transformation actions have no equivalent in JSON schema. Also, some Valibot schemas or validations are too JS-specific and do not have an equivalent JSON schema attribute.
 
@@ -363,7 +363,7 @@ toJsonSchemaDefs(
 // }
 ```
 
-### Global Definitions
+### Global definitions
 
 For advanced use cases, you can manage global schema definitions that will be automatically used when converting schemas. This is particularly useful for larger projects with many reusable schemas.
 
