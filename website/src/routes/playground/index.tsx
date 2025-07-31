@@ -224,7 +224,7 @@ export default component$(() => {
 
   return (
     <main
-      class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-5 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-7 2xl:self-center"
+      class="flex w-full flex-1 flex-col lg:flex-row lg:gap-5 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:gap-7 2xl:self-center"
       window:onMessage$={captureLogs}
       window:onKeyDown$={[preventDefault, handleKeyDown]}
       window:onResize$={resetSideBarWidth}
@@ -237,7 +237,7 @@ export default component$(() => {
           onSave$={saveCode}
         />
         <EditorButtons
-          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:z-10 lg:!flex"
+          class="hidden! lg:absolute! lg:flex! lg:right-10 lg:top-10 lg:z-10"
           model={model}
           executeCode$={executeCode}
         />
@@ -262,7 +262,7 @@ export default component$(() => {
           executeCode$={executeCode}
         />
         <IconButton
-          class="!absolute right-8 top-8 z-10 lg:right-10 lg:top-10"
+          class="absolute! right-8 top-8 z-10 lg:right-10 lg:top-10"
           type="button"
           variant="secondary"
           label="Clear logs"
@@ -381,7 +381,7 @@ const EditorButtons = component$<EditorButtonsProps>(
     });
 
     return (
-      <div class={clsx('flex space-x-6', props.class)}>
+      <div class={clsx('flex gap-6', props.class)}>
         <IconButton
           type="button"
           variant="secondary"
