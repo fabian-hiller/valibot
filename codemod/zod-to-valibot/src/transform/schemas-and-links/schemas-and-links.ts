@@ -140,6 +140,8 @@ function checkForObjectModifierInChain(
   cur: j.ASTPath<j.CallExpression>
 ): ObjectModifier {
   let parent = cur.parentPath;
+  let latestModifier: ObjectModifier = null;
+  
   while (parent) {
     if (
       parent.value.type === 'CallExpression' &&
@@ -147,8 +149,8 @@ function checkForObjectModifierInChain(
       parent.value.callee.property.type === 'Identifier'
     ) {
       const methodName = parent.value.callee.property.name;
-      if (methodName === 'strict' || methodName === 'passthrough') {
-        return methodName;
+      if (methodName === 'strict' || methodName === 'passthrough' || methodName === 'strip') {
+        latestModifier = methodName;
       }
     }
     if (
@@ -157,13 +159,13 @@ function checkForObjectModifierInChain(
       parent.parentPath?.value.type === 'CallExpression'
     ) {
       const methodName = parent.value.property.name;
-      if (methodName === 'strict' || methodName === 'passthrough') {
-        return methodName;
+      if (methodName === 'strict' || methodName === 'passthrough' || methodName === 'strip') {
+        latestModifier = methodName;
       }
     }
     parent = parent.parentPath;
   }
-  return null;
+  return latestModifier;
 }
 
 function toValibotSchemaExp(

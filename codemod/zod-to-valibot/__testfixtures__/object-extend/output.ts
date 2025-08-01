@@ -23,7 +23,7 @@ const Schema13 = v.strictObject(v.extend(Schema2, {bar: v.string()}).entries);
 const Schema14 = v.extend(v.object({foo: v.string()}), {bar: v.number()});
 const Schema15 = v.object({foo: v.number()});
 const Schema16 = v.extend(Schema15, {bar: v.string()});
-const Schema17 = v.object(v.extend(v.strictObject({foo: v.string()}), {bar: v.number()}).entries);
+const Schema17 = v.object(v.extend(v.object({foo: v.string()}), {bar: v.number()}).entries);
 const Schema18 = v.object(v.extend(Schema2, {bar: v.string()}).entries);
 
 // catchall
