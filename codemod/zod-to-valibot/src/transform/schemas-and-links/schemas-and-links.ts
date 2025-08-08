@@ -29,6 +29,7 @@ import {
   transformPartial,
   transformPassthrough,
   transformPick,
+  transformRefine,
   transformRequired,
   transformRest,
   transformSafeParse,
@@ -412,6 +413,8 @@ function toValibotMethodExp(
       return transformPassthrough(valibotIdentifier, schemaExp);
     case 'pick':
       return transformPick(...args);
+    case 'refine':
+      return transformRefine(...args);
     case 'required':
       return transformRequired(...args);
     case 'rest':

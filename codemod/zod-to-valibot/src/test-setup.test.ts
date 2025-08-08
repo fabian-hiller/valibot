@@ -56,6 +56,7 @@ defineTests(transform, [
   'parsing',
   'readonly',
   'record-schema',
+  'refine',
   'schema-chain',
   'schema-options',
   'set-schema',

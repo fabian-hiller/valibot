@@ -17,6 +17,7 @@ export * from './parseAsync';
 export * from './partial';
 export * from './passthrough';
 export * from './pick';
+export * from './refine';
 export * from './required';
 export * from './rest';
 export * from './safeParse';
