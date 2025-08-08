@@ -160,6 +160,7 @@ export const ZOD_METHODS = [
   'strict',
   'strip',
   'spa',
+  'transform',
   'unwrap',
 ] as const;
 

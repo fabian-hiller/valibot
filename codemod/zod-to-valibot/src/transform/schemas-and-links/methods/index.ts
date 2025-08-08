@@ -23,4 +23,5 @@ export * from './safeParse';
 export * from './safeParseAsync';
 export * from './strict';
 export * from './strip';
+export * from './transform';
 export * from './unwrap';

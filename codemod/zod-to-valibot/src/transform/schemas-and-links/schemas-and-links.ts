@@ -35,6 +35,7 @@ import {
   transformSafeParseAsync,
   transformStrict,
   transformStrip,
+  transformTransform,
   transformUnwrap,
 } from './methods';
 import {
@@ -424,6 +425,8 @@ function toValibotMethodExp(
       return transformStrict(valibotIdentifier, schemaExp);
     case 'strip':
       return transformStrip(valibotIdentifier, schemaExp);
+    case 'transform':
+      return transformTransform(...args);
     case 'unwrap':
       return transformUnwrap(...args);
     case 'nullish':

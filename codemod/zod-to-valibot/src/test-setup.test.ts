@@ -64,6 +64,7 @@ defineTests(transform, [
   'specific-namespace-import',
   'string-validation-methods',
   'symbol-schema',
+  'transform',
   'tuple-schema',
   'type-inference',
   'undefined-schema',
