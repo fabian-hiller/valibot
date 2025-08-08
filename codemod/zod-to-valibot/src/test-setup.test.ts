@@ -26,6 +26,7 @@ defineTests(transform, [
   'intersection-schema',
   'literal-schema',
   'map-schema',
+  'multiple-imports-from-zod',
   'named-import',
   'named-import-with-alias',
   'named-import-with-specific-alias',
