@@ -51,6 +51,7 @@ defineTests(transform, [
   'object-strict',
   'object-strip',
   'optional-schema',
+  'or',
   'parsing',
   'readonly',
   'record-schema',
