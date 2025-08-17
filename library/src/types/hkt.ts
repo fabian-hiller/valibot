@@ -7,16 +7,26 @@ export interface BaseHKT<TType extends string = string> {
   result: unknown;
 }
 
-export interface HKTable<THKT extends BaseHKT = BaseHKT> {
+export interface BaseHKTable<THKT extends BaseHKT = BaseHKT> {
   readonly '~hkt'?: THKT;
 }
 
-export type InferHKT<THKTable extends HKTable> = NonNullable<THKTable['~hkt']>;
+export type InferHKT<
+  THKTable extends BaseHKTable,
+  TType extends string = string,
+> = Extract<NonNullable<THKTable['~hkt']>, { type: TType }>;
 
-export type CallHkt<
-  THKTable extends HKTable,
-  TArgs extends InferHKT<THKTable>['argConstraint'],
+export type CallHKT<
+  THKTable extends BaseHKTable,
+  TArgs extends InferHKT<THKTable, TType>['argConstraint'],
   TType extends InferHKT<THKTable>['type'] = InferHKT<THKTable>['type'],
-> = (Extract<InferHKT<THKTable>, { type: TType }> & {
+> = (InferHKT<THKTable, TType> & {
   rawArgs: TArgs;
 })['result'];
+
+export type HKTImplementation<
+  THKTable extends BaseHKTable,
+  TType extends string = string,
+> = (
+  ...args: InferHKT<THKTable>['argConstraint']
+) => CallHKT<THKTable, InferHKT<THKTable>['argConstraint'], TType> & THKTable;

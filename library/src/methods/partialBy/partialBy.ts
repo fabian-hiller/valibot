@@ -8,7 +8,12 @@ import {
   type StrictObjectIssue,
   type StrictObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseHKT, CallHkt, HKTable } from '../../types/hkt.ts';
+import type {
+  BaseHKT,
+  BaseHKTable,
+  CallHKT,
+  HKTImplementation,
+} from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -60,14 +65,14 @@ interface ModifierHKT extends BaseHKT<'partialBy'> {
  */
 type PartialByEntries<
   TEntries extends ObjectEntries,
-  TModifier extends HKTable<ModifierHKT>,
+  TModifier extends BaseHKTable<ModifierHKT>,
   TKeys extends readonly (keyof TEntries)[] | undefined,
 > = {
   [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
-      ? CallHkt<TModifier, [TEntries[TKey]], 'partialBy'>
+      ? CallHKT<TModifier, [TEntries[TKey]], 'partialBy'>
       : TEntries[TKey]
-    : CallHkt<TModifier, [TEntries[TKey]], 'partialBy'>;
+    : CallHKT<TModifier, [TEntries[TKey]], 'partialBy'>;
 };
 
 /**
@@ -75,7 +80,7 @@ type PartialByEntries<
  */
 export type SchemaWithPartialBy<
   TSchema extends Schema,
-  TModifier extends HKTable<ModifierHKT>,
+  TModifier extends BaseHKTable<ModifierHKT>,
   TKeys extends ObjectKeys<TSchema> | undefined,
 > = TSchema extends
   | ObjectSchema<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
@@ -255,7 +260,6 @@ export type SchemaWithPartialBy<
             | undefined;
         }
       : never;
-
 /**
  * Creates a modified copy of an object schema that applies a modifier to all entries.
  *
@@ -266,12 +270,10 @@ export type SchemaWithPartialBy<
  */
 export function partialBy<
   const TSchema extends Schema,
-  const TModifier extends HKTable<ModifierHKT>,
+  const TModifier extends BaseHKTable<ModifierHKT>,
 >(
   schema: TSchema,
-  modifier: (
-    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>
-  ) => BaseSchema<unknown, unknown, BaseIssue<unknown>> & TModifier
+  modifier: HKTImplementation<TModifier>
 ): SchemaWithPartialBy<TSchema, TModifier, undefined>;
 
 /**
@@ -286,31 +288,27 @@ export function partialBy<
 export function partialBy<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
-  const TModifier extends HKTable<ModifierHKT>,
+  const TModifier extends BaseHKTable<ModifierHKT>,
 >(
   schema: TSchema,
-  modifier: (
-    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>
-  ) => BaseSchema<unknown, unknown, BaseIssue<unknown>> & TModifier,
+  modifier: HKTImplementation<TModifier>,
   keys: TKeys
 ): SchemaWithPartialBy<TSchema, TModifier, TKeys>;
 
 // @__NO_SIDE_EFFECTS__
 export function partialBy(
   schema: Schema,
-  modifier: (
-    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>
-  ) => BaseSchema<unknown, unknown, BaseIssue<unknown>> & HKTable<ModifierHKT>,
+  modifier: HKTImplementation<BaseHKTable<ModifierHKT>>,
   keys?: ObjectKeys<Schema>
 ): SchemaWithPartialBy<
   Schema,
-  HKTable<ModifierHKT>,
+  BaseHKTable<ModifierHKT>,
   ObjectKeys<Schema> | undefined
 > {
   // Create modified object entries
   const entries: PartialByEntries<
     ObjectEntries,
-    HKTable<ModifierHKT>,
+    BaseHKTable<ModifierHKT>,
     ObjectKeys<Schema>
   > = {};
   for (const key in schema.entries) {
