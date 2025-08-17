@@ -9,11 +9,11 @@ import {
   type StrictObjectSchema,
 } from '../../schemas/index.ts';
 import type {
+  ApplyHKT,
   BaseHKT,
   BaseHKTable,
   BaseIssue,
   BaseSchema,
-  CallHKT,
   Config,
   ErrorMessage,
   HKTImplementation,
@@ -83,9 +83,9 @@ type RequiredByEntries<
 > = {
   [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
-      ? CallHKT<TModifier, [TEntries[TKey], TMessage], 'requiredBy'>
+      ? ApplyHKT<TModifier, [TEntries[TKey], TMessage], 'requiredBy'>
       : TEntries[TKey]
-    : CallHKT<TModifier, [TEntries[TKey], TMessage], 'requiredBy'>;
+    : ApplyHKT<TModifier, [TEntries[TKey], TMessage], 'requiredBy'>;
 };
 
 /**

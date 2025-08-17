@@ -9,11 +9,11 @@ import {
   type StrictObjectSchema,
 } from '../../schemas/index.ts';
 import type {
+  ApplyHKT,
   BaseHKT,
   BaseHKTable,
   BaseIssue,
   BaseSchema,
-  CallHKT,
   Config,
   ErrorMessage,
   HKTImplementation,
@@ -70,9 +70,9 @@ type PartialByEntries<
 > = {
   [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
-      ? CallHKT<TModifier, [TEntries[TKey]], 'partialBy'>
+      ? ApplyHKT<TModifier, [TEntries[TKey]], 'partialBy'>
       : TEntries[TKey]
-    : CallHKT<TModifier, [TEntries[TKey]], 'partialBy'>;
+    : ApplyHKT<TModifier, [TEntries[TKey]], 'partialBy'>;
 };
 
 /**

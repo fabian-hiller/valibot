@@ -20,7 +20,7 @@ export type InferHKT<
   TType extends string = string,
 > = Extract<NonNullable<THKTable['~hkt']>, { type: TType }>;
 
-export type CallHKT<
+export type ApplyHKT<
   THKTable extends BaseHKTable,
   TArgs extends InferHKT<THKTable, TType>['argConstraint'],
   TType extends InferHKT<THKTable>['type'] = InferHKT<THKTable>['type'],
@@ -33,4 +33,4 @@ export type HKTImplementation<
   TType extends string = string,
 > = (
   ...args: InferHKT<THKTable>['argConstraint']
-) => CallHKT<THKTable, InferHKT<THKTable>['argConstraint'], TType> & THKTable;
+) => ApplyHKT<THKTable, InferHKT<THKTable>['argConstraint'], TType> & THKTable;
