@@ -1,4 +1,6 @@
+import type { RequiredByModifierHKT } from '../../methods/requiredBy/requiredBy.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   ErrorMessage,
@@ -12,6 +14,11 @@ import type {
   NonNullableIssue,
 } from './types.ts';
 
+export interface NonNullableRequiredHKT extends RequiredByModifierHKT {
+  issue: NonNullableIssue;
+  result: NonNullableSchema<this['schema'], this['message']>;
+}
+
 /**
  * Non nullable schema interface.
  */
@@ -19,10 +26,11 @@ export interface NonNullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TMessage extends ErrorMessage<NonNullableIssue> | undefined,
 > extends BaseSchema<
-    InferNonNullableInput<TWrapped>,
-    InferNonNullableOutput<TWrapped>,
-    NonNullableIssue | InferNonNullableIssue<TWrapped>
-  > {
+      InferNonNullableInput<TWrapped>,
+      InferNonNullableOutput<TWrapped>,
+      NonNullableIssue | InferNonNullableIssue<TWrapped>
+    >,
+    BaseHKTable<NonNullableRequiredHKT> {
   /**
    * The schema type.
    */
@@ -104,5 +112,6 @@ export function nonNullable(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~hktType': 'requiredBy',
   };
 }

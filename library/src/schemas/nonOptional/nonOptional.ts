@@ -1,3 +1,5 @@
+import type { RequiredByModifierHKT } from '../../methods/requiredBy/requiredBy.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -12,6 +14,11 @@ import type {
   NonOptionalIssue,
 } from './types.ts';
 
+export interface NonOptionalRequiredHKT extends RequiredByModifierHKT {
+  issue: NonOptionalIssue;
+  result: NonOptionalSchema<this['schema'], this['message']>;
+}
+
 /**
  * Non optional schema interface.
  */
@@ -19,10 +26,11 @@ export interface NonOptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 > extends BaseSchema<
-    InferNonOptionalInput<TWrapped>,
-    InferNonOptionalOutput<TWrapped>,
-    NonOptionalIssue | InferNonOptionalIssue<TWrapped>
-  > {
+      InferNonOptionalInput<TWrapped>,
+      InferNonOptionalOutput<TWrapped>,
+      NonOptionalIssue | InferNonOptionalIssue<TWrapped>
+    >,
+    BaseHKTable<NonOptionalRequiredHKT> {
   /**
    * The schema type.
    */
@@ -104,5 +112,6 @@ export function nonOptional(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~hktType': 'requiredBy',
   };
 }
