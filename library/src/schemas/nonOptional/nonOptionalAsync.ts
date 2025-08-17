@@ -1,4 +1,6 @@
+import type { RequiredByModifierAsyncHKT } from '../../methods/requiredBy/requiredByAsync.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -14,6 +16,12 @@ import type {
   NonOptionalIssue,
 } from './types.ts';
 
+export interface NonOptionalRequiredAsyncHKT
+  extends RequiredByModifierAsyncHKT {
+  issue: NonOptionalIssue;
+  result: NonOptionalSchemaAsync<this['schema'], this['message']>;
+}
+
 /**
  * Non optional schema async interface.
  */
@@ -23,10 +31,11 @@ export interface NonOptionalSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferNonOptionalInput<TWrapped>,
-    InferNonOptionalOutput<TWrapped>,
-    NonOptionalIssue | InferNonOptionalIssue<TWrapped>
-  > {
+      InferNonOptionalInput<TWrapped>,
+      InferNonOptionalOutput<TWrapped>,
+      NonOptionalIssue | InferNonOptionalIssue<TWrapped>
+    >,
+    BaseHKTable<NonOptionalRequiredAsyncHKT> {
   /**
    * The schema type.
    */
@@ -118,5 +127,6 @@ export function nonOptionalAsync(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~hktType': 'requiredByAsync',
   };
 }

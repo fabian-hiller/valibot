@@ -21,6 +21,7 @@ export * from './partialBy/index.ts';
 export * from './pick/index.ts';
 export * from './pipe/index.ts';
 export * from './required/index.ts';
+export * from './requiredBy/index.ts';
 export * from './safeParse/index.ts';
 export * from './safeParser/index.ts';
 export * from './summarize/index.ts';

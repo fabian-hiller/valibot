@@ -1,4 +1,6 @@
+import type { RequiredByModifierAsyncHKT } from '../../methods/requiredBy/requiredByAsync.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -14,6 +16,12 @@ import type {
   NonNullableIssue,
 } from './types.ts';
 
+export interface NonNullableRequiredAsyncHKT
+  extends RequiredByModifierAsyncHKT {
+  issue: NonNullableIssue;
+  result: NonNullableSchemaAsync<this['schema'], this['message']>;
+}
+
 /**
  * Non nullable schema async interface.
  */
@@ -23,10 +31,11 @@ export interface NonNullableSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TMessage extends ErrorMessage<NonNullableIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferNonNullableInput<TWrapped>,
-    InferNonNullableOutput<TWrapped>,
-    NonNullableIssue | InferNonNullableIssue<TWrapped>
-  > {
+      InferNonNullableInput<TWrapped>,
+      InferNonNullableOutput<TWrapped>,
+      NonNullableIssue | InferNonNullableIssue<TWrapped>
+    >,
+    BaseHKTable<NonNullableRequiredAsyncHKT> {
   /**
    * The schema type.
    */
@@ -118,5 +127,6 @@ export function nonNullableAsync(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~hktType': 'requiredByAsync',
   };
 }
