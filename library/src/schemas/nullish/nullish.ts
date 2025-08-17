@@ -1,7 +1,7 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
-import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   Default,

@@ -1,6 +1,6 @@
 import type { RequiredByModifierHKT } from '../../methods/requiredBy/requiredBy.ts';
-import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   ErrorMessage,

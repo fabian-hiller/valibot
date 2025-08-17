@@ -11,15 +11,13 @@ import {
 import type {
   BaseHKT,
   BaseHKTable,
-  CallHKT,
-  HKTImplementation,
-} from '../../types/hkt.ts';
-import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  CallHKT,
   Config,
   ErrorMessage,
+  HKTImplementation,
   InferInput,
   InferIssue,
   InferObjectInput,

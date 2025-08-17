@@ -1,7 +1,7 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
-import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
+  BaseHKTable,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,

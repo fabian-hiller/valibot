@@ -14,8 +14,13 @@ import {
   string,
   type StringIssue,
 } from '../../schemas/index.ts';
-import type { BaseHKTable, HKTImplementation } from '../../types/hkt.ts';
-import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import type {
+  BaseHKTable,
+  HKTImplementation,
+  InferInput,
+  InferIssue,
+  InferOutput,
+} from '../../types/index.ts';
 import {
   partialBy,
   type PartialByModifierHKT,
