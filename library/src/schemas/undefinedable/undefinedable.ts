@@ -1,5 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -22,10 +23,11 @@ export interface UndefinedableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends Default<TWrapped, undefined>,
 > extends BaseSchema<
-    InferInput<TWrapped> | undefined,
-    InferUndefinedableOutput<TWrapped, TDefault>,
-    InferIssue<TWrapped>
-  > {
+      InferInput<TWrapped> | undefined,
+      InferUndefinedableOutput<TWrapped, TDefault>,
+      InferIssue<TWrapped>
+    >,
+    BaseHKTable<UndefinedablePartialHKT> {
   /**
    * The schema type.
    */
@@ -46,10 +48,6 @@ export interface UndefinedableSchema<
    * The default value.
    */
   readonly default: TDefault;
-  /**
-   * Supported HKTs.
-   */
-  readonly '~hkt'?: UndefinedablePartialHKT;
 }
 
 /**
@@ -118,5 +116,6 @@ export function undefinedable(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~hktType': 'partialBy',
   };
 }

@@ -2,6 +2,7 @@ import { describe, expectTypeOf, test } from 'vitest';
 import {
   boolean,
   type BooleanIssue,
+  nonOptional,
   nullish,
   number,
   type NumberIssue,
@@ -44,6 +45,17 @@ describe('partialBy', () => {
       ReturnType<TModifier>,
       ['key1', 'key3']
     >;
+
+    describe('should require modifier to support correct HKT', () => {
+      test('with modified keys', () => {
+        // @ts-expect-error
+        partialBy(wrapped, nonOptional);
+      });
+      test('with specific keys', () => {
+        // @ts-expect-error
+        partialBy(wrapped, nonOptional, ['key1', 'key3']);
+      });
+    });
 
     describe('should return schema object', () => {
       test('with modified keys', () => {

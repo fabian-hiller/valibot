@@ -1,4 +1,5 @@
 import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -25,10 +26,11 @@ export interface ExactOptionalSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, never>,
 > extends BaseSchemaAsync<
-    InferInput<TWrapped>,
-    InferOutput<TWrapped>,
-    InferIssue<TWrapped>
-  > {
+      InferInput<TWrapped>,
+      InferOutput<TWrapped>,
+      InferIssue<TWrapped>
+    >,
+    BaseHKTable<ExactOptionalPartialAsyncHKT> {
   /**
    * The schema type.
    */
@@ -49,10 +51,6 @@ export interface ExactOptionalSchemaAsync<
    * The default value.
    */
   readonly default: TDefault;
-  /**
-   * Supported HKTs.
-   */
-  readonly '~hkt'?: ExactOptionalPartialAsyncHKT;
 }
 
 /**
@@ -111,5 +109,6 @@ export function exactOptionalAsync(
     async '~run'(dataset, config) {
       return this.wrapped['~run'](dataset, config);
     },
+    '~hktType': 'partialByAsync',
   };
 }

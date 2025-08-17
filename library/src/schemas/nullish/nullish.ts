@@ -1,5 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -22,10 +23,11 @@ export interface NullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends Default<TWrapped, null | undefined>,
 > extends BaseSchema<
-    InferInput<TWrapped> | null | undefined,
-    InferNullishOutput<TWrapped, TDefault>,
-    InferIssue<TWrapped>
-  > {
+      InferInput<TWrapped> | null | undefined,
+      InferNullishOutput<TWrapped, TDefault>,
+      InferIssue<TWrapped>
+    >,
+    BaseHKTable<NullishPartialHKT> {
   /**
    * The schema type.
    */
@@ -46,10 +48,6 @@ export interface NullishSchema<
    * The default value.
    */
   readonly default: TDefault;
-  /**
-   * Supported HKTs.
-   */
-  readonly '~hkt'?: NullishPartialHKT;
 }
 
 /**
@@ -113,5 +111,6 @@ export function nullish(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~hktType': 'partialBy',
   };
 }

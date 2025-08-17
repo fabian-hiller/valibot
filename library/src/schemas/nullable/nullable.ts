@@ -1,5 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -22,10 +23,11 @@ export interface NullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends Default<TWrapped, null>,
 > extends BaseSchema<
-    InferInput<TWrapped> | null,
-    InferNullableOutput<TWrapped, TDefault>,
-    InferIssue<TWrapped>
-  > {
+      InferInput<TWrapped> | null,
+      InferNullableOutput<TWrapped, TDefault>,
+      InferIssue<TWrapped>
+    >,
+    BaseHKTable<NullablePartialHKT> {
   /**
    * The schema type.
    */
@@ -46,10 +48,6 @@ export interface NullableSchema<
    * The default value.
    */
   readonly default: TDefault;
-  /**
-   * Supported HKTs.
-   */
-  readonly '~hkt'?: NullablePartialHKT;
 }
 
 /**
@@ -112,5 +110,6 @@ export function nullable(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~hktType': 'partialBy',
   };
 }

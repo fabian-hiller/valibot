@@ -8,7 +8,11 @@ export interface BaseHKT<TType extends string = string> {
 }
 
 export interface BaseHKTable<THKT extends BaseHKT = BaseHKT> {
+  /**
+   * Supported HKTs.
+   */
   readonly '~hkt'?: THKT;
+  readonly '~hktType': THKT['type'];
 }
 
 export type InferHKT<

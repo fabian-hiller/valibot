@@ -1,5 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
+import type { BaseHKTable } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -27,10 +28,11 @@ export interface UndefinedableSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, undefined>,
 > extends BaseSchemaAsync<
-    InferInput<TWrapped> | undefined,
-    InferUndefinedableOutput<TWrapped, TDefault>,
-    InferIssue<TWrapped>
-  > {
+      InferInput<TWrapped> | undefined,
+      InferUndefinedableOutput<TWrapped, TDefault>,
+      InferIssue<TWrapped>
+    >,
+    BaseHKTable<UndefinedablePartialAsyncHKT> {
   /**
    * The schema type.
    */
@@ -126,5 +128,6 @@ export function undefinedableAsync(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~hktType': 'partialByAsync',
   };
 }
