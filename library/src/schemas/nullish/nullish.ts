@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseHKT } from '../../types/hkt.ts';
+import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,9 +11,8 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
-export interface NullishPartialHKT extends BaseHKT<'partialBy'> {
-  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-  result: NullishSchema<this['args'][0], undefined>;
+export interface NullishPartialHKT extends PartialByModifierHKT {
+  result: NullishSchema<this['schema'], undefined>;
 }
 
 /**

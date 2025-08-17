@@ -1,4 +1,4 @@
-import type { BaseHKT } from '../../types/hkt.ts';
+import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -9,9 +9,8 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
-export interface ExactOptionalPartialHKT extends BaseHKT<'partialBy'> {
-  argConstraint: [BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-  result: ExactOptionalSchema<this['args'][0], undefined>;
+export interface ExactOptionalPartialHKT extends PartialByModifierHKT {
+  result: ExactOptionalSchema<this['schema'], undefined>;
 }
 
 /**

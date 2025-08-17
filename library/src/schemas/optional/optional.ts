@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseHKT } from '../../types/hkt.ts';
+import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,9 +11,8 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferOptionalOutput } from './types.ts';
 
-export interface OptionalPartialHKT extends BaseHKT<'partialBy'> {
-  argConstraint: [BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-  result: OptionalSchema<this['args'][0], undefined>;
+export interface OptionalPartialHKT extends PartialByModifierHKT {
+  result: OptionalSchema<this['schema'], undefined>;
 }
 
 /**

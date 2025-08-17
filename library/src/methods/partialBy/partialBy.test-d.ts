@@ -13,8 +13,15 @@ import {
   string,
   type StringIssue,
 } from '../../schemas/index.ts';
+import type { BaseHKTable, HKTImplementation } from '../../types/hkt.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { partialBy, type SchemaWithPartialBy } from './partialBy.ts';
+import {
+  partialBy,
+  type PartialByModifierHKT,
+  type SchemaWithPartialBy,
+} from './partialBy.ts';
+
+type ModifierImpl = HKTImplementation<BaseHKTable<PartialByModifierHKT>>;
 
 describe('partialBy', () => {
   const entries = {
@@ -27,10 +34,16 @@ describe('partialBy', () => {
   describe('object', () => {
     const wrapped = object(entries);
     type Wrapped = typeof wrapped;
-    type Schema1<Modifier extends typeof optional | typeof nullish> =
-      SchemaWithPartialBy<Wrapped, ReturnType<Modifier>, undefined>;
-    type Schema2<Modifier extends typeof optional | typeof nullish> =
-      SchemaWithPartialBy<Wrapped, ReturnType<Modifier>, ['key1', 'key3']>;
+    type Schema1<TModifier extends ModifierImpl> = SchemaWithPartialBy<
+      Wrapped,
+      ReturnType<TModifier>,
+      undefined
+    >;
+    type Schema2<TModifier extends ModifierImpl> = SchemaWithPartialBy<
+      Wrapped,
+      ReturnType<TModifier>,
+      ['key1', 'key3']
+    >;
 
     describe('should return schema object', () => {
       test('with modified keys', () => {
@@ -125,10 +138,16 @@ describe('partialBy', () => {
   describe('objectWithRest', () => {
     const wrapped = objectWithRest(entries, boolean());
     type Wrapped = typeof wrapped;
-    type Schema1<Modifier extends typeof optional | typeof nullish> =
-      SchemaWithPartialBy<Wrapped, ReturnType<Modifier>, undefined>;
-    type Schema2<Modifier extends typeof optional | typeof nullish> =
-      SchemaWithPartialBy<Wrapped, ReturnType<Modifier>, ['key1', 'key3']>;
+    type Schema1<TModifier extends ModifierImpl> = SchemaWithPartialBy<
+      Wrapped,
+      ReturnType<TModifier>,
+      undefined
+    >;
+    type Schema2<TModifier extends ModifierImpl> = SchemaWithPartialBy<
+      Wrapped,
+      ReturnType<TModifier>,
+      ['key1', 'key3']
+    >;
 
     describe('should return schema object', () => {
       test('with modified keys', () => {

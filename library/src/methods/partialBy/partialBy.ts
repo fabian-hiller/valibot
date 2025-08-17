@@ -55,9 +55,11 @@ type Schema = SchemaWithoutPipe<
  *
  * partialBy: (schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>) => BaseSchema<unknown, unknown, BaseIssue<unknown>>
  */
-interface ModifierHKT extends BaseHKT<'partialBy'> {
+export interface PartialByModifierHKT extends BaseHKT<'partialBy'> {
   argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
   result: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
+
+  schema: this['args'][0];
 }
 
 /**
@@ -65,7 +67,7 @@ interface ModifierHKT extends BaseHKT<'partialBy'> {
  */
 type PartialByEntries<
   TEntries extends ObjectEntries,
-  TModifier extends BaseHKTable<ModifierHKT>,
+  TModifier extends BaseHKTable<PartialByModifierHKT>,
   TKeys extends readonly (keyof TEntries)[] | undefined,
 > = {
   [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
@@ -80,7 +82,7 @@ type PartialByEntries<
  */
 export type SchemaWithPartialBy<
   TSchema extends Schema,
-  TModifier extends BaseHKTable<ModifierHKT>,
+  TModifier extends BaseHKTable<PartialByModifierHKT>,
   TKeys extends ObjectKeys<TSchema> | undefined,
 > = TSchema extends
   | ObjectSchema<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
@@ -270,7 +272,7 @@ export type SchemaWithPartialBy<
  */
 export function partialBy<
   const TSchema extends Schema,
-  const TModifier extends BaseHKTable<ModifierHKT>,
+  const TModifier extends BaseHKTable<PartialByModifierHKT>,
 >(
   schema: TSchema,
   modifier: HKTImplementation<TModifier>
@@ -288,7 +290,7 @@ export function partialBy<
 export function partialBy<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
-  const TModifier extends BaseHKTable<ModifierHKT>,
+  const TModifier extends BaseHKTable<PartialByModifierHKT>,
 >(
   schema: TSchema,
   modifier: HKTImplementation<TModifier>,
@@ -298,17 +300,17 @@ export function partialBy<
 // @__NO_SIDE_EFFECTS__
 export function partialBy(
   schema: Schema,
-  modifier: HKTImplementation<BaseHKTable<ModifierHKT>>,
+  modifier: HKTImplementation<BaseHKTable<PartialByModifierHKT>>,
   keys?: ObjectKeys<Schema>
 ): SchemaWithPartialBy<
   Schema,
-  BaseHKTable<ModifierHKT>,
+  BaseHKTable<PartialByModifierHKT>,
   ObjectKeys<Schema> | undefined
 > {
   // Create modified object entries
   const entries: PartialByEntries<
     ObjectEntries,
-    BaseHKTable<ModifierHKT>,
+    BaseHKTable<PartialByModifierHKT>,
     ObjectKeys<Schema>
   > = {};
   for (const key in schema.entries) {
