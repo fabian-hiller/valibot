@@ -1,4 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
+import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,6 +12,11 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 import type { undefinedable } from './undefinedable.ts';
+
+export interface UndefinedablePartialAsyncHKT
+  extends PartialByModifierAsyncHKT {
+  result: UndefinedableSchemaAsync<this['schema'], undefined>;
+}
 
 /**
  * Undefinedable schema async interface.

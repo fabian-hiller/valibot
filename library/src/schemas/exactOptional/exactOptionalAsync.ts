@@ -1,3 +1,4 @@
+import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -9,6 +10,11 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import type { exactOptional } from './exactOptional.ts';
+
+export interface ExactOptionalPartialAsyncHKT
+  extends PartialByModifierAsyncHKT {
+  result: ExactOptionalSchemaAsync<this['schema'], undefined>;
+}
 
 /**
  * Exact optional schema async interface.
@@ -43,6 +49,10 @@ export interface ExactOptionalSchemaAsync<
    * The default value.
    */
   readonly default: TDefault;
+  /**
+   * Supported HKTs.
+   */
+  readonly '~hkt'?: ExactOptionalPartialAsyncHKT;
 }
 
 /**

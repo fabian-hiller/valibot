@@ -1,4 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
+import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,6 +12,10 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { optional } from './optional.ts';
 import type { InferOptionalOutput } from './types.ts';
+
+export interface OptionalPartialAsyncHKT extends PartialByModifierAsyncHKT {
+  result: OptionalSchemaAsync<this['schema'], undefined>;
+}
 
 /**
  * Optional schema async interface.
@@ -45,6 +50,10 @@ export interface OptionalSchemaAsync<
    * The default value.
    */
   readonly default: TDefault;
+  /**
+   * Supported HKTs.
+   */
+  readonly '~hkt'?: OptionalPartialAsyncHKT;
 }
 
 /**

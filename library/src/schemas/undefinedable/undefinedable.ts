@@ -47,7 +47,7 @@ export interface UndefinedableSchema<
    */
   readonly default: TDefault;
   /**
-   * A HKT for use with `v.partialBy`.
+   * Supported HKTs.
    */
   readonly '~hkt'?: UndefinedablePartialHKT;
 }

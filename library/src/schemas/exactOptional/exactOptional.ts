@@ -45,7 +45,7 @@ export interface ExactOptionalSchema<
    */
   readonly default: TDefault;
   /**
-   * A HKT for use with `v.partialBy`.
+   * Supported HKTs.
    */
   readonly '~hkt'?: ExactOptionalPartialHKT;
 }

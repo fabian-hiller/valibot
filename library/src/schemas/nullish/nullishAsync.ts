@@ -1,4 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
+import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,6 +12,10 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { nullish } from './nullish.ts';
 import type { InferNullishOutput } from './types.ts';
+
+export interface NullishPartialAsyncHKT extends PartialByModifierAsyncHKT {
+  result: NullishSchemaAsync<this['schema'], undefined>;
+}
 
 /**
  * Nullish schema async interface.
@@ -45,6 +50,10 @@ export interface NullishSchemaAsync<
    * The default value.
    */
   readonly default: TDefault;
+  /**
+   * Supported HKTs.
+   */
+  readonly '~hkt'?: NullishPartialAsyncHKT;
 }
 
 /**
