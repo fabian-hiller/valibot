@@ -1,4 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
+import type { BaseHKT } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -9,6 +10,11 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
+
+export interface UndefinedablePartialHKT extends BaseHKT<'partialBy'> {
+  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
+  result: UndefinedableSchema<this['args'][0], undefined>;
+}
 
 /**
  * Undefinedable schema interface.
@@ -41,6 +47,10 @@ export interface UndefinedableSchema<
    * The default value.
    */
   readonly default: TDefault;
+  /**
+   * A HKT for use with `v.partialBy`.
+   */
+  readonly '~hkt'?: UndefinedablePartialHKT;
 }
 
 /**

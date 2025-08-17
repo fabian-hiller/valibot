@@ -1,3 +1,4 @@
+import type { BaseHKT } from '../../types/hkt.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -7,6 +8,11 @@ import type {
   InferOutput,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+
+export interface ExactOptionalPartialHKT extends BaseHKT<'partialBy'> {
+  argConstraint: [BaseSchema<unknown, unknown, BaseIssue<unknown>>];
+  result: ExactOptionalSchema<this['args'][0], undefined>;
+}
 
 /**
  * Exact optional schema interface.
@@ -39,6 +45,10 @@ export interface ExactOptionalSchema<
    * The default value.
    */
   readonly default: TDefault;
+  /**
+   * A HKT for use with `v.partialBy`.
+   */
+  readonly '~hkt'?: ExactOptionalPartialHKT;
 }
 
 /**
