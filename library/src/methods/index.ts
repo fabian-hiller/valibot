@@ -17,6 +17,7 @@ export * from './omit/index.ts';
 export * from './parse/index.ts';
 export * from './parser/index.ts';
 export * from './partial/index.ts';
+export * from './partialBy/index.ts';
 export * from './pick/index.ts';
 export * from './pipe/index.ts';
 export * from './required/index.ts';
