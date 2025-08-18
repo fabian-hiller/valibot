@@ -1,8 +1,7 @@
 export interface BaseHKT<TType extends string = string> {
   type: TType;
   rawArgs: unknown[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  argConstraint: any[];
+  argConstraint: unknown[];
   args: this['rawArgs'] extends this['argConstraint'] ? this['rawArgs'] : never;
   result: unknown;
 }
@@ -20,13 +19,16 @@ export type InferHKT<
   TType extends string = string,
 > = Extract<NonNullable<THKTable['~hkt']>, { type: TType }>;
 
+export type PartialApplyHKT<
+  THKT extends BaseHKT,
+  TArgs extends THKT['argConstraint'],
+> = THKT & { rawArgs: TArgs };
+
 export type ApplyHKT<
   THKTable extends BaseHKTable,
   TArgs extends InferHKT<THKTable, TType>['argConstraint'],
   TType extends InferHKT<THKTable>['type'] = InferHKT<THKTable>['type'],
-> = (InferHKT<THKTable, TType> & {
-  rawArgs: TArgs;
-})['result'];
+> = PartialApplyHKT<InferHKT<THKTable, TType>, TArgs>['result'];
 
 export type HKTImplementation<
   THKTable extends BaseHKTable,

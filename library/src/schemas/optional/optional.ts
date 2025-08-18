@@ -1,4 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
 import type {
   BaseHKTable,
@@ -16,6 +17,22 @@ export interface OptionalPartialHKT extends PartialByModifierHKT {
   result: OptionalSchema<this['schema'], undefined>;
 }
 
+export interface OptionalModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    default_?: Default<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      undefined
+    >,
+  ];
+
+  extraArgs: [default_?: Default<this['wrapped'], undefined>];
+
+  default: this['args'][1];
+
+  result: OptionalSchema<this['wrapped'], this['default']>;
+}
+
 /**
  * Optional schema interface.
  */
@@ -27,7 +44,7 @@ export interface OptionalSchema<
       InferOptionalOutput<TWrapped, TDefault>,
       InferIssue<TWrapped>
     >,
-    BaseHKTable<OptionalPartialHKT> {
+    BaseHKTable<OptionalModifierHKT> {
   /**
    * The schema type.
    */
@@ -110,6 +127,6 @@ export function optional(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialBy',
+    '~hktType': 'schemaModifier',
   };
 }
