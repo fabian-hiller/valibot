@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -12,8 +12,17 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
-export interface NullablePartialHKT extends PartialByModifierHKT {
-  result: NullableSchema<this['schema'], undefined>;
+export interface NullableModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    default_?: Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>, null>,
+  ];
+
+  extraArgs: [default_?: Default<this['wrapped'], null>];
+
+  default: this['args'][1];
+
+  result: NullableSchema<this['wrapped'], this['default']>;
 }
 
 /**
@@ -27,7 +36,7 @@ export interface NullableSchema<
       InferNullableOutput<TWrapped, TDefault>,
       InferIssue<TWrapped>
     >,
-    BaseHKTable<NullablePartialHKT> {
+    BaseHKTable<SchemaModifierHKT> {
   /**
    * The schema type.
    */
@@ -110,6 +119,6 @@ export function nullable(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialBy',
+    '~hktType': 'schemaModifier',
   };
 }

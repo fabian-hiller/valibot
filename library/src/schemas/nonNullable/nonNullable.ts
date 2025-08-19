@@ -1,4 +1,4 @@
-import type { RequiredByModifierHKT } from '../../methods/requiredBy/requiredBy.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -14,9 +14,19 @@ import type {
   NonNullableIssue,
 } from './types.ts';
 
-export interface NonNullableRequiredHKT extends RequiredByModifierHKT {
+export interface NonNullableModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    message?: ErrorMessage<NonNullableIssue> | undefined,
+  ];
+
   issue: NonNullableIssue;
-  result: NonNullableSchema<this['schema'], this['message']>;
+
+  extraArgs: [message?: ErrorMessage<NonNullableIssue> | undefined];
+
+  message: this['args'][1];
+
+  result: NonNullableSchema<this['wrapped'], this['message']>;
 }
 
 /**
@@ -30,7 +40,7 @@ export interface NonNullableSchema<
       InferNonNullableOutput<TWrapped>,
       NonNullableIssue | InferNonNullableIssue<TWrapped>
     >,
-    BaseHKTable<NonNullableRequiredHKT> {
+    BaseHKTable<NonNullableModifierHKT> {
   /**
    * The schema type.
    */
@@ -112,6 +122,6 @@ export function nonNullable(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
-    '~hktType': 'requiredBy',
+    '~hktType': 'schemaModifier',
   };
 }

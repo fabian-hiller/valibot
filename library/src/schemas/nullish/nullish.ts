@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -12,8 +12,20 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
-export interface NullishPartialHKT extends PartialByModifierHKT {
-  result: NullishSchema<this['schema'], undefined>;
+export interface NullishModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    default_?: Default<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      null | undefined
+    >,
+  ];
+
+  extraArgs: [default_?: Default<this['wrapped'], null | undefined>];
+
+  default: this['args'][1];
+
+  result: NullishSchema<this['wrapped'], this['default']>;
 }
 
 /**
@@ -27,7 +39,7 @@ export interface NullishSchema<
       InferNullishOutput<TWrapped, TDefault>,
       InferIssue<TWrapped>
     >,
-    BaseHKTable<NullishPartialHKT> {
+    BaseHKTable<NullishModifierHKT> {
   /**
    * The schema type.
    */
@@ -111,6 +123,6 @@ export function nullish(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialBy',
+    '~hktType': 'schemaModifier',
   };
 }

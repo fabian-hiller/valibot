@@ -1,4 +1,4 @@
-import type { RequiredByModifierHKT } from '../../methods/requiredBy/requiredBy.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -14,9 +14,19 @@ import type {
   NonNullishIssue,
 } from './types.ts';
 
-export interface NonNullishRequiredHKT extends RequiredByModifierHKT {
+export interface NonNullishModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    message?: ErrorMessage<NonNullishIssue> | undefined,
+  ];
+
   issue: NonNullishIssue;
-  result: NonNullishSchema<this['schema'], this['message']>;
+
+  extraArgs: [message?: ErrorMessage<NonNullishIssue> | undefined];
+
+  message: this['args'][1];
+
+  result: NonNullishSchema<this['wrapped'], this['message']>;
 }
 
 /**
@@ -30,7 +40,7 @@ export interface NonNullishSchema<
       InferNonNullishOutput<TWrapped>,
       NonNullishIssue | InferNonNullishIssue<TWrapped>
     >,
-    BaseHKTable<NonNullishRequiredHKT> {
+    BaseHKTable<NonNullishModifierHKT> {
   /**
    * The schema type.
    */
@@ -112,6 +122,6 @@ export function nonNullish(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
-    '~hktType': 'requiredBy',
+    '~hktType': 'schemaModifier',
   };
 }

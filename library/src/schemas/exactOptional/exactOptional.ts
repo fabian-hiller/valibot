@@ -1,4 +1,4 @@
-import type { PartialByModifierHKT } from '../../methods/partialBy/partialBy.ts';
+import type { SchemaModifierHKT } from '../../methods/make/make.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -10,8 +10,17 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
-export interface ExactOptionalPartialHKT extends PartialByModifierHKT {
-  result: ExactOptionalSchema<this['schema'], undefined>;
+export interface ExactOptionalModifierHKT extends SchemaModifierHKT {
+  argConstraint: [
+    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    default_?: Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>, never>,
+  ];
+
+  extraArgs: [default_?: Default<this['wrapped'], never>];
+
+  default: this['args'][1];
+
+  result: ExactOptionalSchema<this['wrapped'], this['default']>;
 }
 
 /**
@@ -25,7 +34,7 @@ export interface ExactOptionalSchema<
       InferOutput<TWrapped>,
       InferIssue<TWrapped>
     >,
-    BaseHKTable<ExactOptionalPartialHKT> {
+    BaseHKTable<ExactOptionalModifierHKT> {
   /**
    * The schema type.
    */
@@ -97,6 +106,6 @@ export function exactOptional(
     '~run'(dataset, config) {
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialBy',
+    '~hktType': 'schemaModifier',
   };
 }
