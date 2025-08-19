@@ -30,10 +30,15 @@ export type PartialApplyHKT<
 > = THKT & { rawArgs: TArgs };
 
 export type ApplyHKT<
-  THKTable extends BaseHKTable,
-  TArgs extends InferHKT<THKTable>['argConstraint'],
-> = PartialApplyHKT<InferHKT<THKTable>, TArgs>['result'];
+  THKT extends BaseHKT,
+  TArgs extends THKT['argConstraint'],
+> = PartialApplyHKT<THKT, TArgs>['result'];
 
-export type HKTImplementation<THKTable extends BaseHKTable> = (
-  ...args: InferHKT<THKTable>['argConstraint']
-) => ApplyHKT<THKTable, InferHKT<THKTable>['argConstraint']> & THKTable;
+export const isHkt = '~isHkt';
+
+export interface HKTImplementation<THKT extends BaseHKT> {
+  (
+    ...args: THKT['argConstraint']
+  ): ApplyHKT<THKT, THKT['argConstraint']> & BaseHKTable<THKT>;
+  [isHkt]: true;
+}
