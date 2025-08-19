@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { SchemaModifierHKT } from '../../methods/make/make.ts';
+import type { SchemaMapperHKT } from '../../methods/mapEntries/mapEntries.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -12,20 +12,10 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
-export interface UndefinedableModifierHKT extends SchemaModifierHKT {
-  argConstraint: [
-    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    default_?: Default<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-      undefined
-    >,
-  ];
+export interface UndefinedableModifierHKT extends SchemaMapperHKT {
+  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
 
-  extraArgs: [default_?: Default<this['wrapped'], undefined>];
-
-  default: this['args'][1];
-
-  result: UndefinedableSchema<this['wrapped'], this['default']>;
+  result: UndefinedableSchema<this['wrapped'], undefined>;
 }
 
 /**
@@ -128,6 +118,5 @@ export function undefinedable(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'schemaModifier',
   };
 }

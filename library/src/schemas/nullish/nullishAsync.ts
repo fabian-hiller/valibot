@@ -1,7 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
-  BaseHKTable,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -14,10 +12,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { nullish } from './nullish.ts';
 import type { InferNullishOutput } from './types.ts';
 
-export interface NullishPartialAsyncHKT extends PartialByModifierAsyncHKT {
-  result: NullishSchemaAsync<this['schema'], undefined>;
-}
-
 /**
  * Nullish schema async interface.
  */
@@ -27,11 +21,10 @@ export interface NullishSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, null | undefined>,
 > extends BaseSchemaAsync<
-      InferInput<TWrapped> | null | undefined,
-      InferNullishOutput<TWrapped, TDefault>,
-      InferIssue<TWrapped>
-    >,
-    BaseHKTable<NullishPartialAsyncHKT> {
+    InferInput<TWrapped> | null | undefined,
+    InferNullishOutput<TWrapped, TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
@@ -128,6 +121,5 @@ export function nullishAsync(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialByAsync',
   };
 }

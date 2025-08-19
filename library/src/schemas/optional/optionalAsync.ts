@@ -1,7 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { PartialByModifierAsyncHKT } from '../../methods/partialBy/partialByAsync.ts';
 import type {
-  BaseHKTable,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -14,10 +12,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { optional } from './optional.ts';
 import type { InferOptionalOutput } from './types.ts';
 
-export interface OptionalPartialAsyncHKT extends PartialByModifierAsyncHKT {
-  result: OptionalSchemaAsync<this['schema'], undefined>;
-}
-
 /**
  * Optional schema async interface.
  */
@@ -27,11 +21,10 @@ export interface OptionalSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, undefined>,
 > extends BaseSchemaAsync<
-      InferInput<TWrapped> | undefined,
-      InferOptionalOutput<TWrapped, TDefault>,
-      InferIssue<TWrapped>
-    >,
-    BaseHKTable<OptionalPartialAsyncHKT> {
+    InferInput<TWrapped> | undefined,
+    InferOptionalOutput<TWrapped, TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
@@ -127,6 +120,5 @@ export function optionalAsync(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'partialByAsync',
   };
 }

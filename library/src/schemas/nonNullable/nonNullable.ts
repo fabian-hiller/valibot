@@ -1,4 +1,4 @@
-import type { SchemaModifierHKT } from '../../methods/make/make.ts';
+import type { SchemaMapperHKT } from '../../methods/mapEntries/mapEntries.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -14,19 +14,12 @@ import type {
   NonNullableIssue,
 } from './types.ts';
 
-export interface NonNullableModifierHKT extends SchemaModifierHKT {
-  argConstraint: [
-    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    message?: ErrorMessage<NonNullableIssue> | undefined,
-  ];
+export interface NonNullableModifierHKT extends SchemaMapperHKT {
+  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
 
   issue: NonNullableIssue;
 
-  extraArgs: [message?: ErrorMessage<NonNullableIssue> | undefined];
-
-  message: this['args'][1];
-
-  result: NonNullableSchema<this['wrapped'], this['message']>;
+  result: NonNullableSchema<this['wrapped'], undefined>;
 }
 
 /**
@@ -122,6 +115,5 @@ export function nonNullable(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
-    '~hktType': 'schemaModifier',
   };
 }

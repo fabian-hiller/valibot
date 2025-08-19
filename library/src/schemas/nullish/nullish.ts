@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { SchemaModifierHKT } from '../../methods/make/make.ts';
+import type { SchemaMapperHKT } from '../../methods/mapEntries/mapEntries.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -12,20 +12,10 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
-export interface NullishModifierHKT extends SchemaModifierHKT {
-  argConstraint: [
-    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    default_?: Default<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-      null | undefined
-    >,
-  ];
+export interface NullishModifierHKT extends SchemaMapperHKT {
+  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
 
-  extraArgs: [default_?: Default<this['wrapped'], null | undefined>];
-
-  default: this['args'][1];
-
-  result: NullishSchema<this['wrapped'], this['default']>;
+  result: NullishSchema<this['wrapped'], undefined>;
 }
 
 /**
@@ -123,6 +113,5 @@ export function nullish(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'schemaModifier',
   };
 }

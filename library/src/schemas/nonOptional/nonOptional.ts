@@ -1,4 +1,4 @@
-import type { SchemaModifierHKT } from '../../methods/make/make.ts';
+import type { SchemaMapperHKT } from '../../methods/mapEntries/mapEntries.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -14,19 +14,12 @@ import type {
   NonOptionalIssue,
 } from './types.ts';
 
-export interface NonOptionalModifierHKT extends SchemaModifierHKT {
-  argConstraint: [
-    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    message?: ErrorMessage<NonOptionalIssue> | undefined,
-  ];
+export interface NonOptionalModifierHKT extends SchemaMapperHKT {
+  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
 
   issue: NonOptionalIssue;
 
-  extraArgs: [message?: ErrorMessage<NonOptionalIssue> | undefined];
-
-  message: this['args'][1];
-
-  result: NonOptionalSchema<this['wrapped'], this['message']>;
+  result: NonOptionalSchema<this['wrapped'], undefined>;
 }
 
 /**
@@ -122,6 +115,5 @@ export function nonOptional(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
-    '~hktType': 'schemaModifier',
   };
 }

@@ -1,4 +1,4 @@
-import type { SchemaModifierHKT } from '../../methods/make/make.ts';
+import type { SchemaMapperHKT } from '../../methods/mapEntries/mapEntries.ts';
 import type {
   BaseHKTable,
   BaseIssue,
@@ -10,17 +10,10 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
-export interface ExactOptionalModifierHKT extends SchemaModifierHKT {
-  argConstraint: [
-    wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    default_?: Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>, never>,
-  ];
+export interface ExactOptionalModifierHKT extends SchemaMapperHKT {
+  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
 
-  extraArgs: [default_?: Default<this['wrapped'], never>];
-
-  default: this['args'][1];
-
-  result: ExactOptionalSchema<this['wrapped'], this['default']>;
+  result: ExactOptionalSchema<this['wrapped'], undefined>;
 }
 
 /**
@@ -106,6 +99,5 @@ export function exactOptional(
     '~run'(dataset, config) {
       return this.wrapped['~run'](dataset, config);
     },
-    '~hktType': 'schemaModifier',
   };
 }
