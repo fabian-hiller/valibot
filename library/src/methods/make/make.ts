@@ -65,6 +65,21 @@ export interface SchemaModifierHKT extends BaseHKT<'schemaModifier'> {
   result: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
 }
 
+type InferModifierIssue<
+  TModifier extends SchemaModifierHKT,
+  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>> = BaseSchema<
+    0,
+    0,
+    BaseIssue<0>
+  >,
+> =
+  PartialApplyHKT<
+    TModifier,
+    [TSchema, ...args: TModifier['extraArgs']]
+  > extends { issue: infer Issue extends BaseIssue<unknown> }
+    ? Issue
+    : never;
+
 type InferExtraArgs<
   TModifier extends SchemaModifierHKT,
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>> = BaseSchema<
@@ -187,7 +202,7 @@ export type ModifiedSchema<
         InferObjectOutput<
           ModifiedEntries<TEntries, TModifier, TKeys, TExtraArgs>
         >,
-        InferIssue<TSchema>
+        InferIssue<TSchema> | InferModifierIssue<InferHKT<TModifier>>
       >;
       /**
        * The input, output and issue type.
@@ -202,7 +217,9 @@ export type ModifiedSchema<
             readonly output: InferObjectOutput<
               ModifiedEntries<TEntries, TModifier, TKeys, TExtraArgs>
             >;
-            readonly issue: InferIssue<TSchema>;
+            readonly issue:
+              | InferIssue<TSchema>
+              | InferModifierIssue<InferHKT<TModifier>>;
           }
         | undefined;
     }
@@ -256,7 +273,7 @@ export type ModifiedSchema<
           > & {
             [key: string]: unknown;
           },
-          InferIssue<TSchema>
+          InferIssue<TSchema> | InferModifierIssue<InferHKT<TModifier>>
         >;
         /**
          * The input, output and issue type.
@@ -275,7 +292,9 @@ export type ModifiedSchema<
               > & {
                 [key: string]: unknown;
               };
-              readonly issue: InferIssue<TSchema>;
+              readonly issue:
+                | InferIssue<TSchema>
+                | InferModifierIssue<InferHKT<TModifier>>;
             }
           | undefined;
       }
@@ -330,7 +349,7 @@ export type ModifiedSchema<
             > & {
               [key: string]: InferOutput<TRest>;
             },
-            InferIssue<TSchema>
+            InferIssue<TSchema> | InferModifierIssue<InferHKT<TModifier>>
           >;
           /**
            * The input, output and issue type.
@@ -347,7 +366,9 @@ export type ModifiedSchema<
                 readonly output: InferObjectOutput<
                   ModifiedEntries<TEntries, TModifier, TKeys, TExtraArgs>
                 > & { [key: string]: InferOutput<TRest> };
-                readonly issue: InferIssue<TSchema>;
+                readonly issue:
+                  | InferIssue<TSchema>
+                  | InferModifierIssue<InferHKT<TModifier>>;
               }
             | undefined;
         }
