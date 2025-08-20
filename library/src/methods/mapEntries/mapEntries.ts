@@ -16,10 +16,12 @@ import {
 import {
   type ApplyHKT,
   type BaseHKT,
+  type BaseHKTable,
   type BaseIssue,
   type BaseSchema,
   type ErrorMessage,
   type HKTImplementation,
+  type InferHKT,
   isHkt,
   type ObjectEntries,
   type PartialApplyHKT,
@@ -81,7 +83,10 @@ export type MappedEntries<
   TOverrides extends EntryMapOverrides<TEntries> = Record<never, never>,
 > = Prettify<{
   [TKey in keyof TEntries]: TOverrides[TKey] extends HKTImplementation<SchemaMapperHKT>
-    ? ApplyHKT<Extract<ReturnType<TOverrides[TKey]>, BaseHKT>, [TEntries[TKey]]>
+    ? ApplyHKT<
+        InferHKT<Extract<ReturnType<TOverrides[TKey]>, BaseHKTable>>,
+        [TEntries[TKey]]
+      >
     : TOverrides[TKey] extends ((
           schema: TEntries[TKey]
         ) => infer Result extends SchemaMapperHKT['result'])
@@ -120,6 +125,7 @@ const test = mapEntries(
   Object.assign(optional, { [isHkt]: true as const }),
   {
     name: (schema) => nullish(schema, 'foo'),
+    email: Object.assign(nullish, { [isHkt]: true as const }),
   }
 );
 
