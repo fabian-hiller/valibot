@@ -15,10 +15,6 @@ import type {
 } from './types.ts';
 
 export interface NonNullableModifierHKT extends SchemaMapperHKT {
-  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
-  issue: NonNullableIssue;
-
   result: NonNullableSchema<this['wrapped'], undefined>;
 }
 

@@ -19,15 +19,25 @@ import {
   type BaseHKTable,
   type BaseIssue,
   type BaseSchema,
+  type Config,
   type ErrorMessage,
   type HKTImplementation,
   type InferHKT,
+  type InferInput,
+  type InferIssue,
+  type InferObjectInput,
+  type InferObjectIssue,
+  type InferObjectOutput,
+  type InferOutput,
   isHkt,
   type ObjectEntries,
-  type PartialApplyHKT,
+  type OutputDataset,
   type Prettify,
   type SchemaWithoutPipe,
+  type StandardProps,
+  type UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema type.
@@ -57,20 +67,6 @@ export interface IdentitySchemaMapperHKT extends SchemaMapperHKT {
   result: this['wrapped'];
 }
 
-type InferMapperIssue<
-  TMapper extends SchemaMapperHKT,
-  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>> = BaseSchema<
-    0,
-    0,
-    BaseIssue<0>
-  >,
-> =
-  PartialApplyHKT<TMapper, [TSchema]> extends {
-    issue: infer Issue extends BaseIssue<unknown>;
-  }
-    ? Issue
-    : never;
-
 export type EntryMapOverrides<TEntries extends ObjectEntries> = {
   [TKey in keyof TEntries]?: (
     schema: TEntries[TKey]
@@ -83,9 +79,12 @@ export type MappedEntries<
   TOverrides extends EntryMapOverrides<TEntries> = Record<never, never>,
 > = Prettify<{
   [TKey in keyof TEntries]: TOverrides[TKey] extends HKTImplementation<SchemaMapperHKT>
-    ? ApplyHKT<
-        InferHKT<Extract<ReturnType<TOverrides[TKey]>, BaseHKTable>>,
-        [TEntries[TKey]]
+    ? Extract<
+        ApplyHKT<
+          InferHKT<Extract<ReturnType<TOverrides[TKey]>, BaseHKTable>>,
+          [TEntries[TKey]]
+        >,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>
       >
     : TOverrides[TKey] extends ((
           schema: TEntries[TKey]
@@ -94,21 +93,264 @@ export type MappedEntries<
       : ApplyHKT<TDefaultMapper, [TEntries[TKey]]>;
 }>;
 
-declare function mapEntries<
+/**
+ * Schema with modified entries type.
+ */
+export type SchemaWithMappedEntries<
+  TSchema extends Schema,
+  TDefaultMapper extends SchemaMapperHKT = IdentitySchemaMapperHKT,
+  TOverrides extends EntryMapOverrides<Schema['entries']> = Record<
+    never,
+    never
+  >,
+> = TSchema extends
+  | ObjectSchema<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
+  | StrictObjectSchema<
+      infer TEntries,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
+      /**
+       * The object entries.
+       */
+      readonly entries: MappedEntries<TEntries, TDefaultMapper, TOverrides>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardProps<
+        InferObjectInput<MappedEntries<TEntries, TDefaultMapper, TOverrides>>,
+        InferObjectOutput<MappedEntries<TEntries, TDefaultMapper, TOverrides>>
+      >;
+      /**
+       * Parses unknown input.
+       *
+       * @param dataset The input dataset.
+       * @param config The configuration.
+       *
+       * @returns The output dataset.
+       *
+       * @internal
+       */
+      readonly '~run': (
+        dataset: UnknownDataset,
+        config: Config<BaseIssue<unknown>>
+      ) => OutputDataset<
+        InferObjectOutput<MappedEntries<TEntries, TDefaultMapper, TOverrides>>,
+        InferIssue<TSchema>
+      >;
+      /**
+       * The input, output and issue type.
+       *
+       * @internal
+       */
+      readonly '~types'?:
+        | {
+            readonly input: InferObjectInput<
+              MappedEntries<TEntries, TDefaultMapper, TOverrides>
+            >;
+            readonly output: InferObjectOutput<
+              MappedEntries<TEntries, TDefaultMapper, TOverrides>
+            >;
+            readonly issue:
+              | InferIssue<TSchema>
+              | InferObjectIssue<
+                  MappedEntries<TEntries, TDefaultMapper, TOverrides>
+                >;
+          }
+        | undefined;
+    }
+  : TSchema extends LooseObjectSchema<
+        infer TEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
+        /**
+         * The object entries.
+         */
+        readonly entries: MappedEntries<TEntries, TDefaultMapper, TOverrides>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardProps<
+          InferObjectInput<
+            MappedEntries<TEntries, TDefaultMapper, TOverrides>
+          > & {
+            [key: string]: unknown;
+          },
+          InferObjectOutput<
+            MappedEntries<TEntries, TDefaultMapper, TOverrides>
+          > & {
+            [key: string]: unknown;
+          }
+        >;
+        /**
+         * Parses unknown input.
+         *
+         * @param dataset The input dataset.
+         * @param config The configuration.
+         *
+         * @returns The output dataset.
+         *
+         * @internal
+         */
+        readonly '~run': (
+          dataset: UnknownDataset,
+          config: Config<BaseIssue<unknown>>
+        ) => OutputDataset<
+          InferObjectOutput<
+            MappedEntries<TEntries, TDefaultMapper, TOverrides>
+          > & {
+            [key: string]: unknown;
+          },
+          InferIssue<TSchema>
+        >;
+        /**
+         * The input, output and issue type.
+         *
+         * @internal
+         */
+        readonly '~types'?:
+          | {
+              readonly input: InferObjectInput<
+                MappedEntries<TEntries, TDefaultMapper, TOverrides>
+              > & {
+                [key: string]: unknown;
+              };
+              readonly output: InferObjectOutput<
+                MappedEntries<TEntries, TDefaultMapper, TOverrides>
+              > & {
+                [key: string]: unknown;
+              };
+              readonly issue:
+                | InferIssue<TSchema>
+                | InferObjectIssue<
+                    MappedEntries<TEntries, TDefaultMapper, TOverrides>
+                  >;
+            }
+          | undefined;
+      }
+    : TSchema extends ObjectWithRestSchema<
+          infer TEntries,
+          infer TRest,
+          ErrorMessage<ObjectWithRestIssue> | undefined
+        >
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
+          /**
+           * The object entries.
+           */
+          readonly entries: MappedEntries<TEntries, TDefaultMapper, TOverrides>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardProps<
+            InferObjectInput<
+              MappedEntries<TEntries, TDefaultMapper, TOverrides>
+            > & {
+              [key: string]: InferInput<TRest>;
+            },
+            InferObjectOutput<
+              MappedEntries<TEntries, TDefaultMapper, TOverrides>
+            > & {
+              [key: string]: InferOutput<TRest>;
+            }
+          >;
+          /**
+           * Parses unknown input.
+           *
+           * @param dataset The input dataset.
+           * @param config The configuration.
+           *
+           * @returns The output dataset.
+           *
+           * @internal
+           */
+          readonly '~run': (
+            dataset: UnknownDataset,
+            config: Config<BaseIssue<unknown>>
+          ) => OutputDataset<
+            InferObjectOutput<
+              MappedEntries<TEntries, TDefaultMapper, TOverrides>
+            > & {
+              [key: string]: InferOutput<TRest>;
+            },
+            | InferIssue<TSchema>
+            | InferObjectIssue<
+                MappedEntries<TEntries, TDefaultMapper, TOverrides>
+              >
+          >;
+          /**
+           * The input, output and issue type.
+           *
+           * @internal
+           */
+          readonly '~types'?:
+            | {
+                readonly input: InferObjectInput<
+                  MappedEntries<TEntries, TDefaultMapper, TOverrides>
+                > & {
+                  [key: string]: InferInput<TRest>;
+                };
+                readonly output: InferObjectOutput<
+                  MappedEntries<TEntries, TDefaultMapper, TOverrides>
+                > & { [key: string]: InferOutput<TRest> };
+                readonly issue:
+                  | InferIssue<TSchema>
+                  | InferObjectIssue<
+                      MappedEntries<TEntries, TDefaultMapper, TOverrides>
+                    >;
+              }
+            | undefined;
+        }
+      : never;
+
+/**
+ * Maps the entries of an object schema.
+ *
+ * @param schema The schema to map.
+ * @param mapper The default mapper, e.g. `optional` or `nullable`.
+ *
+ * @returns The schema with mapped entries.
+ */
+export function mapEntries<
   TSchema extends Schema,
   TMapper extends SchemaMapperHKT,
 >(
   schema: TSchema,
   mapper: HKTImplementation<TMapper>
-): MappedEntries<TSchema['entries'], TMapper>;
-declare function mapEntries<
+): SchemaWithMappedEntries<TSchema, TMapper>;
+
+/**
+ * Maps the entries of an object schema.
+ *
+ * @param schema The schema to map.
+ * @param map A map of modifiers for specific entries.
+ *
+ * @returns The schema with mapped entries.
+ */
+export function mapEntries<
   TSchema extends Schema,
   TOverrides extends EntryMapOverrides<TSchema['entries']>,
 >(
   schema: TSchema,
   map: TOverrides
-): MappedEntries<TSchema['entries'], IdentitySchemaMapperHKT, TOverrides>;
-declare function mapEntries<
+): SchemaWithMappedEntries<TSchema, IdentitySchemaMapperHKT, TOverrides>;
+
+/**
+ * Maps the entries of an object schema.
+ *
+ * @param schema The schema to map.
+ * @param mapper The default mapper, e.g. `optional` or `nullable`.
+ * @param overrides Overrides for specific entries.
+ *
+ * @returns The schema with mapped entries.
+ */
+export function mapEntries<
   TSchema extends Schema,
   TDefaultMapper extends SchemaMapperHKT,
   TOverrides extends EntryMapOverrides<TSchema['entries']>,
@@ -116,7 +358,50 @@ declare function mapEntries<
   schema: TSchema,
   mapper: HKTImplementation<TDefaultMapper>,
   overrides: TOverrides
-): MappedEntries<TSchema['entries'], TDefaultMapper, TOverrides>;
+): SchemaWithMappedEntries<TSchema, TDefaultMapper, TOverrides>;
+
+// @__NO_SIDE_EFFECTS__
+export function mapEntries(
+  schema: Schema,
+  mapperOrMap:
+    | HKTImplementation<SchemaMapperHKT>
+    | EntryMapOverrides<Schema['entries']>,
+  overrides_?: EntryMapOverrides<Schema['entries']>
+): SchemaWithMappedEntries<
+  Schema,
+  SchemaMapperHKT,
+  EntryMapOverrides<Schema['entries']>
+> {
+  const [mapper, overrides = {}]: [
+    HKTImplementation<SchemaMapperHKT>,
+    EntryMapOverrides<Schema['entries']> | undefined,
+  ] =
+    typeof mapperOrMap === 'function'
+      ? [mapperOrMap, overrides_]
+      : [
+          Object.assign(<T>(s: T) => s, { [isHkt]: true as const }),
+          mapperOrMap,
+        ];
+
+  // Create modified object entries
+  const entries: MappedEntries<
+    Schema['entries'],
+    SchemaMapperHKT,
+    EntryMapOverrides<Schema['entries']>
+  > = {};
+  for (const key in schema.entries) {
+    entries[key] = overrides[key]
+      ? overrides[key](schema.entries[key])
+      : mapper(schema.entries[key]);
+  }
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
+}
 
 const schema = object({ name: string(), age: number(), email: string() });
 

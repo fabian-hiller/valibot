@@ -13,8 +13,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
 export interface NullishModifierHKT extends SchemaMapperHKT {
-  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
   result: NullishSchema<this['wrapped'], undefined>;
 }
 

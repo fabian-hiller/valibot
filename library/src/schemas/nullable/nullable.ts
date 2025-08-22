@@ -13,8 +13,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
 export interface NullableModifierHKT extends SchemaMapperHKT {
-  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
   result: NullableSchema<this['wrapped'], undefined>;
 }
 

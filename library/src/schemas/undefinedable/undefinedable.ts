@@ -13,8 +13,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
 export interface UndefinedableModifierHKT extends SchemaMapperHKT {
-  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
   result: UndefinedableSchema<this['wrapped'], undefined>;
 }
 

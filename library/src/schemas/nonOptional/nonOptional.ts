@@ -15,10 +15,6 @@ import type {
 } from './types.ts';
 
 export interface NonOptionalModifierHKT extends SchemaMapperHKT {
-  argConstraint: [schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
-  issue: NonOptionalIssue;
-
   result: NonOptionalSchema<this['wrapped'], undefined>;
 }
 

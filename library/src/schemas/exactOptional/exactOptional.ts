@@ -11,8 +11,6 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 export interface ExactOptionalModifierHKT extends SchemaMapperHKT {
-  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
   result: ExactOptionalSchema<this['wrapped'], undefined>;
 }
 

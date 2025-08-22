@@ -13,8 +13,6 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferOptionalOutput } from './types.ts';
 
 export interface OptionalModifierHKT extends SchemaMapperHKT {
-  argConstraint: [wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>];
-
   result: OptionalSchema<this['wrapped'], undefined>;
 }
 
