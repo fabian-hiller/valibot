@@ -86,12 +86,8 @@ export function stringbool<
   const caseOption = options?.case ?? defaultOptions.case;
 
   if (caseOption !== 'sensitive') {
-    truthyValues = truthyValues.map((value) =>
-      typeof value === 'string' ? value.toLowerCase() : value
-    );
-    falsyValues = falsyValues.map((value) =>
-      typeof value === 'string' ? value.toLowerCase() : value
-    );
+    truthyValues = truthyValues.map((value) => value.toLowerCase());
+    falsyValues = falsyValues.map((value) => value.toLowerCase());
   }
 
   const truthySet = new Set(truthyValues);
