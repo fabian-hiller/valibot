@@ -26,6 +26,15 @@ export const DECIMAL_REGEX: RegExp = /^[+-]?(?:\d*\.)?\d+$/u;
 export const DIGITS_REGEX: RegExp = /^\d+$/u;
 
 /**
+ * [Domain name](https://en.wikipedia.org/wiki/Domain_name) regex.
+ *
+ * Hint: ASCII-only validation. For Unicode domains, convert to Punycode (IDNA)
+ * before validation using a separate transformation.
+ */
+export const DOMAIN_REGEX: RegExp =
+  /^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/iu;
+
+/**
  * [Email address](https://en.wikipedia.org/wiki/Email_address) regex.
  */
 export const EMAIL_REGEX: RegExp =
