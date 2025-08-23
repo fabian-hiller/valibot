@@ -1,0 +1,87 @@
+---
+title: domain
+description: Creates a domain validation action.
+source: /actions/domain/domain.ts
+contributors:
+  - yslpn
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# domain
+
+Creates a [domain name](https://en.wikipedia.org/wiki/Domain_name) validation action.
+
+```ts
+const Action = v.domain<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `domain` you can validate the formatting of a domain string.
+If the input is not a valid domain, you can use `message` to customize the error message.
+
+> This action validates ASCII labels with dashes and requires a 2+ letter TLD. It intentionally does not enforce the total domain length ("conservative" regex similar to Zod).
+> Punycode IDN (labels starting with `xn--`) is supported; raw Unicode is not. Convert Unicode domains to Punycode (ToASCII) first via a separate transformation, then validate with `domain`.
+> If you need to validate a full URL (including protocol, path, query, etc.), use the <Link href="../url/">`url`</Link> action.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `domain` can be used.
+
+### Domain schema
+
+Schema to validate a domain.
+
+```ts
+const DomainSchema = v.pipe(
+  v.string(),
+  v.nonEmpty('Please enter your domain.'),
+  v.domain('The domain is badly formatted.')
+);
+```
+
+### IDN domain (Unicode) via transformation
+
+Convert Unicode domains to ASCII (Punycode) first and then validate.
+
+```ts
+const toAsciiViaURL = (s: string) => new URL('http://' + s).hostname; // IDNA/ToASCII
+
+const IdnDomainSchema = v.pipe(
+  v.string(),
+  v.transform(toAsciiViaURL),
+  v.domain()
+);
+```
+
+## Related
+
+The following APIs can be combined with `domain`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
