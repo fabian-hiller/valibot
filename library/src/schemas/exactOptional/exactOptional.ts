@@ -97,5 +97,6 @@ export function exactOptional(
     '~run'(dataset, config) {
       return this.wrapped['~run'](dataset, config);
     },
+    '~preferHkt': true,
   };
 }

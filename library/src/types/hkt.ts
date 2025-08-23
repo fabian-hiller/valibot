@@ -13,10 +13,8 @@ export interface BaseHKT {
 }
 
 export interface BaseHKTable<THKT extends BaseHKT = BaseHKT> {
-  /**
-   * Supported HKTs.
-   */
   readonly '~hkt'?: THKT;
+  readonly '~preferHkt': true;
 }
 
 export type InferHKT<THKTable extends BaseHKTable> = Extract<
@@ -34,11 +32,6 @@ export type ApplyHKT<
   TArgs extends THKT['argConstraint'],
 > = PartialApplyHKT<THKT, TArgs>['result'];
 
-export const isHkt = '~isHkt';
-
-export interface HKTImplementation<THKT extends BaseHKT> {
-  (
-    ...args: THKT['argConstraint']
-  ): ApplyHKT<THKT, THKT['argConstraint']> & BaseHKTable<THKT>;
-  [isHkt]: true;
-}
+export type HKTImplementation<THKT extends BaseHKT> = (
+  ...args: THKT['argConstraint']
+) => ApplyHKT<THKT, THKT['argConstraint']> & BaseHKTable<THKT>;

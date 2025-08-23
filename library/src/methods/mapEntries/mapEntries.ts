@@ -13,29 +13,28 @@ import {
   type StrictObjectSchema,
   string,
 } from '../../schemas/index.ts';
-import {
-  type ApplyHKT,
-  type BaseHKT,
-  type BaseHKTable,
-  type BaseIssue,
-  type BaseSchema,
-  type Config,
-  type ErrorMessage,
-  type HKTImplementation,
-  type InferHKT,
-  type InferInput,
-  type InferIssue,
-  type InferObjectInput,
-  type InferObjectIssue,
-  type InferObjectOutput,
-  type InferOutput,
-  isHkt,
-  type ObjectEntries,
-  type OutputDataset,
-  type Prettify,
-  type SchemaWithoutPipe,
-  type StandardProps,
-  type UnknownDataset,
+import type {
+  ApplyHKT,
+  BaseHKT,
+  BaseHKTable,
+  BaseIssue,
+  BaseSchema,
+  Config,
+  ErrorMessage,
+  HKTImplementation,
+  InferHKT,
+  InferInput,
+  InferIssue,
+  InferObjectInput,
+  InferObjectIssue,
+  InferObjectOutput,
+  InferOutput,
+  ObjectEntries,
+  OutputDataset,
+  Prettify,
+  SchemaWithoutPipe,
+  StandardProps,
+  UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
@@ -373,15 +372,12 @@ export function mapEntries(
   EntryMapOverrides<Schema['entries']>
 > {
   const [mapper, overrides = {}]: [
-    HKTImplementation<SchemaMapperHKT>,
+    (schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>) => typeof schema,
     EntryMapOverrides<Schema['entries']> | undefined,
   ] =
     typeof mapperOrMap === 'function'
       ? [mapperOrMap, overrides_]
-      : [
-          Object.assign(<T>(s: T) => s, { [isHkt]: true as const }),
-          mapperOrMap,
-        ];
+      : [(s) => s, mapperOrMap];
 
   // Create modified object entries
   const entries: MappedEntries<
@@ -405,14 +401,10 @@ export function mapEntries(
 
 const schema = object({ name: string(), age: number(), email: string() });
 
-const test = mapEntries(
-  schema,
-  Object.assign(optional, { [isHkt]: true as const }),
-  {
-    name: (schema) => nullish(schema, 'foo'),
-    email: Object.assign(nullish, { [isHkt]: true as const }),
-  }
-);
+const test = mapEntries(schema, optional, {
+  name: (schema) => nullish(schema, 'foo'),
+  email: nullish,
+});
 
 /*
 // make all optional

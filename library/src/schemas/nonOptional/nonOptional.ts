@@ -111,5 +111,6 @@ export function nonOptional(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~preferHkt': true,
   };
 }

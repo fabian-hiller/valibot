@@ -110,5 +110,6 @@ export function optional(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~preferHkt': true,
   };
 }

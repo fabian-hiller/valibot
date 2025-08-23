@@ -111,5 +111,6 @@ export function nonNullable(
       // @ts-expect-error
       return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
+    '~preferHkt': true,
   };
 }

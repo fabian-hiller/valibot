@@ -116,5 +116,6 @@ export function undefinedable(
       // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
+    '~preferHkt': true,
   };
 }
