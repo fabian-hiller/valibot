@@ -32,7 +32,8 @@ export const DIGITS_REGEX: RegExp = /^\d+$/u;
  * before validation using a separate transformation.
  */
 export const DOMAIN_REGEX: RegExp =
-  /^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/iu;
+  // eslint-disable-next-line redos-detector/no-unsafe-regex, regexp/require-unicode-regexp
+  /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 
 /**
  * [Email address](https://en.wikipedia.org/wiki/Email_address) regex.
