@@ -32,8 +32,7 @@ const Action = v.domain<TInput, TMessage>(message);
 With `domain` you can validate the formatting of a domain string.
 If the input is not a valid domain, you can use `message` to customize the error message.
 
-> This action validates ASCII labels with dashes and requires a 2+ letter TLD. It intentionally does not enforce the total domain length ("conservative" regex similar to Zod).
-> Punycode IDN (labels starting with `xn--`) is supported; raw Unicode is not. Convert Unicode domains to Punycode (ToASCII) first via a separate transformation, then validate with `domain`.
+> This action validates ASCII labels with dashes and requires a 2+ letter ASCII TLD. It intentionally does not enforce the total domain length. Unicode or IDN/Punycode is not supported.
 > If you need to validate a full URL (including protocol, path, query, etc.), use the <Link href="../url/">`url`</Link> action.
 
 ## Returns
@@ -53,20 +52,6 @@ const DomainSchema = v.pipe(
   v.string(),
   v.nonEmpty('Please enter your domain.'),
   v.domain('The domain is badly formatted.')
-);
-```
-
-### IDN domain (Unicode) via transformation
-
-Convert Unicode domains to ASCII (Punycode) first and then validate.
-
-```ts
-const toAsciiViaURL = (s: string) => new URL('http://' + s).hostname; // IDNA/ToASCII
-
-const IdnDomainSchema = v.pipe(
-  v.string(),
-  v.transform(toAsciiViaURL),
-  v.domain()
 );
 ```
 

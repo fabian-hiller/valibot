@@ -72,7 +72,6 @@ describe('domain', () => {
         'EXAMPLE.COM',
         'sub.example.com',
         'sub.sub2.example.co.uk',
-        'xn--bcher-kva.de', // Punycode IDN label
       ]);
     });
   });
