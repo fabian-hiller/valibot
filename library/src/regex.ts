@@ -28,8 +28,7 @@ export const DIGITS_REGEX: RegExp = /^\d+$/u;
 /**
  * [Domain name](https://en.wikipedia.org/wiki/Domain_name) regex.
  *
- * Hint: ASCII-only validation. For Unicode domains, convert to Punycode (IDNA)
- * before validation using a separate transformation.
+ * Hint: ASCII-only validation.
  */
 export const DOMAIN_REGEX: RegExp =
   // eslint-disable-next-line redos-detector/no-unsafe-regex, regexp/require-unicode-regexp
