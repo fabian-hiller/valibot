@@ -86,7 +86,7 @@ export const CodemodEditor = component$(() => {
         value={{ value: zodCode }}
         model={model}
       />
-      <div class="absolute right-10 top-10 z-10 flex space-x-6">
+      <div class="absolute right-10 top-10 z-10 flex gap-6">
         <IconButton
           type="button"
           variant="secondary"
