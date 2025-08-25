@@ -64,8 +64,8 @@ export interface DomainAction<
 /**
  * Creates a domain name validation action.
  *
- * Hint: This action validates ASCII domain names. For Unicode domains (IDN),
- * convert input to Punycode first using a separate transformation.
+ * Hint: Hint: ASCII-only validation. 
+ * Internationalized domain names (IDN) not supported (including their Punycode form).
  *
  * @returns A domain action.
  */
