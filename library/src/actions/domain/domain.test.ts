@@ -87,7 +87,24 @@ describe('domain', () => {
     };
 
     test('too long label (max 63 chars)', () => {
+      const tooLongLabel = 'a'.repeat(64);
+      const domainWithTooLongLabel = tooLongLabel + '.com';
+      expect(domainWithTooLongLabel.length).toBeGreaterThan(63);
       expectActionIssue(action, baseIssue, ['a'.repeat(64) + '.com']);
+    });
+
+    test('too long TLD (max 63 chars)', () => {
+      const tooLongTLD = 'a'.repeat(64);
+      const domainWithTooLongTLD = `example.${tooLongTLD}`;
+      expect(domainWithTooLongTLD.length).toBeGreaterThan(63);
+      expectActionIssue(action, baseIssue, [domainWithTooLongTLD]);
+    });
+
+    test('too long domain (max 253 chars)', () => {
+      const label = 'a'.repeat(63);
+      const tooLongDomain = `${label}.${label}.${label}.${label}.${label}.com`;
+      expect(tooLongDomain.length).toBeGreaterThan(253);
+      expectActionIssue(action, baseIssue, [tooLongDomain]);
     });
 
     test('for empty or whitespace strings', () => {
