@@ -49,12 +49,14 @@ export const CodemodEditor = component$(() => {
     // Get current code from editor model
     const currentCode = model.value!.getValue();
 
+    const tsParser = jscodeshift.withParser('ts');
+
     // Execute codemod with current code
     const transformedCode = await transform(
       { path: 'index.ts', source: currentCode },
       {
-        j: jscodeshift.withParser('ts'),
-        jscodeshift,
+        j: tsParser,
+        jscodeshift: tsParser,
         stats: () => {},
         report: () => {},
       },

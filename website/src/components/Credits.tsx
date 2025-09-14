@@ -88,14 +88,13 @@ export const Credits = component$(() => {
       <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
         {[
           'antfu',
-          'Thanaen',
+          'saturnonearth',
           'ruiaraujo012',
           'hyunbinseo',
-          'F0rce',
-          'UniquePixels',
           'nickytonline',
           'KubaJastrz',
           'andrewmd5',
+          'Thanaen',
           'caegdeveloper',
           'dslatkin',
         ].map((sponsor) => (
