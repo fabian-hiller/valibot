@@ -21,8 +21,8 @@ export const PostCover = component$<PostCoverProps>(({ variant, label }) => (
     role="img"
     aria-label="Post cover image"
   >
-    <div class="absolute -right-[20%] -top-[60%] h-[150%] w-[60%] bg-[radial-gradient(theme(colors.yellow.500/.06),transparent_70%)] dark:bg-[radial-gradient(theme(colors.yellow.300/.05),transparent_70%)]" />
-    <div class="absolute -bottom-[60%] -left-[20%] h-[150%] w-[60%] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)]" />
+    <div class="absolute -right-[20%] -top-[60%] h-[150%] w-[60%] bg-[radial-gradient(theme(--color-yellow-500/.06),transparent_70%)] dark:bg-[radial-gradient(theme(--color-yellow-300/.05),transparent_70%)]" />
+    <div class="absolute -bottom-[60%] -left-[20%] h-[150%] w-[60%] bg-[radial-gradient(theme(--color-sky-600/.08),transparent_70%)] dark:bg-[radial-gradient(theme(--color-sky-400/.08),transparent_70%)]" />
     <div
       class={clsx(
         'font-lexend-exa text-center text-[6vw] font-medium text-slate-700 dark:text-slate-300',
