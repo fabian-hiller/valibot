@@ -7,7 +7,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
 | Arabic (ar)     | [#527][pr-527-url] | ✅     |
-| Catalan (ca)    | [#652][pr-527-url] | ✅     |
+| Catalan (ca)    | [#652][pr-652-url] | ✅     |
 | Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
 | Czech (cs)      | [#886][pr-886-url] | ✅     |
