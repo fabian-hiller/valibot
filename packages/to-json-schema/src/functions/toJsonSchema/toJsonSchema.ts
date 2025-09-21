@@ -1,8 +1,11 @@
-import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import { convertSchema } from '../../converters/index.ts';
 import { getGlobalDefs } from '../../storages/index.ts';
-import type { ConversionConfig, ConversionContext } from '../../type.ts';
+import type {
+  ConversionConfig,
+  ConversionContext,
+  JsonSchema,
+} from '../../type.ts';
 
 /**
  * Converts a Valibot schema to the JSON Schema format.
@@ -15,7 +18,7 @@ import type { ConversionConfig, ConversionContext } from '../../type.ts';
 export function toJsonSchema(
   schema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
   config?: ConversionConfig
-): JSONSchema7 {
+): JsonSchema {
   // Initialize JSON Schema context
   const context: ConversionContext = {
     definitions: {},
@@ -45,7 +48,12 @@ export function toJsonSchema(
 
   // Convert Valibot schema to JSON Schema
   const jsonSchema = convertSchema(
-    { $schema: 'http://json-schema.org/draft-07/schema#' },
+    {
+      $schema:
+        config?.target === 'draft-04'
+          ? 'http://json-schema.org/draft-04/schema#'
+          : 'http://json-schema.org/draft-07/schema#',
+    },
     // @ts-expect-error
     schema,
     config,
@@ -54,7 +62,8 @@ export function toJsonSchema(
 
   // Add definitions to JSON Schema, if necessary
   if (context.referenceMap.size) {
-    jsonSchema.$defs = context.definitions;
+    jsonSchema[config?.target === 'draft-04' ? 'definitions' : '$defs'] =
+      context.definitions;
   }
 
   // Return converted JSON Schema

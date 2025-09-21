@@ -1,6 +1,5 @@
-import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
-import type { ConversionConfig } from '../../type.ts';
+import type { ConversionConfig, JsonSchema } from '../../type.ts';
 import { addError, handleError } from '../../utils/index.ts';
 
 /**
@@ -113,10 +112,10 @@ type Action =
  * @returns The converted JSON Schema.
  */
 export function convertAction(
-  jsonSchema: JSONSchema7,
+  jsonSchema: JsonSchema,
   valibotAction: Action,
   config: ConversionConfig | undefined
-): JSONSchema7 {
+): JsonSchema {
   // Ignore action if specified in configuration
   if (config?.ignoreActions?.includes(valibotAction.type)) {
     return jsonSchema;
@@ -352,7 +351,6 @@ export function convertAction(
       // Hint: It is not necessary to validate the type of the JSON schema or
       // Valibot action requirement, as this action can only follow a valid
       // schema in the pipeline anyway.
-      // @ts-expect-error
       jsonSchema.const = valibotAction.requirement;
       break;
     }

@@ -1,6 +1,9 @@
-import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
-import type { ConversionConfig, ConversionContext } from '../../type.ts';
+import type {
+  ConversionConfig,
+  ConversionContext,
+  JsonSchema,
+} from '../../type.ts';
 import { addError, handleError } from '../../utils/index.ts';
 import { convertAction } from '../convertAction/index.ts';
 
@@ -134,17 +137,17 @@ let refCount = 0;
  * @returns The converted JSON Schema.
  */
 export function convertSchema(
-  jsonSchema: JSONSchema7,
+  jsonSchema: JsonSchema,
   valibotSchema: SchemaOrPipe,
   config: ConversionConfig | undefined,
   context: ConversionContext,
   skipRef = false
-): JSONSchema7 {
+): JsonSchema {
   if (!skipRef) {
     // If schema is in reference map use reference and skip conversion
     const referenceId = context.referenceMap.get(valibotSchema);
     if (referenceId) {
-      jsonSchema.$ref = `#/$defs/${referenceId}`;
+      jsonSchema.$ref = `#/${config?.target === 'draft-04' ? 'definitions' : '$defs'}/${referenceId}`;
       if (config?.overrideRef) {
         const refOverride = config.overrideRef({
           ...context,
@@ -372,6 +375,7 @@ export function convertSchema(
     case 'nullish': {
       // Add union of wrapped schema and null to JSON Schema
       jsonSchema.anyOf = [
+        // @ts-expect-error
         convertSchema(
           {},
           valibotSchema.wrapped as SchemaOrPipe,
@@ -421,7 +425,6 @@ export function convertSchema(
           'The value of the "literal" schema is not JSON compatible.'
         );
       }
-      // @ts-expect-error
       jsonSchema.const = valibotSchema.literal;
       break;
     }
@@ -449,6 +452,7 @@ export function convertSchema(
 
     case 'union':
     case 'variant': {
+      // @ts-expect-error
       jsonSchema.anyOf = valibotSchema.options.map((option) =>
         convertSchema({}, option as SchemaOrPipe, config, context)
       );
@@ -456,6 +460,7 @@ export function convertSchema(
     }
 
     case 'intersect': {
+      // @ts-expect-error
       jsonSchema.allOf = valibotSchema.options.map((option) =>
         convertSchema({}, option as SchemaOrPipe, config, context)
       );
