@@ -199,7 +199,8 @@ export function looseObjectAsync(
           } else if (
             valueSchema.type !== 'exact_optional' &&
             valueSchema.type !== 'optional' &&
-            valueSchema.type !== 'nullish'
+            valueSchema.type !== 'nullish' &&
+            valueSchema.type !== 'undefinedable'
           ) {
             _addIssue(this, 'key', dataset, config, {
               input: undefined,
