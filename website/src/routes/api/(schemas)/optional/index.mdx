@@ -82,7 +82,7 @@ const NumberSchema = v.unwrap(OptionalNumberSchema);
 
 ### Default to `undefined`
 
-If you wish optional entries to default to an `undefined` value, you must pass this as a function returning `undefined`, otherwise this will be seen as no argument being passed).
+If you wish optional entries to default to an `undefined` value, you must pass the `default_` parameter as a function returning `undefined`, otherwise this will be seen as no parameter being passed.
 
 ```ts
 const OptionalEntrySchema = v.object({
