@@ -40,13 +40,17 @@ describe('intersect', () => {
 
     test('of input', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<
-        { key1: string }[] & { key2?: number | undefined }[]
+        | ({ key1: string }[] & { key2?: number | undefined }[])
+        | { key1: string }[]
+        | { key2?: number | undefined }[]
       >();
     });
 
     test('of output', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<
-        { key1: string }[] & { key2: number }[]
+        | ({ key1: string }[] & { key2: number }[])
+        | { key1: string }[]
+        | { key2: number }[]
       >();
     });
 
