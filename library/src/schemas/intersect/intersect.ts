@@ -1,3 +1,4 @@
+import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -105,7 +106,16 @@ export function intersect(
 
         // Parse schema of each option and collect outputs
         for (const schema of this.options) {
-          const optionDataset = schema['~run']({ value: input }, config);
+          let optionDataset = schema['~run']({ value: input }, config);
+          if (!optionDataset.typed) {
+            if (schema.type === 'optional') {
+              let result = getDefault(schema);
+              if (result === undefined) {
+                continue;
+              }
+              optionDataset = { typed: true, value: result };
+            }
+          }
 
           // If there are issues, capture them
           if (optionDataset.issues) {
