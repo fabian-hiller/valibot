@@ -98,7 +98,7 @@ export const DocsLayout = component$(() => {
         </div>
         <Navigation
           class={clsx(
-            'px-8 py-9 lg:w-60 lg:py-32',
+            'px-8 py-9 lg:w-60 lg:py-24 xl:py-32',
             showChapters.value ? '2xl:w-64' : '2xl:w-72'
           )}
         />
@@ -106,7 +106,7 @@ export const DocsLayout = component$(() => {
 
       <main
         class={clsx(
-          'relative flex-1 py-12 md:py-20 lg:w-px lg:py-32',
+          'relative flex-1 py-12 md:py-14 lg:w-px lg:py-24 xl:py-32',
           showChapters.value ? 'lg:px-9' : 'lg:pl-9'
         )}
       >
