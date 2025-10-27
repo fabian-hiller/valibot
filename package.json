@@ -12,8 +12,13 @@
   "private": true,
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
     "prettier": "^3.5.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.7.3"
+  },
+  "scripts": {
+    "prepare": "husky"
   }
 }
