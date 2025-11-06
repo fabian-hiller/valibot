@@ -361,8 +361,10 @@ describe('convertSchema', () => {
           v.object({
             key1: v.string(),
             key2: v.optional(v.string()),
-            key3: v.number(),
-            key4: v.nullish(v.number()),
+            key3: v.boolean(),
+            key4: v.exactOptional(v.boolean()),
+            key5: v.number(),
+            key6: v.nullish(v.number()),
           }),
           undefined,
           createContext()
@@ -372,10 +374,12 @@ describe('convertSchema', () => {
         properties: {
           key1: { type: 'string' },
           key2: { type: 'string' },
-          key3: { type: 'number' },
-          key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+          key3: { type: 'boolean' },
+          key4: { type: 'boolean' },
+          key5: { type: 'number' },
+          key6: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
-        required: ['key1', 'key3'],
+        required: ['key1', 'key3', 'key5'],
       });
     });
 
@@ -387,8 +391,10 @@ describe('convertSchema', () => {
             {
               key1: v.string(),
               key2: v.optional(v.string()),
-              key3: v.number(),
-              key4: v.nullish(v.number()),
+              key3: v.boolean(),
+              key4: v.exactOptional(v.boolean()),
+              key5: v.number(),
+              key6: v.nullish(v.number()),
             },
             v.number()
           ),
@@ -400,10 +406,12 @@ describe('convertSchema', () => {
         properties: {
           key1: { type: 'string' },
           key2: { type: 'string' },
-          key3: { type: 'number' },
-          key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+          key3: { type: 'boolean' },
+          key4: { type: 'boolean' },
+          key5: { type: 'number' },
+          key6: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
-        required: ['key1', 'key3'],
+        required: ['key1', 'key3', 'key5'],
         additionalProperties: { type: 'number' },
       });
     });
@@ -415,8 +423,10 @@ describe('convertSchema', () => {
           v.looseObject({
             key1: v.string(),
             key2: v.optional(v.string()),
-            key3: v.number(),
-            key4: v.nullish(v.number()),
+            key3: v.boolean(),
+            key4: v.exactOptional(v.boolean()),
+            key5: v.number(),
+            key6: v.nullish(v.number()),
           }),
           undefined,
           createContext()
@@ -426,10 +436,12 @@ describe('convertSchema', () => {
         properties: {
           key1: { type: 'string' },
           key2: { type: 'string' },
-          key3: { type: 'number' },
-          key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+          key3: { type: 'boolean' },
+          key4: { type: 'boolean' },
+          key5: { type: 'number' },
+          key6: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
-        required: ['key1', 'key3'],
+        required: ['key1', 'key3', 'key5'],
       });
     });
 
@@ -440,8 +452,10 @@ describe('convertSchema', () => {
           v.strictObject({
             key1: v.string(),
             key2: v.optional(v.string()),
-            key3: v.number(),
-            key4: v.nullish(v.number()),
+            key3: v.boolean(),
+            key4: v.exactOptional(v.boolean()),
+            key5: v.number(),
+            key6: v.nullish(v.number()),
           }),
           undefined,
           createContext()
@@ -451,10 +465,12 @@ describe('convertSchema', () => {
         properties: {
           key1: { type: 'string' },
           key2: { type: 'string' },
-          key3: { type: 'number' },
-          key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+          key3: { type: 'boolean' },
+          key4: { type: 'boolean' },
+          key5: { type: 'number' },
+          key6: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
-        required: ['key1', 'key3'],
+        required: ['key1', 'key3', 'key5'],
         additionalProperties: false,
       });
     });
