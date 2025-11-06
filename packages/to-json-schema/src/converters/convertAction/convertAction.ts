@@ -246,7 +246,7 @@ export function convertAction(
     }
 
     case 'max_value': {
-      if (jsonSchema.type !== 'number') {
+      if (jsonSchema.type !== 'number' && jsonSchema.type !== 'integer') {
         errors = addError(
           errors,
           `The "max_value" action is not supported on type "${jsonSchema.type}".`
@@ -291,7 +291,7 @@ export function convertAction(
     }
 
     case 'min_value': {
-      if (jsonSchema.type !== 'number') {
+      if (jsonSchema.type !== 'number' && jsonSchema.type !== 'integer') {
         errors = addError(
           errors,
           `The "min_value" action is not supported on type "${jsonSchema.type}".`
