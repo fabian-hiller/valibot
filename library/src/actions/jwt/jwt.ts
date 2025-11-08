@@ -87,10 +87,10 @@ export function jwt(
   return {
     kind: 'validation',
     type: 'jwt',
-  reference: jwt,
-  async: false,
-  expects: null,
-  requirement: JWT_REGEX,
+    reference: jwt,
+    async: false,
+    expects: null,
+    requirement: JWT_REGEX,
     message,
     '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
