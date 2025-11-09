@@ -63,7 +63,7 @@ export default component$(() => {
       <ol class="mx-3 mt-6 flex flex-wrap lg:mx-2 lg:mt-10">
         {posts.value.map((post) => (
           <li class="w-full px-5 py-6 md:w-1/2 lg:p-8" key={post.href}>
-            <Link class="flex flex-col gap-8" href={post.href}>
+            <Link class="flex flex-col gap-8" href={post.href} prefetch={false}>
               <PostCover variant="blog" label={post.cover} />
               <div class="flex flex-col gap-5">
                 <h3 class="text-lg font-medium leading-normal text-slate-900 md:text-xl lg:text-2xl dark:text-slate-200">
