@@ -360,6 +360,7 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
                 data.name[0] !== data.name[0].toUpperCase(),
             }}
             href={data.href}
+            prefetch={false}
           >
             {data.name}
           </Link>

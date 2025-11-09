@@ -543,6 +543,7 @@ const SearchItem = component$<SearchItemProps>(
         )}
         ref={element}
         href={path}
+        prefetch={false}
         onMouseEnter$={() => (activeIndex.value = index)}
         onFocusIn$={() => (activeIndex.value = index)}
         // eslint-disable-next-line qwik/valid-lexical-scope

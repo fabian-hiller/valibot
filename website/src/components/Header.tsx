@@ -98,6 +98,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
           <Link
             class="focus-ring inline-flex w-full select-none items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 md:w-auto md:text-lg lg:text-xl dark:hover:text-slate-200"
             href="/"
+            prefetch={false}
             preventdefault:contextmenu
             onContextMenu$={() =>
               window.open(
@@ -152,6 +153,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
                   'docsearch-lvl0 text-slate-900 dark:text-slate-200'
               )}
               href={href}
+              prefetch={false}
             >
               {label}
             </Link>

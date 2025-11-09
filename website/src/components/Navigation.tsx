@@ -137,6 +137,7 @@ const NavItem = component$<NavItemProps>(({ navElement, text, items }) => {
                     : 'hover:text-slate-800 dark:hover:text-slate-300'
                 )}
                 href={href}
+                prefetch={false}
               >
                 {text}
               </Link>

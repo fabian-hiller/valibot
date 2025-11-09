@@ -14,7 +14,7 @@ export const ApiList = component$<ApiListProps>(({ label, items }) => (
     {label && label + ': '}
     {items.map((item, index) => (
       <li key={item} class="p-0!">
-        <Link href={`/api/${item}/`}>
+        <Link href={`/api/${item}/`} prefetch={false}>
           <code>{item}</code>
         </Link>
         {index < items.length - 1 && ','}

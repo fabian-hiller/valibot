@@ -41,7 +41,7 @@ export const UnstyledButton = component$((props: UnstyledButtonProps) => {
 
     // Internal link
     return (
-      <Link {...props}>
+      <Link {...props} prefetch={false}>
         <Slot />
       </Link>
     );
