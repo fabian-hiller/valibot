@@ -34,6 +34,7 @@
     "@types/node": "^22.13.13",
     "tsdown": "^0.12.4",
     "typescript": "^5.8.2",
+    "vite-plugin-node-polyfills": "^0.24.0",
     "vitest": "^3.0.9"
   }
 }
